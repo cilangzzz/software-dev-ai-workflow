@@ -2,14 +2,88 @@
 
 ## 用例1：Web应用安全扫描
 
-### 输入
+### 场景描述
+安全工程师需要对Java Web应用进行全面的安全扫描，包括代码漏洞、依赖漏洞和密钥泄露检测。
+
+### 使用Skill
+- **Skill**: security-scan
+- **触发方式**: `/security-scan` 或自然语言 "执行安全扫描"
+
+### 完整提示词
 ```
+/security-scan
+
 扫描目标: src/main/java/
 扫描类型: 全部
 项目: Java Web应用
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| target | string | 是 | "src/main/java/" |
+| scan_types | string | 否 | "all" |
+| fail_threshold | string | 否 | 未指定 |
+
+### 执行过程
+
+#### 步骤1：预扫描
+快速识别可疑区域：
+
+**预扫描结果**：
+- 扫描文件: 156个
+- 代码行数: 23,456行
+- 可疑区域: 12处
+- 潜在高危: 3处
+
+#### 步骤2：深度扫描
+执行各类安全扫描：
+
+**SAST扫描**（静态代码分析）：
+- 扫描规则: 500+
+- 发现漏洞: 6个
+
+**SCA扫描**（依赖漏洞）：
+- 依赖数量: 45个
+- 发现漏洞: 4个
+
+**Secrets扫描**（密钥检测）：
+- 扫描文件: 156个
+- 发现泄露: 3处
+
+#### 步骤3：结果聚合
+合并和去重扫描结果：
+
+**漏洞汇总**：
+| 扫描类型 | Critical | High | Medium | Low |
+|----------|----------|------|--------|-----|
+| SAST | 2 | 2 | 1 | 1 |
+| SCA | 1 | 2 | 1 | 0 |
+| Secrets | 0 | 3 | 0 | 0 |
+| **总计** | **3** | **7** | **2** | **1** |
+
+#### 步骤4：优先级排序
+按风险排序：
+
+**Critical级别漏洞**：
+1. SQL注入 (SEC-001) - UserService.java:45
+2. 硬编码凭据 (SEC-002) - DatabaseConfig.java:15
+3. Log4j漏洞 (CVE-2021-44228) - 依赖包
+
+**High级别漏洞**：
+1. XSS漏洞 (SEC-003) - CommentController.java:67
+2. 路径遍历 (SEC-004) - FileController.java:34
+3. Spring漏洞 (CVE-2022-22965) - 依赖包
+
+#### 步骤5：报告生成
+生成统一报告：
+
+**修复优先级建议**：
+- 立即修复: 3个Critical漏洞
+- 本周修复: 4个High漏洞
+- 计划修复: 3个Medium/Low漏洞
+
+### 最终输出
 ```markdown
 # 安全扫描报告
 
@@ -17,15 +91,15 @@
 - 扫描时间: 2024-01-15 10:30:00
 - 扫描目标: src/main/java/
 - 扫描类型: SAST + SCA + Secrets
-- 总漏洞数: 12
+- 总漏洞数: 13
 
 ## 漏洞统计
 | 严重级别 | 数量 | 占比 |
 |----------|------|------|
-| 🔴 Critical | 2 | 17% |
-| 🟠 High | 4 | 33% |
-| 🟡 Medium | 4 | 33% |
-| 🟢 Low | 2 | 17% |
+| 🔴 Critical | 3 | 23% |
+| 🟠 High | 7 | 54% |
+| 🟡 Medium | 2 | 15% |
+| 🟢 Low | 1 | 8% |
 
 ## SAST扫描结果
 
@@ -150,15 +224,98 @@ if (!filePath.startsWith(basePath)) {
 
 ## 用例2：API安全威胁建模
 
-### 输入
+### 场景描述
+安全架构师需要对移动App API系统进行威胁建模，识别潜在安全威胁并制定缓解措施。
+
+### 使用Skill
+- **Skill**: security-threat-model
+- **触发方式**: `/security-threat-model` 或自然语言 "威胁建模"
+
+### 完整提示词
 ```
+/security-threat-model
+
 系统：用户通过移动App访问后端API
 功能：用户登录、查询订单、修改个人信息
 认证：JWT Token
 数据：MySQL + Redis
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| system_description | string | 是 | "用户通过移动App访问后端API，功能：用户登录、查询订单、修改个人信息，认证：JWT Token，数据：MySQL + Redis" |
+| data_flow | string | 否 | 未指定 |
+| trust_boundaries | string | 否 | 未指定 |
+
+### 执行过程
+
+#### 步骤1：系统分析
+解析系统组件和交互：
+
+**系统组件**：
+- 移动App（客户端）
+- API Gateway（网关层）
+- 应用服务（业务层）
+- MySQL（数据存储）
+- Redis（缓存层）
+
+**关键交互**：
+- App ↔ API: HTTPS通信，JWT认证
+- API ↔ MySQL: 内网通信
+- API ↔ Redis: 内网通信
+
+#### 步骤2：边界识别
+识别信任边界：
+
+**信任边界**：
+- 边界1: 移动App → API服务器（不可信网络）
+- 边界2: API服务器 → 数据库（可信内网）
+- 边界3: API服务器 → Redis（可信内网）
+
+#### 步骤3：威胁识别
+使用STRIDE分类威胁：
+
+**S - Spoofing (欺骗)**: 4个威胁
+**T - Tampering (篡改)**: 4个威胁
+**R - Repudiation (抵赖)**: 2个威胁
+**I - Information Disclosure (信息泄露)**: 4个威胁
+**D - Denial of Service (拒绝服务)**: 3个威胁
+**E - Elevation of Privilege (权限提升)**: 3个威胁
+
+**总计**: 20个威胁
+
+#### 步骤4：风险评估
+评估威胁风险等级：
+
+**高风险威胁**: 10个
+- JWT Token被窃取
+- 中间人攻击
+- 修改他人订单
+- SQL注入
+- 敏感数据未加密存储
+- API请求泛洪
+- 越权访问他人数据
+- 普通用户执行管理操作
+- IDOR
+
+**中风险威胁**: 8个
+**低风险威胁**: 2个
+
+#### 步骤5：缓解建议
+提供安全控制建议：
+
+**认证与授权**：
+- JWT Token有效期<2小时
+- 关键操作需要二次验证
+- 实现RBAC权限模型
+
+**数据安全**：
+- 所有通信使用TLS 1.2+
+- 密码使用bcrypt存储
+- 敏感字段AES-256加密
+
+### 最终输出
 ```markdown
 # 威胁建模报告
 
@@ -270,17 +427,27 @@ if (!filePath.startsWith(basePath)) {
 
 | 风险等级 | 数量 | 占比 | 处理时限 |
 |----------|------|------|---------|
-| 🔴 高风险 | 10 | 45% | 立即处理 |
-| 🟠 中风险 | 8 | 36% | 1周内处理 |
-| 🟡 低风险 | 4 | 18% | 迭代中处理 |
+| 🔴 高风险 | 10 | 50% | 立即处理 |
+| 🟠 中风险 | 8 | 40% | 1周内处理 |
+| 🟡 低风险 | 2 | 10% | 迭代中处理 |
 ```
 
 ---
 
 ## 用例3：代码安全审查
 
-### 输入
-```java
+### 场景描述
+安全工程师需要对UserController.java进行代码安全审查，检测安全漏洞并提供修复建议。
+
+### 使用Skill
+- **Skill**: security-code-review
+- **触发方式**: `/security-code-review` 或自然语言 "安全代码审查"
+
+### 完整提示词
+```
+/security-code-review
+
+目标代码:
 // UserController.java
 @RestController
 public class UserController {
@@ -313,7 +480,66 @@ public class UserController {
 }
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| target | string | 是 | "UserController.java" |
+| language | string | 否 | "java" |
+| severity | string | 否 | "all" |
+
+### 执行过程
+
+#### 步骤1：代码解析
+解析目标代码：
+
+**代码结构**：
+- 类: UserController
+- 方法: getUser, login, updateProfile, generateToken
+- 注解: @RestController, @GetMapping, @PostMapping, @PutMapping
+- 行数: 约25行
+
+#### 步骤2：漏洞模式匹配
+匹配已知漏洞模式：
+
+**检测到的漏洞模式**：
+| 模式 | 位置 | 匹配度 |
+|------|------|--------|
+| 明文密码比较 | 第16行 | 100% |
+| 弱Token生成 | 第24行 | 100% |
+| 缺少权限检查 | 第10-12行 | 95% |
+| 缺少输入验证 | 第21-23行 | 90% |
+
+#### 步骤3：数据流分析
+分析敏感数据流：
+
+**敏感数据流追踪**：
+- 密码: request.getPassword() → equals() → 未使用安全比较
+- Token: generateToken() → 返回值 → 可预测
+- 用户数据: userService.findById(id) → 直接返回 → 信息泄露风险
+
+#### 步骤4：风险评级
+评估漏洞严重程度：
+
+**漏洞评级**：
+| 漏洞 | 严重性 | 依据 |
+|------|--------|------|
+| 明文密码比较 | 🔴 Critical | CWE-798, 密码存储安全风险 |
+| 弱Token生成 | 🔴 Critical | CWE-384, 认证绕过风险 |
+| 越权访问风险 | 🟠 High | CWE-639, IDOR漏洞 |
+| 缺少输入验证 | 🟠 High | CWE-20, 数据完整性风险 |
+| 返回过多信息 | 🟡 Medium | CWE-200, 信息泄露 |
+| 缺少异常处理 | 🟡 Medium | CWE-209, 信息泄露 |
+
+#### 步骤5：修复建议
+提供修复方案：
+
+**修复优先级**：
+1. 密码验证改用BCrypt
+2. Token改用JWT
+3. 添加权限校验
+4. 添加输入验证
+
+### 最终输出
 ```markdown
 # 代码安全审查报告
 
