@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"h:/Documents/software-dev-ai-workflow\" remote -v)",
+      "Bash(git -C \"h:/Documents/software-dev-ai-workflow\" log --oneline -5)",
+      "WebFetch(domain:www.anthropic.com)",
+      "WebFetch(domain:docs.anthropic.com)"
+    ]
+  }
+}
