@@ -2,21 +2,18 @@
 
 ## 用例1：订单退款功能评审
 
-### 背景
-现有电商平台需要新增订单退款功能，已有数据模型、领域设计和数据库设计文档。
+### 场景描述
+现有电商平台需要新增订单退款功能，研发团队需要对需求进行评审，分析对现有设计的影响。
 
-### 输入
-```
-requirement_doc: docs/requirements/order-refund.md
-data_model_doc: docs/design/data-model.md
-domain_design_doc: docs/design/domain-design.md
-database_design_doc: docs/design/database-design.md
-review_depth: standard
-```
+### 使用Skill
+- **Skill**: requirement-review
+- **触发方式**: `/requirement-review` 或自然语言 "评审需求"
 
-### 需求内容
+### 完整提示词
 ```
-功能需求：订单退款功能
+/requirement-review
+
+需求文档：订单退款功能
 1. 用户可在订单完成后30天内申请退款
 2. 支持全额退款和部分退款
 3. 退款申请提交后进入商家审核
@@ -27,57 +24,86 @@ review_depth: standard
 - 订单状态为"已完成"才可申请退款
 - 部分退款时，按商品实付金额计算
 - 退款金额不超过订单实付金额
+
+评审深度：standard
 ```
 
-### 现有设计文档
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| requirement_doc | string | 是 | "订单退款功能需求文档" |
+| data_model_doc | string | 否 | "docs/design/data-model.md" |
+| domain_design_doc | string | 否 | "docs/design/domain-design.md" |
+| database_design_doc | string | 否 | "docs/design/database-design.md" |
+| review_depth | string | 否 | "standard" |
 
-#### 数据模型
-```
-实体：
-- Order（订单）：orderNo, userId, status, totalAmount, paidAmount
-- OrderItem（订单项）：orderId, productId, quantity, price
-- User（用户）：userId, username, phone
-- Product（商品）：productId, name, price
-- Payment（支付）：paymentId, orderId, amount, status
-```
+### 执行过程
 
-#### 领域设计
-```
-订单域：
-- 聚合根：Order
-- 实体：OrderItem
-- 领域服务：OrderService, OrderQueryService
+#### 步骤1：需求解析
+解析需求文档，提取功能点、实体、业务规则：
 
-支付域：
-- 聚合根：Payment
-- 领域服务：PaymentService
-```
+**功能点**：
+- 用户申请退款（全额/部分退款）
+- 商家审核退款申请
+- 退款进度查询
+- 退款到账通知
 
-#### 数据库设计
-```sql
--- 订单表
-CREATE TABLE orders (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    order_no VARCHAR(50) UNIQUE NOT NULL,
-    user_id BIGINT NOT NULL,
-    status TINYINT DEFAULT 0,
-    total_amount DECIMAL(10,2),
-    paid_amount DECIMAL(10,2),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+**实体识别**：
+- RefundOrder（退款订单）
+- RefundItem（退款商品明细）
 
--- 订单项表
-CREATE TABLE order_items (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    order_id BIGINT NOT NULL,
-    product_id BIGINT NOT NULL,
-    quantity INT DEFAULT 1,
-    price DECIMAL(10,2),
-    FOREIGN KEY (order_id) REFERENCES orders(id)
-);
-```
+**业务规则**：
+- 退款时间限制：订单完成后30天内
+- 退款条件：订单状态为"已完成"
+- 退款金额限制：不超过订单实付金额
 
-### 输出
+#### 步骤2：文档加载
+加载现有设计文档：
+- 数据模型：Order、OrderItem、User、Product、Payment
+- 领域设计：订单域、支付域
+- 数据库设计：orders、order_items表
+
+#### 步骤3：实体映射
+将需求中的实体与现有数据模型进行匹配：
+
+| 需求实体 | 现有实体 | 匹配结果 |
+|----------|----------|----------|
+| RefundOrder | 无 | 需新增 |
+| Order.refundStatus | Order | 需扩展属性 |
+| User | User | 完全复用 |
+| Payment | Payment | 需扩展退款流水 |
+
+#### 步骤4：影响分析
+分析需求对现有设计的影响范围：
+
+**新增实体**：RefundOrder、RefundItem
+**修改实体**：Order（新增refundStatus、refundAmount）
+**数据库变更**：新增refund_order、refund_item表，修改orders表
+
+#### 步骤5：冲突检测
+识别需求与现有设计的潜在冲突：
+- ✅ 无明显设计冲突
+- ⚠️ 需确认部分退款库存处理规则
+- ⚠️ 需确认大额退款风控方案
+
+#### 步骤6：可行性评估
+评估技术可行性和实现复杂度：
+
+| 维度 | 评估结果 |
+|------|----------|
+| 实现复杂度 | ⭐⭐⭐ 中等 |
+| 技术成熟度 | ⭐⭐⭐⭐⭐ 成熟 |
+| 团队能力 | ⭐⭐⭐⭐ 匹配 |
+
+#### 步骤7：风险识别
+识别技术风险和业务风险：
+- 🔴 高风险：退款与支付回调并发、大额退款资金安全
+- 🟠 中风险：部分退款库存回滚、历史订单表结构变更
+
+#### 步骤8：报告生成
+生成需求评审报告。
+
+### 最终输出
 ```markdown
 # 需求评审报告
 
@@ -127,54 +153,6 @@ CREATE TABLE order_items (
 |----------|--------|-----------|--------|
 | 历史订单退款状态初始化 | orders | 500万+ | 中 |
 
-```sql
--- 建议的迁移脚本
-ALTER TABLE orders
-ADD COLUMN refund_status TINYINT DEFAULT 0 COMMENT '退款状态: 0-无退款, 1-退款中, 2-已退款',
-ADD COLUMN refund_amount DECIMAL(10,2) DEFAULT 0.00 COMMENT '已退款金额';
-
--- 历史数据处理
-UPDATE orders SET refund_status = 0, refund_amount = 0
-WHERE refund_status IS NULL;
-```
-
-### 索引影响
-| 索引名 | 表名 | 影响说明 |
-|--------|------|----------|
-| idx_refund_status | orders | 新增索引，支持退款订单查询 |
-| idx_user_refund | refund_order | 新增索引，支持用户退款列表查询 |
-
-## 领域影响分析
-
-### 领域边界影响
-| 领域 | 影响类型 | 说明 |
-|------|----------|------|
-| 订单域 | 扩展 | 新增退款聚合，订单聚合需支持退款状态 |
-| 支付域 | 扩展 | 需新增退款接口对接 |
-| 通知域 | 扩展 | 新增退款通知场景 |
-
-### 聚合根影响
-| 聚合根 | 变更类型 | 涉及实体 |
-|--------|----------|----------|
-| Order | 状态扩展 | 新增退款相关状态流转 |
-| RefundOrder | 新增聚合根 | RefundOrder, RefundItem |
-
-## 接口影响分析
-
-### 新增接口
-| 接口路径 | 方法 | 功能描述 |
-|----------|------|----------|
-| /api/orders/{id}/refund | POST | 申请退款 |
-| /api/refunds/{id} | GET | 查询退款详情 |
-| /api/refunds | GET | 退款列表查询 |
-| /api/refunds/{id}/cancel | POST | 取消退款申请 |
-
-### 修改接口
-| 接口路径 | 变更类型 | 向后兼容性 |
-|----------|----------|-----------|
-| GET /api/orders/{id} | 响应扩展 | ✅兼容（新增字段） |
-| GET /api/orders | 响应扩展 | ✅兼容（新增字段） |
-
 ## 风险识别
 
 ### 🔴 高风险
@@ -189,31 +167,6 @@ WHERE refund_status IS NULL;
 | 部分退款库存回滚 | 库存数据准确性 | 明确部分退款库存处理规则 |
 | 历史订单表结构变更 | 500万+数据迁移 | 分批迁移，灰度验证 |
 
-### 🟢 低风险
-| 风险描述 | 说明 |
-|----------|------|
-| 前端退款入口 | 新功能，无历史包袱 |
-
-## 可行性评估
-
-### 技术可行性
-| 维度 | 评估结果 | 说明 |
-|------|----------|------|
-| 实现复杂度 | ⭐⭐⭐ | 涉及多个领域协作，状态管理复杂 |
-| 技术成熟度 | ⭐⭐⭐⭐⭐ | 退款为常见功能，技术方案成熟 |
-| 团队能力匹配 | ⭐⭐⭐⭐ | 团队有支付对接经验 |
-
-### 工期预估
-| 模块 | 预估工期 | 置信度 |
-|------|----------|--------|
-| 退款领域模型 | 3天 | 高 |
-| 数据库变更 | 2天 | 高 |
-| 退款核心接口 | 5天 | 中 |
-| 支付退款对接 | 3天 | 中 |
-| 通知与回调 | 2天 | 高 |
-| 测试与联调 | 5天 | 中 |
-| **总计** | **20天** | 中 |
-
 ## 待澄清问题
 
 | # | 问题 | 优先级 | 提问对象 | 状态 |
@@ -223,35 +176,15 @@ WHERE refund_status IS NULL;
 | 3 | 退款超时未审核如何处理？ | P1 | 产品 | 待确认 |
 | 4 | 是否支持多次部分退款？上限是多少？ | P1 | 产品 | 待确认 |
 
-## 评审检查清单
-
-### 必检项
-- [x] 需求文档完整，无歧义表述
-- [x] 验收标准明确可测试
-- [ ] 与现有设计无冲突（部分退款库存规则待确认）
-- [x] 数据变更方案可行
-- [x] 接口设计符合规范
-
-### 建议项
-- [x] 性能影响已评估
-- [ ] 安全风险已识别（大额退款风控方案待细化）
-- [x] 数据迁移方案已制定
-
 ## 评审结论
 
 ### 总体评价
-需求清晰，技术方案可行。主要风险在于退款与支付的并发处理、大额退款的资金安全。建议采用状态机模式管理退款流程，增加风控审核环节。
+需求清晰，技术方案可行。主要风险在于退款与支付的并发处理、大额退款的资金安全。
 
 ### 前置条件
 1. 确认部分退款时优惠券处理规则
-2. 确认退款审核流程（是否需要多级审核）
+2. 确认退款审核流程
 3. 制定大额退款风控方案
-
-### 建议措施
-1. 使用分布式状态机管理退款状态流转
-2. 增加退款金额阈值，超过阈值需人工审核
-3. 数据库变更采用Online DDL，避免锁表
-4. 历史数据迁移分批执行，每批10万条
 
 ### 下一步
 1. 产品确认待澄清问题后，进入技术方案设计阶段
@@ -263,26 +196,97 @@ WHERE refund_status IS NULL;
 
 ## 用例2：会员积分系统评审
 
-### 输入
-```
-requirement_doc: docs/requirements/member-points.md
-data_model_doc: docs/design/data-model.md
-database_design_doc: docs/design/database-design.md
-review_depth: deep
-focus_areas: data, performance
-```
+### 场景描述
+需要评审会员积分系统需求，重点关注数据量增长和性能问题。
 
-### 需求内容
+### 使用Skill
+- **Skill**: requirement-review
+- **触发方式**: `/requirement-review` 或自然语言 "分析这个需求的影响"
+
+### 完整提示词
 ```
-会员积分系统需求：
+/requirement-review
+
+需求文档：会员积分系统
 1. 用户购物获得积分（1元=1积分）
 2. 积分可用于抵扣现金（100积分=1元）
 3. 积分有效期2年，到期自动清零
 4. 积分明细可查询
 5. 特殊活动期间积分翻倍
+
+评审深度：deep
+关注领域：data, performance
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| requirement_doc | string | 是 | "会员积分系统需求" |
+| data_model_doc | string | 否 | "docs/design/data-model.md" |
+| database_design_doc | string | 否 | "docs/design/database-design.md" |
+| review_depth | string | 否 | "deep" |
+| focus_areas | string | 否 | "data, performance" |
+
+### 执行过程
+
+#### 步骤1：需求解析
+解析需求文档，提取功能点、实体、业务规则：
+
+**功能点**：
+- 积分获取（购物获得）
+- 积分抵扣
+- 积分过期处理
+- 积分明细查询
+- 活动积分翻倍
+
+**实体识别**：
+- MemberPoints（积分账户）
+- PointsRecord（积分明细）
+- PointsRule（积分规则）
+
+#### 步骤2：文档加载
+加载现有设计文档，分析现有数据模型。
+
+#### 步骤3：实体映射
+将需求中的实体与现有数据模型进行匹配：
+
+| 需求实体 | 现有实体 | 匹配结果 |
+|----------|----------|----------|
+| MemberPoints | 无 | 需新增 |
+| PointsRecord | 无 | 需新增 |
+| User.points | User | 需扩展属性 |
+| Order.points | Order | 需扩展属性 |
+
+#### 步骤4：影响分析
+分析需求对现有设计的影响范围：
+
+**重点关注**：
+- 积分明细表数据量预估：年增长5000万+，3年预估1.5亿+
+- 高频查询：用户积分查询（QPS 500+）
+
+#### 步骤5：冲突检测
+识别需求与现有设计的潜在冲突：
+- ✅ 无明显设计冲突
+- ⚠️ 积分明细表数据量增长需重点关注
+
+#### 步骤6：可行性评估
+评估技术可行性和实现复杂度：
+
+| 维度 | 评估结果 |
+|------|----------|
+| 实现复杂度 | ⭐⭐⭐ 中等 |
+| 性能挑战 | ⭐⭐⭐⭐ 较高 |
+| 团队能力 | ⭐⭐⭐⭐ 匹配 |
+
+#### 步骤7：风险识别
+识别技术风险和业务风险：
+- 🔴 高风险：积分明细表数据量爆炸、积分并发扣减、积分过期批量处理
+- 🟠 中风险：积分规则动态变更、积分抵扣计算精度
+
+#### 步骤8：报告生成
+生成需求评审报告，重点关注数据量和性能分析。
+
+### 最终输出
 ```markdown
 # 需求评审报告
 
@@ -302,12 +306,6 @@ focus_areas: data, performance
 | PointsRecord | userId, points, type, source, expireAt | 会员域-积分聚合 |
 | PointsRule | ruleId, ratio, startTime, endTime | 会员域-规则聚合 |
 
-### 修改实体
-| 实体名称 | 变更类型 | 新增属性 | 影响范围 |
-|----------|----------|----------|----------|
-| User | 属性扩展 | memberLevel, points | 用户查询、用户列表 |
-| Order | 属性扩展 | earnedPoints, usedPoints | 订单查询、结算流程 |
-
 ## 数据库影响分析
 
 ### 表结构变更
@@ -316,8 +314,6 @@ focus_areas: data, performance
 | 新增 | member_points | 用户积分账户表 | 🟠 中 |
 | 新增 | points_record | 积分明细表（流水） | 🔴 高 |
 | 新增 | points_rule | 积分规则表 | 🟢 低 |
-| 修改 | users | 新增points字段 | 🟠 中 |
-| 修改 | orders | 新增积分相关字段 | 🟢 低 |
 
 ### 性能分析
 
@@ -325,19 +321,6 @@ focus_areas: data, performance
 | 表 | 年增长量 | 3年预估 | 索引策略 |
 |----|----------|---------|----------|
 | points_record | 5000万+ | 1.5亿+ | 分区表 + 冷热分离 |
-
-#### 查询性能影响
-```sql
--- 高频查询场景分析
--- 1. 用户积分查询（QPS: 500+）
-SELECT * FROM member_points WHERE user_id = ?;
-
--- 2. 积分明细查询（QPS: 200+）
-SELECT * FROM points_record WHERE user_id = ? ORDER BY created_at DESC LIMIT 20;
-
--- 3. 积分过期检查（定时任务，日执行）
-SELECT * FROM points_record WHERE expire_at < NOW() AND status = 'available';
-```
 
 #### 性能优化建议
 1. **积分明细表分区**: 按月份分区，提升查询效率
@@ -354,12 +337,6 @@ SELECT * FROM points_record WHERE expire_at < NOW() AND status = 'available';
 | 积分并发扣减 | 积分超扣 | Redis分布式锁+乐观锁 |
 | 积分过期批量处理 | 数据库压力 | 分批处理+异步化 |
 
-### 🟠 中风险
-| 风险描述 | 影响范围 | 缓解措施建议 |
-|----------|----------|--------------|
-| 积分规则动态变更 | 已计算积分一致性 | 规则版本化管理 |
-| 积分抵扣计算精度 | 金额计算 | 使用DECIMAL类型，避免浮点精度问题 |
-
 ## 待澄清问题
 
 | # | 问题 | 优先级 | 提问对象 | 状态 |
@@ -367,23 +344,13 @@ SELECT * FROM points_record WHERE expire_at < NOW() AND status = 'available';
 | 1 | 积分过期是按获得时间还是统一年末？ | P0 | 产品/业务 | 待确认 |
 | 2 | 积分抵扣是否支持部分使用？ | P0 | 产品 | 待确认 |
 | 3 | 退款时积分如何处理？ | P1 | 产品 | 待确认 |
-| 4 | 积分清零前是否需要提醒？ | P1 | 产品 | 待确认 |
 
 ## 评审结论
 
-### 总体评价
-积分系统技术方案可行，但需要重点关注数据量增长带来的性能问题。建议采用分区表、缓存、异步处理等策略应对。
-
 ### 前置条件
-1. 确认积分过期规则（按获得时间还是统一年末）
+1. 确认积分过期规则
 2. 确认积分抵扣使用规则
 3. 制定积分明细数据归档策略
-
-### 建议措施
-1. 积分明细表按月分区，保留最近12个月热数据
-2. 引入Redis缓存用户积分余额
-3. 积分过期检查使用定时任务+消息队列异步处理
-4. 积分扣减使用分布式锁防止超扣
 
 ### 下一步
 1. 确认待澄清问题后，调用 `/architect` 生成详细技术方案
@@ -394,13 +361,57 @@ SELECT * FROM points_record WHERE expire_at < NOW() AND status = 'available';
 
 ## 用例3：快速评审模式
 
-### 输入
+### 场景描述
+简单需求，快速评审确认影响范围。
+
+### 使用Skill
+- **Skill**: requirement-review
+- **触发方式**: `/requirement-review` 或自然语言 "评审需求"
+
+### 完整提示词
 ```
-requirement_doc: "用户希望能够在商品详情页看到商品的销量和评价数量"
-review_depth: quick
+/requirement-review
+
+需求：用户希望能够在商品详情页看到商品的销量和评价数量
+
+评审深度：quick
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| requirement_doc | string | 是 | "用户希望能够在商品详情页看到商品的销量和评价数量" |
+| review_depth | string | 否 | "quick" |
+
+### 执行过程
+
+#### 步骤1：需求解析
+提取核心需求：商品详情页展示销量和评价数量。
+
+#### 步骤2：文档加载
+快速扫描现有Product实体，确认无冲突。
+
+#### 步骤3：实体映射
+- Product新增salesCount、reviewCount字段
+- 数据来源：订单聚合、评价表统计
+
+#### 步骤4：影响分析
+- 新增字段：salesCount、reviewCount
+- 计算策略：建议异步计算+缓存
+
+#### 步骤5：冲突检测
+✅ 无设计冲突
+
+#### 步骤6：可行性评估
+⭐⭐⭐⭐⭐ 简单需求，技术成熟
+
+#### 步骤7：风险识别
+🟢 低风险：展示功能，不影响核心流程
+
+#### 步骤8：报告生成
+生成快速评审报告。
+
+### 最终输出
 ```markdown
 # 需求评审报告（快速模式）
 
@@ -438,15 +449,64 @@ review_depth: quick
 
 ## 用例4：与现有设计冲突检测
 
-### 输入
+### 场景描述
+需求设计与现有设计存在冲突，需要检测并提出解决方案。
+
+### 使用Skill
+- **Skill**: requirement-review
+- **触发方式**: `/requirement-review` 或自然语言 "检查需求与现有设计的兼容性"
+
+### 完整提示词
 ```
-requirement_doc: "需要新增一个商品库存表，包含商品ID和库存数量"
-data_model_doc: docs/design/data-model.md
-database_design_doc: docs/design/database-design.md
-review_depth: standard
+/requirement-review
+
+需求：需要新增一个商品库存表，包含商品ID和库存数量
+
+评审深度：standard
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| requirement_doc | string | 是 | "需要新增一个商品库存表，包含商品ID和库存数量" |
+| data_model_doc | string | 否 | "docs/design/data-model.md" |
+| database_design_doc | string | 否 | "docs/design/database-design.md" |
+| review_depth | string | 否 | "standard" |
+
+### 执行过程
+
+#### 步骤1：需求解析
+提取需求：新建商品库存表（inventory），包含商品ID和库存数量。
+
+#### 步骤2：文档加载
+加载现有设计文档，发现Product实体已包含stock字段。
+
+#### 步骤3：实体映射
+检测到冲突：
+- 需求设计：新建inventory表
+- 现有设计：Product已包含stock字段
+
+#### 步骤4：影响分析
+分析两种方案的影响：
+- 方案A：扩展现有products表
+- 方案B：新建inventory表，迁移数据
+
+#### 步骤5：冲突检测
+🔴 设计冲突：
+- 实体重复：Product已包含stock字段
+- 关系冲突：新建独立inventory表与现有设计不一致
+
+#### 步骤6：可行性评估
+两种方案均可行，但方案A更优（避免重复建设和数据迁移）。
+
+#### 步骤7：风险识别
+- 方案A风险：低
+- 方案B风险：中（数据迁移、重复建设）
+
+#### 步骤8：报告生成
+生成评审报告，提出解决方案。
+
+### 最终输出
 ```markdown
 # 需求评审报告
 

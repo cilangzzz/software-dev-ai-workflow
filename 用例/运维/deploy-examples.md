@@ -2,8 +2,17 @@
 
 ## 用例1：生产环境部署分析
 
-### 输入
+### 场景描述
+运维工程师需要对即将部署到生产环境的版本进行全面的风险评估，并生成详细的部署计划和回滚方案。
+
+### 使用Skill
+- **Skill**: deploy-analyzer
+- **触发方式**: `/deploy-analyzer` 或自然语言 "分析部署风险"
+
+### 完整提示词
 ```
+/deploy-analyzer
+
 版本: v2.3.0
 环境: prod
 变更内容:
@@ -14,7 +23,81 @@
 - 依赖升级：log4j 2.14.1 → 2.17.1
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| version | string | 是 | "v2.3.0" |
+| environment | string | 是 | "prod" |
+| changes | string | 否 | "新增商品评价功能\n修复订单支付超时问题\n升级Redis客户端版本\n数据库Schema变更：添加评价表\n依赖升级：log4j 2.14.1 → 2.17.1" |
+
+### 执行过程
+
+#### 步骤1：变更分析
+分析版本变更内容，识别变更类型：
+
+**变更分类**：
+| 类型 | 数量 | 详情 |
+|------|------|------|
+| 新功能 | 1 | 商品评价功能 |
+| Bug修复 | 1 | 订单支付超时 |
+| 依赖升级 | 2 | Redis客户端, log4j |
+| 破坏性变更 | 1 | 数据库Schema变更 |
+
+**关键变更点**：
+- 新增评价表DDL需要提前执行
+- log4j版本升级涉及安全漏洞修复
+- Redis客户端升级可能影响连接配置
+
+#### 步骤2：依赖检查
+检查依赖变更和兼容性：
+
+**依赖变更清单**：
+| 依赖 | 原版本 | 新版本 | 兼容性 | 风险 |
+|------|--------|--------|--------|------|
+| Redis客户端 | 3.6.0 | 4.0.0 | 需验证配置 | 中 |
+| log4j | 2.14.1 | 2.17.1 | 向后兼容 | 低 |
+
+**配置变更**：
+- Redis连接池参数需调整
+- 日志格式可能有细微变化
+
+#### 步骤3：环境对比
+对比源环境和目标环境：
+
+**环境差异**：
+| 配置项 | staging | prod | 差异影响 |
+|--------|---------|------|----------|
+| 数据库版本 | MySQL 8.0.28 | MySQL 8.0.30 | 兼容 |
+| Redis版本 | 6.2 | 6.2 | 一致 |
+| JVM版本 | OpenJDK 11 | OpenJDK 11 | 一致 |
+| 节点数量 | 2 | 6 | 扩缩容策略不同 |
+
+#### 步骤4：风险评估
+评估部署风险点：
+
+**高风险项** 🔴：
+| 风险 | 影响 | 概率 | 缓解措施 |
+|------|------|------|---------|
+| 数据库Schema变更 | 服务启动失败 | 高 | 先执行DDL，再部署服务，保留回滚脚本 |
+| Redis客户端升级 | 连接失败 | 中 | 提前在staging验证，准备配置回滚方案 |
+
+**中风险项** 🟠：
+| 风险 | 影响 | 概率 | 缓解措施 |
+|------|------|------|---------|
+| 评价功能影响性能 | 响应变慢 | 中 | 添加评价索引，开启缓存 |
+| 新API未配置限流 | 系统过载 | 中 | 预先配置限流规则 |
+
+#### 步骤5：计划生成
+生成部署计划和回滚方案：
+
+**部署时间线**：
+- 00:00 - 数据库变更
+- 01:00 - 服务灰度部署
+- 02:00 - 全量发布
+
+**回滚预案**：服务回滚 < 5分钟，数据库回滚 < 15分钟
+
+### 最终输出
 ```markdown
 # 部署分析报告
 
@@ -233,9 +316,18 @@ curl -X POST $WEBHOOK_URL -d '{"msg": "v2.3.0 已回滚"}'
 
 ## 用例2：CI/CD故障诊断
 
-### 输入
+### 场景描述
+CI流水线构建失败，开发人员需要快速定位问题原因并获取修复建议。
+
+### 使用Skill
+- **Skill**: ci-pipeline-assistant
+- **触发方式**: `/ci-pipeline-assistant` 或自然语言 "CI构建失败了"
+
+### 完整提示词
 ```
-CI日志:
+/ci-pipeline-assistant
+
+流水线日志:
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.2:test
 [ERROR] There are test failures.
 [ERROR]
@@ -244,17 +336,86 @@ CI日志:
 [ERROR]     at com.example.UserServiceTest.testRegisterUser(UserServiceTest.java:45)
 [ERROR]
 [ERROR] Please refer to /home/runner/work/myapp/target/surefire-reports for the individual test results.
-[ERROR]
-[ERROR] -> [Help 1]
-[ERROR]
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR]
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+
+关注点: debug
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| pipeline_log | string | 是 | "[ERROR] Failed to execute goal...testRegisterUser FAILED...Expected: 200 Actual: 500" |
+| pipeline_type | string | 否 | 未指定 |
+| focus | string | 否 | "debug" |
+
+### 执行过程
+
+#### 步骤1：日志解析
+解析流水线日志，提取关键信息：
+
+**日志关键信息**：
+- 失败阶段: test (测试阶段)
+- 失败插件: maven-surefire-plugin:2.22.2
+- 失败测试: UserServiceTest > testRegisterUser
+- 错误类型: AssertionError
+
+#### 步骤2：错误识别
+识别失败阶段和原因：
+
+**错误详情**：
+```
+com.example.UserServiceTest > testRegisterUser FAILED
+java.lang.AssertionError: Expected: 200 Actual: 500
+```
+
+**错误定位**：
+- 文件: UserServiceTest.java
+- 行号: 45
+- 断言: 期望HTTP状态码200，实际返回500
+
+#### 步骤3：根因分析
+分析问题根因：
+
+**可能原因（按概率排序）**：
+| # | 原因 | 概率 | 验证方法 |
+|---|------|------|---------|
+| 1 | 测试环境数据库未启动/连接失败 | 高 | 检查CI环境变量和数据库配置 |
+| 2 | 代码改动引入bug | 中 | 查看最近提交的代码变更 |
+| 3 | 测试数据准备问题 | 中 | 检查测试前置条件 |
+| 4 | 依赖服务不可用 | 低 | 检查外部服务状态 |
+
+#### 步骤4：修复建议
+提供修复方案：
+
+**立即检查命令**：
+```bash
+# 查看详细测试日志
+mvn test -Dtest=UserServiceTest#testRegisterUser -X
+
+# 检查CI环境数据库配置
+echo $DATABASE_URL
+echo $DATABASE_USERNAME
+
+# 本地重现测试
+mvn test -Dtest=UserServiceTest
+```
+
+**可能修复方案**：
+- 场景1: 数据库连接问题 → 检查CI服务配置
+- 场景2: 代码bug → 检查注册接口实现
+- 场景3: 测试数据问题 → 使用唯一测试数据
+
+#### 步骤5：优化建议
+提供性能优化建议：
+
+**构建性能分析**：
+| 阶段 | 耗时 | 可优化点 |
+|------|------|---------|
+| 依赖下载 | 3m20s | 配置本地Maven仓库缓存 |
+| 编译 | 1m15s | 开启并行编译 |
+| 测试 | 4m30s | 排除不必要的集成测试 |
+| 打包 | 0m45s | - |
+
+### 最终输出
 ```markdown
 # CI流水线诊断报告
 
@@ -373,8 +534,17 @@ void testRegisterUser() {
 
 ## 用例3：多服务部署协调
 
-### 输入
+### 场景描述
+需要同时部署多个有依赖关系的服务，需要确定正确的部署顺序和协调方案。
+
+### 使用Skill
+- **Skill**: deploy-analyzer
+- **触发方式**: `/deploy-analyzer` 或自然语言 "生成部署计划"
+
+### 完整提示词
 ```
+/deploy-analyzer
+
 部署需求：
 - 前端服务: user-web v1.2.0
 - 后端API: user-api v2.0.0
@@ -382,7 +552,77 @@ void testRegisterUser() {
 依赖关系：前端依赖网关，网关依赖后端API
 ```
 
-### 输出
+### 输入参数
+| 参数名 | 类型 | 必填 | 值 |
+|--------|------|------|-----|
+| version | string | 是 | 多服务版本 |
+| environment | string | 是 | 未指定（使用默认） |
+| changes | string | 否 | "前端服务: user-web v1.2.0\n后端API: user-api v2.0.0\n网关服务: gateway v1.5.0\n依赖关系：前端依赖网关，网关依赖后端API" |
+
+### 执行过程
+
+#### 步骤1：变更分析
+分析版本变更内容，识别服务依赖：
+
+**服务清单**：
+| 服务 | 版本 | 类型 | 依赖 |
+|------|------|------|------|
+| user-web | v1.2.0 | 前端 | gateway |
+| gateway | v1.5.0 | 网关 | user-api |
+| user-api | v2.0.0 | 后端API | 无 |
+
+**依赖图**：
+```
+user-web → gateway → user-api
+```
+
+#### 步骤2：依赖检查
+检查依赖变更和兼容性：
+
+**API兼容性检查**：
+| 变更类型 | 影响范围 | 处理方案 |
+|----------|----------|----------|
+| 新增接口 | 无破坏性 | 正常部署 |
+| 接口废弃 | 需确认调用方 | 保留旧版本1个月 |
+| 参数变更 | gateway需同步更新 | 协调更新 |
+
+**版本兼容矩阵**：
+| user-web | gateway | user-api | 兼容性 |
+|----------|---------|----------|--------|
+| v1.2.0 | v1.5.0 | v2.0.0 | ✅ 目标版本 |
+| v1.1.0 | v1.4.0 | v1.9.0 | ✅ 当前版本 |
+| v1.2.0 | v1.4.0 | v1.9.0 | ⚠️ 部分功能不可用 |
+
+#### 步骤3：环境对比
+对比源环境和目标环境：
+
+**部署顺序分析**：
+- 推荐顺序: 自底向上
+- 1. user-api (后端API) - 最底层，无依赖
+- 2. gateway (网关) - 依赖API
+- 3. user-web (前端) - 依赖网关
+
+#### 步骤4：风险评估
+评估部署风险点：
+
+**协调风险**：
+| 风险 | 影响 | 概率 | 缓解措施 |
+|------|------|------|---------|
+| 服务间版本不兼容 | 功能异常 | 中 | 逐层验证后再继续 |
+| 部署顺序错误 | 服务不可用 | 高 | 严格按依赖顺序部署 |
+| 回滚复杂 | 恢复时间长 | 中 | 准备全链路回滚脚本 |
+
+#### 步骤5：计划生成
+生成部署计划和回滚方案：
+
+**时间窗口**：
+| 阶段 | 服务 | 版本 | 时间窗口 | 验证要点 |
+|------|------|------|----------|----------|
+| 1 | user-api | v2.0.0 | 00:00-00:30 | API健康检查、功能验证 |
+| 2 | gateway | v1.5.0 | 00:30-01:00 | 路由配置、限流验证 |
+| 3 | user-web | v1.2.0 | 01:00-01:30 | 页面访问、端到端测试 |
+
+### 最终输出
 ```markdown
 # 多服务部署协调报告
 
@@ -522,4 +762,5 @@ groups:
       severity: critical
     annotations:
       summary: "user-api服务不可用"
+```
 ```

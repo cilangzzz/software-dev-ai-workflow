@@ -5,7 +5,8 @@
       "Bash(git -C \"h:/Documents/software-dev-ai-workflow\" log --oneline -5)",
       "WebFetch(domain:www.anthropic.com)",
       "WebFetch(domain:docs.anthropic.com)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Read(//h/basePlatform/ruoyi-vue-pro-master/ruoyi-vue-pro-master/skills/**)"
     ]
   }
 }
