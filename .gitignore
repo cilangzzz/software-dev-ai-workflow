@@ -34,3 +34,6 @@ target/
 *.temp
 *.swp
 *~
+
+#  Output directory
+output/
