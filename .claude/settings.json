@@ -7,7 +7,8 @@
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:github.com)",
       "Read(//h/basePlatform/ruoyi-vue-pro-master/ruoyi-vue-pro-master/skills/**)",
-      "Read(//e/Documents/项目文档/法制/程序/gaxx-pro/**)"
+      "Read(//e/Documents/项目文档/法制/程序/gaxx-pro/**)",
+      "Read(//e/Documents/项目文档/法制/程序/middleHandle/**)"
     ]
   }
 }
