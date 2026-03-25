@@ -1,0 +1,531 @@
+# 研发部 Skill 协作关系配置
+
+# ==================== Skill 注册表 ====================
+
+skills:
+  requirement-review:
+    name: "需求评审"
+    version: "1.0.0"
+    priority: "P0"
+    description: "辅助研发团队进行需求评审，分析需求完整性、识别设计冲突"
+    class: "RequirementReviewSkill"
+    config_schema: "schemas/requirement-review-config.json"
+
+  requirement-change:
+    name: "需求变更处理"
+    version: "1.0.0"
+    priority: "P0"
+    description: "管理需求变更全流程，分析变更对设计文档的影响"
+    class: "RequirementChangeSkill"
+    config_schema: "schemas/requirement-change-config.json"
+
+  architect:
+    name: "架构设计"
+    version: "2.0.0"
+    priority: "P0"
+    description: "架构设计主入口，生成架构方案和ADR"
+    class: "ArchitectSkill"
+    config_schema: "schemas/architect-config.json"
+
+  adr:
+    name: "架构决策记录"
+    version: "1.0.0"
+    priority: "P0"
+    description: "创建和管理架构决策记录"
+    class: "AdrSkill"
+    config_schema: "schemas/adr-config.json"
+
+  scaffold:
+    name: "项目脚手架"
+    version: "1.0.0"
+    priority: "P0"
+    description: "快速生成项目脚手架代码"
+    class: "ScaffoldSkill"
+    config_schema: "schemas/scaffold-config.json"
+
+  implement:
+    name: "功能实现"
+    version: "1.0.0"
+    priority: "P0"
+    description: "根据设计文档实现功能代码"
+    class: "ImplementSkill"
+    config_schema: "schemas/implement-config.json"
+
+  code-review:
+    name: "代码审查"
+    version: "1.0.0"
+    priority: "P0"
+    description: "对代码变更进行自动化审查"
+    class: "CodeReviewSkill"
+    config_schema: "schemas/code-review-config.json"
+
+# ==================== 协作关系定义 ====================
+
+collaboration:
+
+  # 需求评审 -> 架构设计 / 需求变更
+  requirement-review:
+    # 触发条件
+    triggers:
+      - type: "event"
+        event: "requirement_submitted"
+        source: "product"
+      - type: "command"
+        command: "/requirement-review"
+      - type: "keyword"
+        keywords: ["评审需求", "需求评审", "分析需求影响"]
+
+    # 输入要求
+    inputs:
+      requirement_doc:
+        type: "string"
+        required: true
+        description: "需求文档路径或内容"
+      review_depth:
+        type: "string"
+        default: "standard"
+        enum: ["quick", "standard", "deep"]
+
+    # 输出
+    outputs:
+      - "评审报告"
+      - "待澄清问题清单"
+      - "设计冲突列表"
+
+    # 后续触发
+    next:
+      - skill: "architect"
+        condition: "${review_result == 'passed'}"
+        pass_params:
+          requirements: "${requirement_doc}"
+          review_report: "${output.report}"
+
+      - skill: "requirement-change"
+        condition: "${conflicts_detected == true}"
+        pass_params:
+          change_request: "${output.conflicts}"
+          source: "requirement-review"
+
+  # 需求变更 -> 功能实现
+  requirement-change:
+    triggers:
+      - type: "skill"
+        skill: "requirement-review"
+        condition: "设计冲突"
+      - type: "event"
+        event: "change_request_submitted"
+      - type: "command"
+        command: "/requirement-change"
+
+    inputs:
+      change_request:
+        type: "string"
+        required: true
+      design_docs:
+        type: "object"
+        properties:
+          data_model: { type: "string" }
+          domain_design: { type: "string" }
+          database_design: { type: "string" }
+
+    outputs:
+      - "变更影响分析报告"
+      - "变更实施方案"
+      - "DDL迁移脚本"
+
+    uses_documents:
+      - "docs/design/data-model.md"
+      - "docs/design/domain-design.md"
+      - "docs/design/database-design.md"
+
+    next:
+      - skill: "implement"
+        condition: "${change_approved == true}"
+        pass_params:
+          implementation_plan: "${output.plan}"
+
+  # 架构设计 -> ADR / 脚手架 / 功能实现
+  architect:
+    triggers:
+      - type: "skill"
+        skill: "requirement-review"
+        condition: "评审通过"
+      - type: "event"
+        event: "project_initiated"
+      - type: "command"
+        command: "/architect"
+
+    inputs:
+      requirements:
+        type: "string"
+        required: true
+      constraints:
+        type: "string"
+        required: false
+      scale:
+        type: "string"
+        default: "medium"
+        enum: ["small", "medium", "large"]
+      template:
+        type: "string"
+        default: "default"
+
+    outputs:
+      - "架构设计文档"
+      - "技术选型报告"
+      - "模块划分方案"
+      - "数据模型草案"
+
+    next:
+      - skill: "adr"
+        condition: "${major_decisions_count > 0}"
+        pass_params:
+          decisions: "${output.decisions}"
+
+      - skill: "scaffold"
+        condition: "${is_new_project == true}"
+        pass_params:
+          architecture: "${output.architecture}"
+          tech_stack: "${output.tech_stack}"
+
+      - skill: "implement"
+        condition: "${is_incremental == true}"
+        pass_params:
+          architecture: "${output.architecture}"
+
+    updates_documents:
+      - path: "docs/design/data-model.md"
+        section: "实体定义"
+        trigger: "架构确定"
+      - path: "docs/design/domain-design.md"
+        section: "领域边界"
+        trigger: "架构确定"
+
+  # ADR - 独立使用或被触发
+  adr:
+    triggers:
+      - type: "skill"
+        skill: "architect"
+        condition: "重大决策"
+      - type: "command"
+        command: "/adr"
+
+    inputs:
+      title:
+        type: "string"
+        required: true
+      context:
+        type: "string"
+        required: true
+      alternatives:
+        type: "array"
+        required: false
+
+    outputs:
+      - "ADR文档"
+
+    next: []
+
+  # 脚手架 -> 功能实现
+  scaffold:
+    triggers:
+      - type: "skill"
+        skill: "architect"
+        condition: "新项目"
+      - type: "command"
+        command: "/scaffold"
+
+    inputs:
+      project_name:
+        type: "string"
+        required: true
+      tech_stack:
+        type: "string"
+        required: true
+      features:
+        type: "array"
+        required: false
+
+    outputs:
+      - "项目脚手架"
+      - "配置文件"
+      - "基础代码框架"
+
+    next:
+      - skill: "implement"
+        pass_params:
+          project_path: "${output.project_path}"
+
+  # 功能实现 -> 代码审查
+  implement:
+    triggers:
+      - type: "skill"
+        skill: "scaffold"
+      - type: "skill"
+        skill: "requirement-change"
+        condition: "变更批准"
+      - type: "command"
+        command: "/implement"
+
+    inputs:
+      specification:
+        type: "string"
+        required: true
+      target_file:
+        type: "string"
+        required: false
+
+    outputs:
+      - "源代码"
+      - "单元测试"
+      - "API文档"
+
+    next:
+      - skill: "code-review"
+        condition: "${code_completed == true}"
+        pass_params:
+          target: "${output.files}"
+
+  # 代码审查 -> 功能实现(修复)
+  code-review:
+    triggers:
+      - type: "skill"
+        skill: "implement"
+        condition: "代码完成"
+      - type: "event"
+        event: "pull_request_created"
+      - type: "command"
+        command: "/code-review"
+
+    inputs:
+      target:
+        type: "string"
+        required: true
+      review_type:
+        type: "string"
+        default: "full"
+        enum: ["quick", "full", "security"]
+
+    outputs:
+      - "审查报告"
+      - "问题清单"
+      - "质量评分"
+
+    next:
+      - skill: "implement"
+        condition: "${issues_count > 0}"
+        pass_params:
+          fix_issues: "${output.issues}"
+
+# ==================== 工作流定义 ====================
+
+workflows:
+
+  # 新功能开发流程
+  new_feature:
+    name: "新功能开发流程"
+    description: "从需求评审到代码审查的完整流程"
+    steps:
+      - id: "review"
+        skill: "requirement-review"
+        input:
+          requirement_doc: "${workflow.input.requirement}"
+        on_failure: "abort"
+
+      - id: "architecture"
+        skill: "architect"
+        condition: "${review.output.result == 'passed'}"
+        input:
+          requirements: "${workflow.input.requirement}"
+        on_failure:
+          skill: "scaffold"
+          fallback: true
+
+      - id: "development"
+        skill: "implement"
+        input:
+          specification: "${review.output.spec}"
+          architecture: "${architecture.output}"
+        on_failure: "notify"
+
+      - id: "review_code"
+        skill: "code-review"
+        input:
+          target: "${development.output.files}"
+
+    output:
+      code: "${development.output}"
+      review: "${review_code.output}"
+
+  # 需求变更流程
+  change_request:
+    name: "需求变更流程"
+    description: "处理需求变更的完整流程"
+    steps:
+      - id: "analyze"
+        skill: "requirement-change"
+        input:
+          change_request: "${workflow.input.change}"
+          design_docs: "${workflow.input.designs}"
+
+      - id: "approval"
+        type: "human"
+        description: "等待变更审批"
+        timeout: "24h"
+
+      - id: "implement"
+        skill: "implement"
+        condition: "${approval.result == 'approved'}"
+        input:
+          implementation_plan: "${analyze.output.plan}"
+
+      - id: "review"
+        skill: "code-review"
+        input:
+          target: "${implement.output.files}"
+
+  # 快速原型流程
+  quick_prototype:
+    name: "快速原型流程"
+    description: "快速生成原型代码"
+    steps:
+      - id: "scaffold"
+        skill: "scaffold"
+        input:
+          project_name: "${workflow.input.name}"
+          tech_stack: "${workflow.input.stack}"
+
+      - id: "implement"
+        skill: "implement"
+        input:
+          specification: "${workflow.input.features}"
+
+# ==================== 设计文档注册 ====================
+
+design_documents:
+  data_model:
+    path: "docs/design/data-model.md"
+    format: "markdown"
+    schema: "schemas/data-model-schema.json"
+    maintained_by:
+      - "architect"
+      - "requirement-change"
+    sections:
+      - "实体定义"
+      - "属性列表"
+      - "关系图"
+      - "枚举定义"
+
+  domain_design:
+    path: "docs/design/domain-design.md"
+    format: "markdown"
+    schema: "schemas/domain-design-schema.json"
+    maintained_by:
+      - "architect"
+      - "requirement-change"
+    sections:
+      - "领域边界"
+      - "聚合根"
+      - "领域服务"
+      - "领域事件"
+
+  database_design:
+    path: "docs/design/database-design.md"
+    format: "markdown"
+    schema: "schemas/database-design-schema.json"
+    maintained_by:
+      - "architect"
+      - "requirement-change"
+    sections:
+      - "表结构定义"
+      - "索引设计"
+      - "数据迁移脚本"
+      - "存储过程"
+
+  api_design:
+    path: "docs/design/api-design.md"
+    format: "markdown"
+    schema: "schemas/api-design-schema.json"
+    maintained_by:
+      - "architect"
+      - "implement"
+    sections:
+      - "接口定义"
+      - "请求响应格式"
+      - "错误码定义"
+
+# ==================== 错误处理配置 ====================
+
+error_handling:
+
+  # 全局默认配置
+  defaults:
+    retry_count: 3
+    retry_delay: "5s"
+    timeout: "30m"
+    fallback_enabled: true
+
+  # 各 Skill 的错误处理
+  skills:
+    architect:
+      errors:
+        - type: "input_invalid"
+          action: "request_correction"
+        - type: "execution_timeout"
+          action: "fallback"
+          fallback_skill: "scaffold"
+        - type: "document_write_failed"
+          action: "retry"
+          retry_count: 2
+
+    implement:
+      errors:
+        - type: "syntax_error"
+          action: "auto_fix"
+        - type: "test_failed"
+          action: "report_and_continue"
+        - type: "dependency_missing"
+          action: "install_and_retry"
+
+    code-review:
+      errors:
+        - type: "file_too_large"
+          action: "partial_review"
+        - type: "unsupported_language"
+          action: "skip_and_notify"
+
+# ==================== 通知配置 ====================
+
+notifications:
+  channels:
+    - type: "email"
+      config:
+        smtp_host: "${SMTP_HOST}"
+        smtp_port: 587
+    - type: "webhook"
+      config:
+        url: "${WEBHOOK_URL}"
+    - type: "in_app"
+      config:
+        database: "notifications"
+
+  rules:
+    - event: "skill_completed"
+      skill: "architect"
+      notify:
+        - role: "tech_lead"
+          channel: ["email", "in_app"]
+          template: "architecture_completed"
+
+    - event: "skill_failed"
+      skill: "*"
+      notify:
+        - role: "developer"
+          channel: ["in_app"]
+          template: "skill_failed"
+
+    - event: "human_approval_required"
+      notify:
+        - role: "reviewer"
+          channel: ["email", "in_app"]
+          template: "approval_required"
