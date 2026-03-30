@@ -1,0 +1,302 @@
+name: erp-module-builder
+version: 1.0.0
+description: ERP系统模块自动化开发场景配置
+
+# ============================================================
+# 主循环配置 - Plan -> Contract -> Build -> Evaluate -> Iterate
+# ============================================================
+workflow:
+  max_rounds: 5
+  pass_threshold: 7.0
+
+  phases:
+    # --------------------------------------------------------
+    # Phase 1: Plan - 需求分析与规划
+    # --------------------------------------------------------
+    - name: plan
+      description: 需求分析与规划阶段
+      agent: planner
+      skills:
+        - requirement-analyzer
+        - user-story-generator
+        - acceptance-criteria-writer
+      inputs:
+        - .workspace/spec.md
+        - 00-ERP系统需求总览.md
+      outputs:
+        - 产品/PRD/PRD-{module}.md
+        - 产品/UserStory/UserStory-{module}.md
+        - 产品/AcceptanceCriteria/AC-{module}.md
+      quality_gate:
+        - name: prd_completeness
+          check: doc_validator
+          params:
+            required_sections:
+              - 功能概述
+              - 用户角色定义
+              - 功能清单
+              - 业务流程图
+              - 数据字典
+              - 非功能需求
+        - name: user_story_coverage
+          check: doc_validator
+          params:
+            min_coverage: 80
+            format_check: true
+      timeout: 30min
+
+    # --------------------------------------------------------
+    # Phase 2: Contract - 开发契约制定
+    # --------------------------------------------------------
+    - name: contract
+      description: 开发契约制定阶段
+      agents:
+        - contract_proposer
+        - contract_reviewer
+      skills:
+        - architect
+        - adr
+      inputs:
+        - 产品/PRD/PRD-{module}.md
+        - 产品/UserStory/UserStory-{module}.md
+      outputs:
+        - .workspace/contract.md
+        - 研发/系统架构设计.md
+        - 研发/ADR/ADR-{module}.md
+      quality_gate:
+        - name: architecture_review
+          check: doc_validator
+          params:
+            required_sections:
+              - 架构图
+              - 技术选型
+              - 模块划分
+              - 数据流向
+              - 接口边界
+        - name: contract_approved
+          check: contract_reviewer
+          params:
+            min_score: 7.0
+      timeout: 20min
+
+    # --------------------------------------------------------
+    # Phase 3: Build - 代码与文档生成
+    # --------------------------------------------------------
+    - name: build
+      description: 代码与文档生成阶段
+      agent: builder
+      skills:
+        - db-designer
+        - api-designer
+        - entity-generator
+        - crud-generator
+        - implement
+        - scaffold
+      inputs:
+        - .workspace/contract.md
+        - 产品/PRD/PRD-{module}.md
+        - 研发/系统架构设计.md
+      outputs:
+        - 研发/数据库设计/DB-{module}.md
+        - 研发/API设计/API-{module}.md
+        - 研发/详细设计/Detail-{module}.md
+        - 代码/backend/src/main/java/**/entity/*.java
+        - 代码/backend/src/main/java/**/controller/*.java
+        - 代码/backend/src/main/java/**/service/*.java
+        - 代码/backend/src/main/java/**/mapper/*.java
+        - 代码/backend/src/main/resources/mapper/*.xml
+      quality_gate:
+        - name: sql_syntax_check
+          check: db_migrate
+          params:
+            action: validate
+        - name: api_spec_validation
+          check: api_test
+          params:
+            action: validate_spec
+        - name: code_structure_check
+          check: doc_validator
+          params:
+            required_dirs:
+              - entity
+              - controller
+              - service
+              - mapper
+      timeout: 60min
+      sub_agents:
+        - name: db-designer
+          context_isolation: true
+          max_tokens: 40000
+        - name: api-designer
+          context_isolation: true
+          max_tokens: 40000
+
+    # --------------------------------------------------------
+    # Phase 4: Evaluate - 测试与验证
+    # --------------------------------------------------------
+    - name: evaluate
+      description: 测试与验证阶段
+      agent: evaluator
+      skills:
+        - test-case-generator
+        - test-executor
+        - code-review
+      inputs:
+        - 代码/backend/
+        - 研发/API设计/API-{module}.md
+        - 研发/数据库设计/DB-{module}.md
+      outputs:
+        - 代码/tests/unit/*.java
+        - 代码/tests/api/*.json
+        - .workspace/feedback.md
+      quality_gate:
+        - name: unit_test_coverage
+          check: test_executor
+          params:
+            threshold: 80
+        - name: integration_test_pass
+          check: api_test
+          params:
+            action: run_test
+            required_pass: true
+        - name: code_quality
+          check: code-review
+          params:
+            min_score: 7.0
+      timeout: 40min
+
+    # --------------------------------------------------------
+    # Phase 5: Iterate - 迭代优化
+    # --------------------------------------------------------
+    - name: iterate
+      description: 迭代优化阶段
+      agent: builder
+      skills:
+        - bug-analyzer
+        - refactor
+        - implement
+      condition:
+        type: has_feedback
+        check: feedback_score_below_threshold
+      inputs:
+        - .workspace/feedback.md
+      outputs:
+        - 更新代码/backend/
+        - 更新文档/研发/
+        - .workspace/progress.md
+      max_iterations: 3
+      timeout: 30min/iteration
+
+# ============================================================
+# 上下文管理配置
+# ============================================================
+context:
+  compaction:
+    threshold: 80000
+    strategy: summary
+    retention_ratio:
+      planner: 0.50
+      builder: 0.20
+      evaluator: 0.50
+      default: 0.30
+    trigger_patterns:
+      - "let me wrap up"
+      - "that should be enough"
+      - "running low on context"
+
+  reset:
+    threshold: 150000
+    strategy: checkpoint
+    checkpoint_file: .workspace/progress.md
+    anxiety_patterns:
+      - "let me wrap up"
+      - "running (low on|out of) (context|space|tokens)"
+      - "that should be (enough|sufficient)"
+      - "I'll just"
+      - "I think I've covered"
+      - "quickly summarize"
+
+# ============================================================
+# 工具配置
+# ============================================================
+tools:
+  core:
+    - read_file
+    - write_file
+    - list_files
+    - run_bash
+
+  extended:
+    - db_migrate
+    - api_test
+    - doc_validator
+    - uml_generator
+    - delegate_task
+
+# ============================================================
+# 技术栈配置
+# ============================================================
+tech_stack:
+  backend:
+    framework: Spring Boot 2.7
+    orm: MyBatis Plus 3.5
+    language: Java 17
+    build: Maven
+
+  database:
+    type: MySQL 8.x
+    charset: utf8mb4
+    collation: utf8mb4_unicode_ci
+
+  cache:
+    type: Redis 6.x
+
+  mq:
+    type: RabbitMQ 3.x
+
+  workflow:
+    type: Flowable 6.8.x
+
+  frontend:
+    framework: Vue3
+    ui: Element Plus
+
+  mobile:
+    framework: UniApp
+
+# ============================================================
+# 架构约束
+# ============================================================
+architecture:
+  multi_tenant:
+    mode: shared_database
+    isolation_field: tenant_id
+
+  auth:
+    type: jwt_bearer
+    token_header: Authorization
+
+  api:
+    style: restful
+    prefix: /admin-api/erp/{module}
+    version: /v1/
+    response_format:
+      success:
+        code: 0
+        message: success
+        data: {}
+        timestamp: 1709875200000
+      error:
+        code: 40001
+        message: 错误描述
+        data: null
+
+  entity:
+    required_fields:
+      - id (BIGINT, AUTO_INCREMENT)
+      - tenant_id (BIGINT)
+      - created_by (VARCHAR)
+      - created_time (DATETIME)
+      - updated_by (VARCHAR)
+      - updated_time (DATETIME)
+      - deleted (TINYINT, default 0)
