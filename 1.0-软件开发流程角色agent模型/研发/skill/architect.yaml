@@ -1,0 +1,470 @@
+# 架构设计 Skill
+# 根据需求自动生成架构方案和架构决策记录
+
+skill:
+  id: "architect"
+  name: "架构设计"
+  version: "2.0.0"
+  category: "design"
+  description: "架构设计主入口，根据需求自动生成架构方案和架构决策记录（ADR）。提供技术选型建议、系统架构图、模块划分等核心架构输出。支持与设计文档联动，自动更新相关设计文档。"
+  priority: "P0"
+  capability_level: 5
+  complexity: "complex"
+  estimated_time: "30-60分钟"
+  created_at: "2026-03-31"
+  updated_at: "2026-03-31"
+
+# ============================================
+# 第一部分：前置条件
+# ============================================
+prerequisites:
+  dependencies:
+    - skill: "requirement-review"
+      condition: "需求评审完成"
+      description: "获取评审通过的需求数据"
+
+  required_documents:
+    - document: "需求文档/PRD"
+      purpose: "架构设计输入"
+      optional: false
+    - document: "现有架构文档"
+      purpose: "参考现有设计"
+      optional: true
+    - document: "技术约束文档"
+      purpose: "了解技术限制"
+      optional: true
+
+  permissions:
+    - "architecture:write"
+    - "repository:read"
+
+# ============================================
+# 第二部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/architect"
+
+  keywords:
+    - "设计系统架构"
+    - "生成架构方案"
+    - "技术选型建议"
+    - "架构设计"
+
+  events:
+    - name: "requirement_review_passed"
+      condition: "需求评审通过"
+    - name: "project_initiated"
+      condition: "项目启动"
+    - name: "major_change_requested"
+      condition: "重大变更请求"
+
+# ============================================
+# 第三部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "requirements"
+      type: "string"
+      required: true
+      description: "需求描述或PRD内容"
+
+    - name: "constraints"
+      type: "string"
+      required: false
+      description: "技术约束条件"
+
+    - name: "preferences"
+      type: "string"
+      required: false
+      description: "技术偏好（语言、框架等）"
+
+    - name: "scale"
+      type: "string"
+      required: false
+      default: "medium"
+      enum: ["small", "medium", "large"]
+      description: "系统规模"
+
+    - name: "template"
+      type: "string"
+      required: false
+      default: "default"
+      enum: ["default", "microservice", "monolith", "serverless"]
+      description: "架构模板"
+
+    - name: "output_dir"
+      type: "string"
+      required: false
+      default: "docs/architecture"
+      description: "输出目录"
+
+# ============================================
+# 第四部分：执行流程
+# ============================================
+workflow:
+  description: "架构设计按以下4个阶段执行"
+
+  phases:
+    - name: "需求分析"
+      description: "解析需求文档，提取核心要素"
+      duration: "5-10min"
+      steps:
+        - step: "解析需求文档"
+          action: "提取功能需求和非功能需求"
+        - step: "识别核心实体"
+          action: "从需求中提取业务实体"
+          reference: "db-designer.yaml 表命名规范"
+        - step: "分析约束条件"
+          action: "整理技术和业务约束"
+        - step: "评估系统规模"
+          action: "确定架构复杂度等级"
+
+    - name: "技术选型"
+      description: "分析备选方案，生成推荐"
+      duration: "10-15min"
+      steps:
+        - step: "分析备选方案"
+          action: "列出可行的技术方案"
+        - step: "评估权衡"
+          action: "分析各方案的优劣"
+        - step: "生成推荐"
+          action: "输出技术选型建议"
+        - step: "记录决策"
+          action: "触发 ADR 记录重要决策"
+
+    - name: "架构设计"
+      description: "设计系统架构和模块划分"
+      duration: "15-25min"
+      steps:
+        - step: "设计系统架构"
+          action: "生成系统架构图"
+        - step: "模块划分"
+          action: "定义模块边界和职责"
+        - step: "接口设计"
+          action: "定义模块间接口"
+          reference: "api-designer.yaml 接口规范"
+        - step: "数据设计"
+          action: "设计核心数据模型"
+          reference: "db-designer.yaml 必需字段规范"
+
+    - name: "文档输出"
+      description: "生成架构文档和检查清单"
+      duration: "5-10min"
+      steps:
+        - step: "生成架构文档"
+          action: "输出完整架构设计文档"
+        - step: "更新关联文档"
+          action: "同步更新数据模型、领域设计等"
+        - step: "生成检查清单"
+          action: "输出架构评审检查清单"
+
+# ============================================
+# 第五部分：输出产物
+# ============================================
+output:
+  base_path: "docs/architecture"
+
+  artifacts:
+    - name: "架构设计文档"
+      path: "architecture-{project}.md"
+      description: "完整架构设计文档"
+
+    - name: "系统架构图"
+      path: "diagrams/system-architecture.mmd"
+      description: "Mermaid格式架构图"
+
+    - name: "模块划分图"
+      path: "diagrams/module-structure.mmd"
+      description: "模块依赖关系图"
+
+    - name: "数据流图"
+      path: "diagrams/data-flow.mmd"
+      description: "核心数据流图"
+
+    - name: "部署架构图"
+      path: "diagrams/deployment.mmd"
+      description: "部署拓扑图"
+
+    - name: "技术选型表"
+      path: "tech-selection.md"
+      description: "技术选型决策表"
+
+    - name: "检查清单"
+      path: "checklist.md"
+      description: "架构评审检查清单"
+
+# ============================================
+# 第六部分：后置动作
+# ============================================
+post_actions:
+  trigger_skills:
+    - skill: "adr"
+      condition: "存在重大技术决策"
+      pass_params: "decision_context"
+    - skill: "scaffold"
+      condition: "架构设计完成且为新项目"
+      pass_params: "architecture_config"
+    - skill: "implement"
+      condition: "架构设计完成且为增量开发"
+      pass_params: "implementation_plan"
+
+  notifications:
+    - event: "架构设计完成"
+      target: "技术负责人"
+      method: "邮件 + 站内信"
+    - event: "发现设计冲突"
+      target: "产品 + 研发"
+      method: "站内信"
+    - event: "需要评审"
+      target: "架构组"
+      method: "邮件"
+
+  document_updates:
+    - document: "数据模型文档"
+      update: "实体定义和关系"
+      timing: "架构确定后"
+    - document: "领域设计文档"
+      update: "领域边界和服务"
+      timing: "架构确定后"
+    - document: "数据库设计文档"
+      update: "表结构设计"
+      timing: "架构确定后"
+      reference: "db-designer.yaml"
+
+# ============================================
+# 第七部分：错误处理
+# ============================================
+error_handling:
+  errors:
+    - code: "INVALID_REQUIREMENT"
+      message: "需求文档格式错误"
+      solution: "请求用户修正"
+      retry: 0
+
+    - code: "DEPENDENCY_TIMEOUT"
+      message: "外部依赖超时"
+      solution: "重试请求"
+      retry: 3
+      timeout: "30s"
+
+    - code: "TEMPLATE_FAILED"
+      message: "模板渲染失败"
+      solution: "使用默认模板"
+      retry: 1
+
+    - code: "WRITE_FAILED"
+      message: "文档写入失败"
+      solution: "重试写入"
+      retry: 2
+      timeout: "10s"
+
+  degradation:
+    fallback_skill: "scaffold"
+    condition: "架构设计失败或超时（>60分钟）"
+    fallback_output: "使用默认脚手架模板生成项目结构"
+
+  rollback:
+    enabled: true
+    strategy: "文档版本回退"
+    checkpoints: "每个阶段完成时创建"
+
+# ============================================
+# 第八部分：配置选项
+# ============================================
+config:
+  template_options:
+    - name: "template"
+      type: "string"
+      default: "default"
+      description: "架构模板选择"
+    - name: "diagram_format"
+      type: "string"
+      default: "mermaid"
+      description: "架构图格式"
+    - name: "output_language"
+      type: "string"
+      default: "zh-CN"
+      description: "输出语言"
+
+  rule_options:
+    - name: "require_adr"
+      type: "boolean"
+      default: true
+      description: "是否自动生成ADR"
+    - name: "min_alternatives"
+      type: "int"
+      default: 2
+      description: "最少备选方案数"
+    - name: "check_conflicts"
+      type: "boolean"
+      default: true
+      description: "是否检查设计冲突"
+
+  user_preferences:
+    - name: "tech_stack"
+      options: ["spring-boot", "fastapi", "gin", "nest"]
+      default: "spring-boot"
+    - name: "architecture_style"
+      options: ["microservice", "monolith", "serverless"]
+      default: "microservice"
+    - name: "database"
+      options: ["mysql", "postgresql", "mongodb"]
+      default: "mysql"
+
+# ============================================
+# 第九部分：关联文档引用
+# ============================================
+references:
+  primary:
+    - path: "skills/design/db-designer.yaml"
+      description: "数据库设计规范、表命名、必需字段、索引设计"
+      relationship: "template"
+      sections:
+        - "表命名规范"
+        - "必需字段规范"
+        - "索引设计规范"
+
+    - path: "skills/design/api-designer.yaml"
+      description: "API设计规范、接口规划、权限设计"
+      relationship: "template"
+      sections:
+        - "第一部分：设计原则"
+        - "第二部分：接口规范"
+        - "第四部分：请求响应规范"
+
+  secondary:
+    - path: "docs/templates/architecture-template.md"
+      description: "架构设计文档模板"
+      relationship: "template"
+
+    - path: "skills/design/entity-designer.yaml"
+      description: "实体类设计规范"
+      relationship: "reference"
+      sections:
+        - "继承体系"
+        - "类型映射"
+
+  collaboration:
+    - skill: "requirement-review"
+      relationship: "upstream"
+      description: "需求评审通过后触发架构设计"
+      path: "skills/research/requirement-review.yaml"
+
+    - skill: "adr"
+      relationship: "downstream"
+      condition: "major_decisions"
+      description: "架构决策记录"
+      path: "skills/implement/adr.yaml"
+
+    - skill: "scaffold"
+      relationship: "downstream"
+      condition: "is_new_project"
+      description: "新项目生成脚手架"
+      path: "skills/implement/scaffold.yaml"
+
+    - skill: "implement"
+      relationship: "downstream"
+      condition: "is_incremental"
+      description: "增量开发直接进入实现"
+      path: "skills/implement/implement.yaml"
+
+# ============================================
+# 第十部分：质量标准
+# ============================================
+quality_standards:
+  - standard: "技术选型合理性"
+    requirement: "提供至少2个备选方案"
+    check: "检查技术选型表"
+
+  - standard: "架构完整性"
+    requirement: "覆盖所有功能需求"
+    check: "需求-架构映射检查"
+
+  - standard: "可扩展性"
+    requirement: "支持3-5倍业务增长"
+    check: "评估扩展策略"
+
+  - standard: "文档完整性"
+    requirement: "包含架构图、模块图、接口定义"
+    check: "检查输出产物清单"
+
+  - standard: "决策可追溯"
+    requirement: "重要决策关联ADR"
+    check: "ADR链接验证"
+
+# ============================================
+# 第十一部分：使用示例
+# ============================================
+examples:
+  - name: "电商系统架构设计"
+    input: |
+      requirements: |
+        开发一个B2C电商平台，支持用户注册登录、商品浏览、购物车、
+        订单管理、支付功能。预计日均PV 100万，高峰期QPS 5000。
+
+      constraints: |
+        团队熟悉Java和MySQL，预算有限。
+
+      preferences: |
+        语言：Java
+        框架：Spring Boot
+
+      scale: large
+      template: microservice
+    output_summary: |
+      技术选型：Vue 3 + Spring Boot + MySQL + Redis + RabbitMQ
+      核心服务：user-service, goods-service, order-service, payment-service
+      部署方案：容器化部署，支持水平扩展
+
+  - name: "快速原型架构"
+    input: |
+      requirements: "开发一个任务管理工具，支持任务的CRUD和团队协作"
+      scale: small
+      template: monolith
+    output_summary: |
+      简化的单体架构设计文档
+      技术栈：Spring Boot + MySQL
+      单服务部署
+
+# ============================================
+# 第十二部分：依赖工具
+# ============================================
+tools:
+  - name: "Read"
+    usage: "读取需求文档和现有架构文档"
+  - name: "Write"
+    usage: "输出架构设计文档"
+  - name: "Edit"
+    usage: "更新关联设计文档"
+  - name: "WebSearch"
+    usage: "查询技术最佳实践"
+  - name: "Glob"
+    usage: "查找项目现有结构"
+  - name: "Bash"
+    usage: "执行架构验证命令"
+
+# ============================================
+# 注意事项
+# ============================================
+notes:
+  - "架构设计需要平衡理想方案和团队能力"
+  - "过早优化是万恶之源，优先保证MVP可用"
+  - "架构文档需要持续更新维护"
+  - "重大架构决策必须记录ADR"
+  - "考虑成本约束和运维复杂度"
+  - "新项目建议使用脚手架模板快速启动"
+
+# ============================================
+# 更新历史
+# ============================================
+history:
+  - version: "2.0.0"
+    date: "2026-03-31"
+    changes: "转换为YAML格式，新增references章节"
+  - version: "2.0.0"
+    date: "2026-03-25"
+    changes: "增加协作关系、错误处理、配置化支持"
+  - version: "1.0.0"
+    date: "2026-03-18"
+    changes: "初始版本"

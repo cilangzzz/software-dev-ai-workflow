@@ -5,6 +5,18 @@ module_name: 销售管理模块
 system_type: ERP
 status: draft
 created_at: 2026-03-30
+# 动态引用基础架构规范（以 yudao-skill-pro 为准）
+# 基础路径通过环境变量 YUDAO_SKILL_PRO_PATH 或用户输入指定
+references:
+  design:
+    - "${YUDAO_SKILL_PRO_PATH}/skills/design/db-designer.yaml"
+    - "${YUDAO_SKILL_PRO_PATH}/skills/design/entity-designer.yaml"
+    - "${YUDAO_SKILL_PRO_PATH}/skills/design/api-designer.yaml"
+    - "${YUDAO_SKILL_PRO_PATH}/skills/design/crud-designer.yaml"
+  module_guide:
+    - "${YUDAO_SKILL_PRO_PATH}/skills/modules/erp/skill-erp.yaml"
+  # 默认路径（当环境变量未设置时使用）
+  default_path: "H:/Documents/yudao-skill-pro"
 ---
 
 # 需求规格
@@ -45,7 +57,25 @@ created_at: 2026-03-30
 - 生产计划模块(PP): 销售预测驱动生产
 
 ## 6. 数据约束
-- 多租户支持：所有业务表包含 tenant_id
-- 审计字段：created_by, created_time, updated_by, updated_time
-- 逻辑删除：deleted 字段 (0-未删除, 1-已删除)
-- VIN码预分配：订单创建时可预分配车辆VIN码
+
+> **重要**：数据约束以 yudao-skill-pro 基础架构规范为准。
+> 详细规范见 references 中指定的 db-designer.yaml 和 entity-designer.yaml。
+
+### 6.1 必需字段（详见 db-designer.yaml）
+- `id` - BIGINT, 主键
+- `tenant_id` - BIGINT, 租户编号（位于 id 之后）
+- `creator` - VARCHAR(64), 创建者
+- `create_time` - DATETIME, 创建时间
+- `updater` - VARCHAR(64), 更新者
+- `update_time` - DATETIME, 更新时间
+- `deleted` - BIT(1), 逻辑删除
+
+### 6.2 索引规范（详见 db-designer.yaml）
+- 所有索引必须包含 `tenant_id` 作为第一列
+- 唯一索引必须包含 `deleted` 字段
+
+### 6.3 实体继承（详见 entity-designer.yaml）
+- 多租户业务表：继承 `TenantBaseDO`
+
+### 6.4 业务特定约束
+- VIN码预分配：订单创建时可预分配车辆VIN码（17位，符合ISO3779标准）

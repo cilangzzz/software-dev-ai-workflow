@@ -1,0 +1,368 @@
+# 功能实现 Skill
+# 根据设计文档实现功能代码
+
+skill:
+  id: "implement"
+  name: "功能实现"
+  version: "1.0.0"
+  category: "implement"
+  description: "根据设计文档和用户故事，实现功能代码。AI辅助生成业务逻辑代码、数据模型、API接口等，并同步生成单元测试"
+  created_at: "2026-03-31"
+  updated_at: "2026-03-31"
+
+# ============================================
+# 第一部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/implement"
+
+  keywords:
+    - "实现这个功能"
+    - "写代码"
+    - "开发功能"
+    - "实现用户故事"
+
+  events:
+    - name: "architecture_completed"
+      condition: "架构设计完成"
+    - name: "scaffold_completed"
+      condition: "脚手架创建完成"
+    - name: "change_approved"
+      condition: "需求变更批准"
+
+# ============================================
+# 第二部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "specification"
+      type: "string"
+      required: true
+      description: "功能规格描述或用户故事"
+
+    - name: "target_file"
+      type: "string"
+      required: false
+      description: "目标文件路径"
+
+    - name: "language"
+      type: "string"
+      required: false
+      default: "auto_detect"
+      description: "编程语言（默认根据项目检测）"
+
+    - name: "style"
+      type: "string"
+      required: false
+      default: "clean"
+      enum: ["clean", "enterprise"]
+      description: "代码风格"
+
+# ============================================
+# 第三部分：执行流程
+# ============================================
+workflow:
+  description: "功能实现按以下6个阶段顺序执行"
+
+  phases:
+    - name: "需求理解"
+      description: "解析功能规格和用户故事"
+      duration: "2-5min"
+      steps:
+        - step: "解析功能规格"
+          action: "提取功能需求、验收标准"
+        - step: "识别实体和关系"
+          action: "从需求中提取业务实体"
+
+    - name: "上下文分析"
+      description: "分析现有代码结构和模式"
+      duration: "3-5min"
+      steps:
+        - step: "读取项目结构"
+          action: "使用 Glob 查找相关文件"
+        - step: "分析代码模式"
+          action: "使用 Read 读取现有实现模式"
+        - step: "识别技术栈"
+          action: "从配置文件推断技术栈"
+
+    - name: "设计实现"
+      description: "设计代码结构和逻辑"
+      duration: "5-10min"
+      steps:
+        - step: "参考设计文档"
+          action: "读取对应的 design.yaml 文件"
+          reference: "references.primary"
+        - step: "设计数据模型"
+          action: "根据 db-designer 规范设计实体"
+        - step: "设计API接口"
+          action: "根据 api-designer 规范设计接口"
+
+    - name: "代码生成"
+      description: "生成业务代码"
+      duration: "10-20min"
+      steps:
+        - step: "生成实体类"
+          action: "按照 entity-designer 模板生成 DO"
+        - step: "生成Mapper层"
+          action: "按照 crud-designer 模板生成 Mapper"
+        - step: "生成Service层"
+          action: "按照 crud-designer 模板生成 Service"
+        - step: "生成Controller层"
+          action: "按照 api-designer 模板生成 Controller"
+
+    - name: "测试生成"
+      description: "同步生成单元测试"
+      duration: "5-10min"
+      steps:
+        - step: "生成单元测试"
+          action: "为每个Service方法生成测试"
+        - step: "覆盖边界条件"
+          action: "测试正常、异常、边界场景"
+
+    - name: "文档注释"
+      description: "添加必要的代码注释"
+      duration: "2-3min"
+      steps:
+        - step: "添加JavaDoc注释"
+          action: "类和方法添加注释"
+        - step: "添加Swagger注解"
+          action: "API接口添加 @Operation 注解"
+
+# ============================================
+# 第四部分：输出产物
+# ============================================
+output:
+  base_path: "src/main/java/{package}"
+
+  artifacts:
+    - name: "实体类"
+      path: "dal/dataobject/{feature}/{Entity}DO.java"
+      description: "数据库实体映射类"
+
+    - name: "Mapper接口"
+      path: "dal/mysql/{feature}/{Entity}Mapper.java"
+      description: "数据访问接口"
+
+    - name: "Service接口"
+      path: "service/{feature}/{Entity}Service.java"
+      description: "业务服务接口"
+
+    - name: "Service实现"
+      path: "service/{feature}/{Entity}ServiceImpl.java"
+      description: "业务服务实现"
+
+    - name: "Controller"
+      path: "controller/admin/{feature}/{Entity}Controller.java"
+      description: "HTTP API控制器"
+
+    - name: "VO类"
+      path: "controller/admin/{feature}/vo/"
+      description: "请求响应对象"
+
+    - name: "单元测试"
+      path: "src/test/java/{package}/service/{feature}/"
+      description: "单元测试文件"
+
+# ============================================
+# 第五部分：质量标准
+# ============================================
+quality_standards:
+  - standard: "代码风格"
+    requirement: "符合项目既有风格"
+    check: "比对现有代码模式"
+
+  - standard: "测试覆盖"
+    requirement: "单元测试覆盖率 >= 80%"
+    check: "运行测试覆盖率工具"
+
+  - standard: "安全检查"
+    requirement: "无明显的安全漏洞"
+    check: "SQL注入、XSS检查"
+
+  - standard: "错误处理"
+    requirement: "包含必要的错误处理"
+    check: "异常捕获和业务异常"
+
+  - standard: "设计原则"
+    requirement: "遵循SOLID原则"
+    check: "代码复杂度检查"
+
+# ============================================
+# 第六部分：关联文档引用
+# ============================================
+references:
+  primary:
+    - path: "skills/design/api-designer.yaml"
+      description: "API设计规范、Controller模板、权限标识、错误码体系"
+      relationship: "template"
+      sections:
+        - "第二部分：接口规范（标准端点定义）"
+        - "第三部分：注解规范"
+        - "第五部分：权限标识规范"
+        - "第六部分：错误码体系"
+        - "第七部分：Controller模板"
+
+    - path: "skills/design/db-designer.yaml"
+      description: "数据库设计规范、SQL编写规范、索引设计"
+      relationship: "reference"
+      sections:
+        - "必需字段规范"
+        - "索引设计规范"
+        - "编写规范"
+
+    - path: "skills/design/crud-designer.yaml"
+      description: "CRUD完整实现流程、各层代码模板"
+      relationship: "template"
+      sections:
+        - "第三部分：执行流程（5阶段）"
+        - "第四部分：输出产物"
+        - "第五部分：命名规范速查"
+
+    - path: "skills/design/entity-designer.yaml"
+      description: "实体类设计规范、注解规范、继承体系"
+      relationship: "template"
+      sections:
+        - "继承体系"
+        - "注解规范"
+        - "代码模板"
+
+  secondary:
+    - path: "skills/usage/entity-implementation.md"
+      description: "实体类实现完整流程、各层代码模板"
+      relationship: "reference"
+
+    - path: "skills/modules/{module}/skill-{module}.yaml"
+      relationship: "module_reference"
+      description: "具体模块的技术规范和扩展指南"
+      example: "skills/modules/system/skill-system.yaml"
+
+  collaboration:
+    - skill: "architect"
+      relationship: "upstream"
+      description: "架构设计提供技术选型和模块划分"
+      path: "skills/implement/architect.yaml"
+
+    - skill: "scaffold"
+      relationship: "upstream"
+      description: "项目脚手架提供基础结构"
+      path: "skills/implement/scaffold.yaml"
+
+    - skill: "code-review"
+      relationship: "downstream"
+      description: "实现完成后触发代码评审"
+      path: "skills/implement/code-review.yaml"
+
+# ============================================
+# 第七部分：质量检查清单
+# ============================================
+checklist:
+  before_implement:
+    - item: "阅读对应的设计文档"
+      check: "读取 references.primary 中的 design.yaml"
+    - item: "分析现有代码模式"
+      check: "读取项目中类似的实现"
+    - item: "确认技术栈"
+      check: "识别语言、框架、ORM"
+
+  during_implement:
+    - item: "实体类继承正确基类"
+      check: "TenantBaseDO（多租户）/ BaseDO（单租户）"
+    - item: "Controller注解完整"
+      check: "@Tag/@RestController/@RequestMapping/@Validated"
+    - item: "接口权限标识正确"
+      check: "{module}:{feature}:{operation} 格式"
+    - item: "错误码编号符合规范"
+      check: "1_{module_code}_{feature_code}_{seq} 格式"
+
+  after_implement:
+    - item: "代码编译通过"
+      check: "执行 mvn compile / npm build"
+    - item: "单元测试通过"
+      check: "执行测试并检查覆盖率"
+    - item: "代码风格检查"
+      check: "lint 工具检查"
+
+# ============================================
+# 第八部分：使用示例
+# ============================================
+examples:
+  - name: "实现用户注册功能"
+    input: |
+      用户故事：作为新用户，我希望能够注册账号，以便使用系统功能。
+      验收标准：
+      - 支持邮箱注册
+      - 密码需要加密存储
+      - 注册成功发送欢迎邮件
+      - 用户名不能重复
+    output_summary: |
+      生成的文件：
+      - UserController.java (85行)
+      - UserService.java (120行)
+      - UserRepository.java (25行)
+      - User.java (45行)
+      - RegisterRequest.java (30行)
+      - UserServiceTest.java (150行)
+
+  - name: "实现商品搜索功能"
+    input: |
+      功能需求：实现商品搜索功能
+      - 支持关键词搜索
+      - 支持分类筛选
+      - 支持价格区间筛选
+      - 支持排序（价格、销量、上架时间）
+      - 分页展示
+    output_summary: |
+      生成的文件：
+      - GoodsController.java (65行)
+      - GoodsService.java (95行)
+      - GoodsSpecification.java (80行)
+      - GoodsSearchRequest.java (40行)
+      - GoodsSearchResponse.java (35行)
+
+# ============================================
+# 第九部分：依赖工具
+# ============================================
+tools:
+  - name: "Read"
+    usage: "读取现有代码结构"
+  - name: "Write"
+    usage: "创建新文件"
+  - name: "Edit"
+    usage: "修改现有文件"
+  - name: "Grep"
+    usage: "搜索相关代码"
+  - name: "Glob"
+    usage: "查找文件"
+
+# ============================================
+# 快速参考
+# ============================================
+quick_reference:
+  implementation_layers:
+    DO: "实体类 - dal/dataobject/{feature}/{Entity}DO.java"
+    Mapper: "数据访问 - dal/mysql/{feature}/{Entity}Mapper.java"
+    Service: "业务逻辑 - service/{feature}/{Entity}Service.java"
+    Controller: "HTTP接口 - controller/admin/{feature}/{Entity}Controller.java"
+    VO: "请求响应 - controller/admin/{feature}/vo/"
+
+  reference_design_docs:
+    api: "api-designer.yaml - Controller模板、权限、错误码"
+    db: "db-designer.yaml - SQL规范、索引设计"
+    entity: "entity-designer.yaml - 实体类继承、注解"
+    crud: "crud-designer.yaml - 完整实现流程"
+
+  common_patterns:
+    crud_pattern: "使用 crud-designer.yaml 生成标准 CRUD"
+    custom_pattern: "参考 api-designer.yaml 设计自定义接口"
+    query_pattern: "使用 LambdaQueryWrapperX 构建动态查询"
+
+# ============================================
+# 注意事项
+# ============================================
+notes:
+  - "生成的代码需要人工Review后才能合并"
+  - "复杂业务逻辑建议先做技术设计"
+  - "注意SQL注入、XSS等安全问题"
+  - "遵循项目既有的命名规范和代码风格"
+  - "测试用例需要覆盖边界条件"
