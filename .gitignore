@@ -38,3 +38,7 @@ target/
 #  Output directory
 output/
 ignore_direcetory/
+# Test directory
+test/
+# Code coverage directory
+.claude/
