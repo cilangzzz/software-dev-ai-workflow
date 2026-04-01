@@ -1,0 +1,181 @@
+name: mes-module-builder
+version: 1.0.0
+description: MES系统模块自动化开发场景配置
+extends: erp-module-builder
+
+# ============================================================
+# MES 特有配置扩展
+# ============================================================
+workflow:
+  phases:
+    # Build阶段扩展MES特有技能
+    - name: build
+      skills:
+        - db-designer
+        - api-designer
+        - entity-generator
+        - crud-generator
+        - implement
+        - scaffold
+        # MES特有技能
+        - plc-connector-generator      # PLC通讯代码生成
+        - barcode-handler-generator    # 条码处理代码生成
+        - vin-tracker-generator        # VIN追溯代码生成
+        - equipment-monitor-generator  # 设备监控代码生成
+      sub_agents:
+        - name: db-designer
+          context_isolation: true
+          max_tokens: 40000
+        - name: api-designer
+          context_isolation: true
+          max_tokens: 40000
+        - name: equipment-integrator
+          context_isolation: true
+          max_tokens: 30000
+
+# ============================================================
+# MES 行业特性配置
+# ============================================================
+domain_specific:
+  # 设备集成特性
+  equipment_integration:
+    plc_communication:
+      protocol: ModbusTCP
+      data_collection_interval: 100ms
+      connection_pool_size: 10
+    torque_gun_interface:
+      data_fields:
+        - torque_value
+        - angle_value
+        - result_status
+        - measurement_time
+      threshold_check: true
+    scanner_interface:
+      types:
+        - barcode_scanner
+        - qr_scanner
+        - rfid_reader
+      scan_timeout: 5s
+
+  # 追溯特性
+  traceability:
+    vin_tracking:
+      vin_length: 17
+      validation_rule: ISO3779
+      lifecycle_stages:
+        - 车身焊接
+        - 涂装
+        - 总装
+        - PDI检测
+        - 出厂
+    batch_tracking:
+      batch_id_format: "{date}-{line}-{seq}"
+      components:
+        - 零件批次
+        - 物料批次
+        - 工具批次
+    quality_trace:
+      inspection_types:
+        - 过程检验
+        - 终检
+        - PDI
+      critical_parts:
+        - 发动机
+        - 变速箱
+        - 安全气囊
+        - 刹车系统
+
+  # 实时特性
+  realtime:
+    data_collection:
+      mode: event_driven
+      buffer_size: 1000
+      flush_interval: 1s
+    status_monitoring:
+      update_interval: 500ms
+      metrics:
+        - 设备状态
+        - 工位状态
+        - 产线效率
+        - 故障告警
+
+# ============================================================
+# MES 特有工具
+# ============================================================
+tools:
+  extended:
+    - db_migrate
+    - api_test
+    - doc_validator
+    - uml_generator
+    - delegate_task
+    # MES特有工具
+    - plc_simulator
+    - barcode_reader
+    - vin_validator
+    - equipment_status_checker
+
+# ============================================================
+# MES API配置扩展
+# ============================================================
+api:
+  prefix: /admin-api/mes/{module}
+
+  mes_specific_endpoints:
+    # 工单相关
+    work_order:
+      - POST /work-orders (创建工单)
+      - PUT /work-orders/{id}/start (开工)
+      - PUT /work-orders/{id}/complete (完工)
+      - GET /work-orders/{id}/status (状态查询)
+
+    # 作业执行相关
+    assembly_task:
+      - POST /assembly-tasks (创建作业)
+      - PUT /assembly-tasks/{id}/scan (扫码绑定)
+      - PUT /assembly-tasks/{id}/submit (提交结果)
+      - GET /assembly-tasks/{id}/trace (追溯查询)
+
+    # 设备集成相关
+    equipment:
+      - GET /equipment/status (设备状态)
+      - POST /equipment/data (设备数据上报)
+      - GET /equipment/plc/{id} (PLC数据)
+
+    # 追溯相关
+    traceability:
+      - GET /trace/vin/{vin} (VIN追溯)
+      - GET /trace/batch/{batchId} (批次追溯)
+      - POST /trace/bind (关键件绑定)
+
+# ============================================================
+# MES 数据模型扩展
+# ============================================================
+entity:
+  required_fields:
+    - id
+    - tenant_id
+    - created_by
+    - created_time
+    - updated_by
+    - updated_time
+    - deleted
+    # MES特有字段
+    - vin (VARCHAR(17))           # 车辆识别码
+    - work_order_id (BIGINT)      # 工单ID
+    - workstation_id (BIGINT)     # 工位ID
+    - operation_id (BIGINT)       # 工序ID
+    - batch_id (VARCHAR(50))      # 批次ID
+    - equipment_id (BIGINT)       # 设备ID
+
+  mes_specific_tables:
+    - mes_work_order              # 生产工单表
+    - mes_operation               # 工序表
+    - mes_workstation             # 工位表
+    - mes_assembly_task           # 装配作业表
+    - mes_assembly_result         # 装配结果表
+    - mes_vin_trace               # VIN追溯表
+    - mes_critical_part_bind      # 关键件绑定表
+    - mes_equipment_status        # 设备状态表
+    - mes_plc_data                # PLC数据表
+    - mes_quality_inspection      # 质量检验表

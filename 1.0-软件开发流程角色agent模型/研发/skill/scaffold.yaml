@@ -1,0 +1,484 @@
+# 项目脚手架 Skill
+# 快速生成项目脚手架代码
+
+skill:
+  id: "scaffold"
+  name: "项目脚手架"
+  version: "1.0.0"
+  category: "implement"
+  description: "根据技术栈和项目类型快速生成项目脚手架代码。包含标准的项目结构、配置文件、基础代码模板，让开发者快速开始业务开发。"
+  priority: "P0"
+  created_at: "2026-03-31"
+  updated_at: "2026-03-31"
+
+# ============================================
+# 第一部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/scaffold"
+
+  keywords:
+    - "创建项目"
+    - "生成脚手架"
+    - "初始化项目"
+    - "创建新项目"
+
+  events:
+    - name: "architecture_completed"
+      condition: "架构设计完成且为新项目"
+    - name: "project_initiated"
+      condition: "项目启动"
+
+# ============================================
+# 第二部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "project_name"
+      type: "string"
+      required: true
+      description: "项目名称"
+      examples: ["my-shop-api", "admin-dashboard"]
+
+    - name: "tech_stack"
+      type: "string"
+      required: true
+      description: "技术栈"
+      enum: ["spring-boot", "vue3", "react", "nextjs", "fastapi", "gin"]
+      examples: ["spring-boot", "vue3"]
+
+    - name: "project_type"
+      type: "string"
+      required: false
+      default: "web"
+      enum: ["web", "api", "cli", "lib"]
+      description: "项目类型"
+
+    - name: "features"
+      type: "string"
+      required: false
+      description: "需要的功能特性（逗号分隔）"
+      examples: ["mysql, redis, security, swagger"]
+
+# ============================================
+# 第三部分：执行流程
+# ============================================
+workflow:
+  description: "项目脚手架按以下6个阶段执行"
+
+  phases:
+    - name: "模板匹配"
+      description: "根据技术栈选择对应模板"
+      duration: "1-2min"
+      steps:
+        - step: "识别技术栈"
+          action: "根据 tech_stack 参数选择模板"
+        - step: "识别项目类型"
+          action: "确定 web/api/cli/lib 类型"
+        - step: "识别功能特性"
+          action: "解析 features 列表"
+
+    - name: "变量替换"
+      description: "替换模板中的项目名称等变量"
+      duration: "1-2min"
+      steps:
+        - step: "设置项目变量"
+          action: "project_name, package_name, port 等"
+        - step: "设置特性变量"
+          action: "根据 features 启用/禁用配置"
+
+    - name: "目录创建"
+      description: "创建标准项目结构"
+      duration: "2-3min"
+      steps:
+        - step: "创建基础目录"
+          action: "src, docs, config 等"
+        - step: "创建技术栈特定目录"
+          action: "根据技术栈创建对应目录结构"
+          reference: "architect.yaml 模块划分"
+
+    - name: "配置生成"
+      description: "生成配置文件"
+      duration: "2-3min"
+      steps:
+        - step: "生成应用配置"
+          action: "application.yml, package.json 等"
+        - step: "生成数据库配置"
+          action: "数据库连接配置"
+          condition: "tech_stack == 'spring-boot' && features contains 'mysql'"
+          reference: "db-designer.yaml 配置规范"
+        - step: "生成构建配置"
+          action: "pom.xml, Dockerfile 等"
+
+    - name: "基础代码"
+      description: "生成示例代码和测试"
+      duration: "3-5min"
+      steps:
+        - step: "生成主入口类"
+          action: "Application.java, main.ts 等"
+        - step: "生成示例控制器"
+          action: "HealthController.java 等"
+        - step: "生成示例测试"
+          action: "ApplicationTests.java 等"
+
+    - name: "依赖安装"
+      description: "生成依赖文件"
+      duration: "1-2min"
+      steps:
+        - step: "生成依赖清单"
+          action: "pom.xml, package.json 等"
+        - step: "生成依赖锁定文件"
+          action: "可选执行 mvn/npm 命令"
+
+# ============================================
+# 第四部分：支持的技术栈
+# ============================================
+tech_stacks:
+  - name: "Spring Boot"
+    identifier: "spring-boot"
+    features: ["mysql", "redis", "mongodb", "security", "swagger"]
+    base_structure: |
+      {project_name}/
+      ├── src/main/java/com/{package}/
+      │   ├── Application.java
+      │   ├── config/
+      │   ├── controller/
+      │   ├── service/
+      │   ├── repository/
+      │   └── entity/
+      ├── src/main/resources/
+      │   ├── application.yml
+      │   └── application-dev.yml
+      ├── src/test/java/
+      ├── docs/
+      ├── .gitignore
+      ├── pom.xml
+      └── README.md
+
+  - name: "Vue 3"
+    identifier: "vue3"
+    features: ["typescript", "pinia", "router", "eslint"]
+    base_structure: |
+      {project_name}/
+      ├── src/
+      │   ├── main.ts
+      │   ├── App.vue
+      │   ├── router/
+      │   ├── stores/
+      │   ├── views/
+      │   ├── components/
+      │   ├── api/
+      │   └── assets/
+      ├── public/
+      ├── .gitignore
+      ├── index.html
+      ├── package.json
+      ├── tsconfig.json
+      ├── vite.config.ts
+      └── README.md
+
+  - name: "React"
+    identifier: "react"
+    features: ["typescript", "redux", "router", "tailwind"]
+    base_structure: |
+      {project_name}/
+      ├── src/
+      │   ├── App.tsx
+      │   ├── components/
+      │   ├── pages/
+      │   ├── store/
+      │   ├── hooks/
+      │   └── utils/
+      ├── public/
+      ├── .gitignore
+      ├── package.json
+      ├── tsconfig.json
+      └── README.md
+
+  - name: "Next.js"
+    identifier: "nextjs"
+    features: ["typescript", "prisma", "tailwind", "trpc"]
+    base_structure: |
+      {project_name}/
+      ├── src/
+      │   ├── pages/
+      │   ├── components/
+      │   ├── lib/
+      │   └── styles/
+      ├── prisma/
+      ├── public/
+      ├── .gitignore
+      ├── package.json
+      ├── next.config.js
+      └── README.md
+
+  - name: "Python FastAPI"
+    identifier: "fastapi"
+    features: ["sqlalchemy", "redis", "celery"]
+    base_structure: |
+      {project_name}/
+      ├── app/
+      │   ├── main.py
+      │   ├── api/
+      │   ├── models/
+      │   ├── services/
+      │   └── config/
+      ├── tests/
+      ├── .gitignore
+      ├── requirements.txt
+      └── README.md
+
+  - name: "Go Gin"
+    identifier: "gin"
+    features: ["gorm", "redis", "swagger"]
+    base_structure: |
+      {project_name}/
+      ├── cmd/
+      ├── internal/
+      │   ├── handlers/
+      │   ├── models/
+      │   ├── services/
+      │   └── config/
+      ├── pkg/
+      ├── .gitignore
+      ├── go.mod
+      └── README.md
+
+# ============================================
+# 第五部分：输出产物
+# ============================================
+output:
+  base_path: "{project_name}"
+
+  artifacts:
+    - name: "项目目录结构"
+      description: "完整的标准项目目录"
+
+    - name: "应用配置文件"
+      files: ["application.yml", "package.json", "config.py"]
+      description: "应用运行配置"
+
+    - name: "构建配置文件"
+      files: ["pom.xml", "Dockerfile", "Makefile"]
+      description: "构建和部署配置"
+
+    - name: "主入口文件"
+      files: ["Application.java", "main.ts", "main.py"]
+      description: "应用启动入口"
+
+    - name: "示例代码"
+      files: ["HealthController.java", "App.vue"]
+      description: "示例代码模板"
+
+    - name: "测试文件"
+      files: ["ApplicationTests.java", "tests/"]
+      description: "基础测试框架"
+
+    - name: "README文档"
+      files: ["README.md", "docs/"]
+      description: "项目说明文档"
+
+# ============================================
+# 第六部分：关联文档引用
+# ============================================
+references:
+  primary:
+    - path: "skills/implement/architect.yaml"
+      description: "架构设计提供技术栈选择和项目结构"
+      relationship: "input"
+      sections:
+        - "技术选型"
+        - "模块划分"
+        - "部署架构"
+
+  secondary:
+    - path: "skills/design/db-designer.yaml"
+      description: "数据库配置规范（当启用mysql特性时）"
+      relationship: "reference"
+      condition: "features contains 'mysql'"
+      sections:
+        - "必需字段规范"
+
+    - path: "templates/scaffold/"
+      description: "各类技术栈的脚手架模板"
+      relationship: "template"
+
+  collaboration:
+    - skill: "architect"
+      relationship: "upstream"
+      condition: "architect_completed"
+      description: "依赖架构设计确定技术栈"
+      path: "skills/implement/architect.yaml"
+
+    - skill: "implement"
+      relationship: "downstream"
+      description: "脚手架创建后进入功能开发"
+      path: "skills/implement/implement.yaml"
+
+# ============================================
+# 第七部分：质量标准
+# ============================================
+quality_standards:
+  - standard: "项目结构"
+    requirement: "符合最佳实践"
+    check: "对比标准模板结构"
+
+  - standard: "配置文件"
+    requirement: "完整可用"
+    check: "检查必要配置项"
+
+  - standard: "测试框架"
+    requirement: "包含基础测试框架"
+    check: "检查测试目录和文件"
+
+  - standard: "文档"
+    requirement: "包含README和开发指南"
+    check: "检查文档文件"
+
+  - standard: "代码风格"
+    requirement: "代码风格检查配置完整"
+    check: "检查 eslint/prettier/checkstyle 配置"
+
+# ============================================
+# 第八部分：使用示例
+# ============================================
+examples:
+  - name: "创建Spring Boot项目"
+    input: |
+      project_name: my-shop-api
+      tech_stack: spring-boot
+      project_type: api
+      features: mysql, redis, security, swagger
+    output_summary: |
+      项目 my-shop-api 创建成功！
+
+      项目结构:
+      my-shop-api/
+      ├── src/main/java/com/myshop/api/
+      │   ├── MyShopApiApplication.java
+      │   ├── config/ (SecurityConfig, RedisConfig, SwaggerConfig)
+      │   ├── controller/
+      │   ├── service/
+      │   ├── repository/
+      │   └── entity/
+      ├── src/main/resources/
+      │   ├── application.yml
+      │   └── application-dev.yml
+      ├── docs/
+      ├── .gitignore
+      ├── pom.xml
+      └── README.md
+
+      下一步:
+      1. cd my-shop-api
+      2. 配置数据库连接（修改 application-dev.yml）
+      3. 运行 mvn spring-boot:run
+
+  - name: "创建Vue3项目"
+    input: |
+      project_name: admin-dashboard
+      tech_stack: vue3
+      project_type: web
+      features: typescript, pinia, router, tailwind
+    output_summary: |
+      项目 admin-dashboard 创建成功！
+
+      项目结构:
+      admin-dashboard/
+      ├── src/
+      │   ├── main.ts
+      │   ├── App.vue
+      │   ├── router/index.ts
+      │   ├── stores/counter.ts
+      │   ├── views/HomeView.vue
+      │   ├── components/
+      │   ├── api/
+      │   └── assets/
+      ├── public/
+      ├── .gitignore
+      ├── index.html
+      ├── package.json
+      ├── tsconfig.json
+      ├── vite.config.ts
+      ├── tailwind.config.js
+      └── README.md
+
+      下一步:
+      1. cd admin-dashboard
+      2. npm install
+      3. npm run dev
+
+# ============================================
+# 第九部分：依赖工具
+# ============================================
+tools:
+  - name: "Bash"
+    usage: "执行脚手架命令（npm init, mvn archetype 等）"
+  - name: "Write"
+    usage: "创建项目文件"
+  - name: "Edit"
+    usage: "修改配置文件"
+
+# ============================================
+# 第十部分：质量检查清单
+# ============================================
+checklist:
+  before_create:
+    - item: "项目名称符合命名规范"
+      check: "小写、连字符格式"
+    - item: "技术栈参数有效"
+      check: "在 tech_stacks 列表中"
+    - item: "功能特性参数有效"
+      check: "在对应技术栈的 features 列表中"
+
+  during_create:
+    - item: "目录结构正确"
+      check: "对比标准模板"
+    - item: "配置文件完整"
+      check: "检查必要配置项"
+    - item: "变量替换正确"
+      check: "检查 project_name 等变量"
+
+  after_create:
+    - item: "README内容正确"
+      check: "包含项目名称和下一步指引"
+    - item: "示例代码可运行"
+      check: "编译/启动测试"
+    - item: "配置文件格式正确"
+      check: "YAML/JSON 格式校验"
+
+# ============================================
+# 注意事项
+# ============================================
+notes:
+  - "项目名称需符合命名规范（小写、连字符）"
+  - "创建后需检查并修改配置文件"
+  - "根据实际需求调整依赖版本"
+  - "建议先查看生成的README了解项目结构"
+  - "部分功能可能需要额外配置（如数据库连接）"
+
+# ============================================
+# 快速参考
+# ============================================
+quick_reference:
+  tech_stack_commands:
+    spring-boot: "mvn spring-boot:run"
+    vue3: "npm run dev"
+    react: "npm start"
+    nextjs: "npm run dev"
+    fastapi: "uvicorn app.main:app"
+    gin: "go run cmd/main.go"
+
+  common_features:
+    mysql: "数据库配置 + ORM"
+    redis: "缓存配置"
+    security: "安全认证配置"
+    swagger: "API文档配置"
+    typescript: "TypeScript配置"
+
+  next_steps:
+    - "cd {project_name}"
+    - "安装依赖（npm install / mvn install）"
+    - "配置数据库连接"
+    - "运行项目"

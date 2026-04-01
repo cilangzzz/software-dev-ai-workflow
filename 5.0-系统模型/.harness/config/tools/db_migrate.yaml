@@ -1,0 +1,180 @@
+name: db_migrate
+version: 1.0.0
+description: 数据库迁移脚本生成与管理工具
+
+# ============================================================
+# OpenAI Function Calling Schema
+# ============================================================
+schema:
+  type: function
+  function:
+    name: db_migrate
+    description: |
+      根据数据库设计文档生成迁移脚本，支持Flyway/Liquibase格式。
+      可验证SQL语法、生成DDL脚本、管理迁移版本。
+    parameters:
+      type: object
+      properties:
+        action:
+          type: string
+          enum: [generate, validate, apply, rollback]
+          description: 执行动作
+        db_design_file:
+          type: string
+          description: 数据库设计文档路径
+        target_database:
+          type: string
+          enum: [mysql, postgresql, oracle]
+          default: mysql
+          description: 目标数据库类型
+        migration_tool:
+          type: string
+          enum: [flyway, liquibase, mybatis-migrate]
+          default: flyway
+          description: 迁移工具类型
+        output_dir:
+          type: string
+          default: 代码/backend/db/migration
+          description: 输出目录
+        version_prefix:
+          type: string
+          default: "V"
+          description: 版本前缀（Flyway格式）
+      required:
+        - action
+        - db_design_file
+
+# ============================================================
+# 执行流程定义
+# ============================================================
+execution_flow:
+  generate:
+    description: 生成迁移脚本
+    steps:
+      - name: parse
+        description: 解析数据库设计文档中的CREATE TABLE语句
+        parser: markdown_sql_parser
+      - name: validate
+        description: 验证SQL语法和表关系
+        validator: sql_linter
+      - name: transform
+        description: 转换为目标数据库格式（如有需要）
+        transformer: dialect_adapter
+      - name: version
+        description: 生成版本号（基于时间戳）
+        generator: version_generator
+        format: "YYYYMMDDHHMMSS"
+      - name: output
+        description: 输出迁移文件
+        format: "V{version}__{description}.sql"
+
+  validate:
+    description: 验证SQL语法
+    steps:
+      - name: parse
+        description: 解析SQL语句
+        parser: sql_parser
+      - name: lint
+        description: SQL语法检查
+        linter: sql_linter
+        rules:
+          - valid_syntax
+          - proper_indexing
+          - foreign_key_constraints
+      - name: relation
+        description: 检查表关系和索引
+        checker: relation_checker
+      - name: report
+        description: 生成验证报告
+        format: json
+
+  apply:
+    description: 执行迁移
+    steps:
+      - name: connect
+        description: 连接数据库
+        connector: jdbc_connector
+      - name: execute
+        description: 执行迁移脚本
+        executor: migration_executor
+      - name: verify
+        description: 验证执行结果
+        verifier: schema_verifier
+
+  rollback:
+    description: 回滚迁移
+    steps:
+      - name: find
+        description: 查找对应回滚脚本
+        finder: rollback_finder
+      - name: execute
+        description: 执行回滚
+        executor: rollback_executor
+      - name: verify
+        description: 验证回滚结果
+        verifier: schema_verifier
+
+# ============================================================
+# 输出格式定义
+# ============================================================
+output_format:
+  flyway:
+    filename_pattern: "V{YYYYMMDDHHMMSS}__{description}.sql"
+    example: "V20260330150000__create_sd_customer.sql"
+    location: "db/migration/"
+
+  liquibase:
+    filename_pattern: "{description}.xml"
+    change_set_id: "{module}-{timestamp}"
+    example: "create-sd-customer.xml"
+    location: "db/changelog/"
+
+# ============================================================
+# 校验规则
+# ============================================================
+validation_rules:
+  sql_syntax:
+    - valid_create_table
+    - valid_column_definition
+    - valid_primary_key
+    - valid_foreign_key
+    - valid_index
+
+  naming_convention:
+    table_name: "^[a-z][a-z0-9_]*$"
+    column_name: "^[a-z][a-z0-9_]*$"
+    index_name: "^(uk|idx)_[a-z][a-z0-9_]*$"
+
+  required_fields:
+    - id (BIGINT)
+    - tenant_id (BIGINT)
+    - created_by (VARCHAR)
+    - created_time (DATETIME)
+    - updated_by (VARCHAR)
+    - updated_time (DATETIME)
+    - deleted (TINYINT)
+
+# ============================================================
+# 错误处理
+# ============================================================
+error_handling:
+  syntax_error:
+    code: DB001
+    message: SQL语法错误
+    action: 返回错误详情，建议修复
+  duplicate_table:
+    code: DB002
+    message: 表已存在
+    action: 检查是否为增量设计，建议使用ALTER TABLE
+  relation_error:
+    code: DB003
+    message: 外键关系错误
+    action: 检查父表是否存在，建议调整创建顺序
+  naming_violation:
+    code: DB004
+    message: 命名规范违反
+    action: 返回正确命名建议
+  missing_required_field:
+    code: DB005
+    message: 缺少必需字段
+    action: 列出缺失字段，提供添加建议

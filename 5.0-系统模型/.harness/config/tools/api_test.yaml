@@ -1,0 +1,233 @@
+name: api_test
+version: 1.0.0
+description: API接口测试执行与验证工具
+
+# ============================================================
+# OpenAI Function Calling Schema
+# ============================================================
+schema:
+  type: function
+  function:
+    name: api_test
+    description: |
+      根据API设计文档生成测试用例，执行接口测试，
+      支持Postman Collection生成和Newman执行。
+    parameters:
+      type: object
+      properties:
+        action:
+          type: string
+          enum: [generate_collection, run_test, validate_spec]
+          description: 执行动作
+        api_design_file:
+          type: string
+          description: API设计文档路径
+        openapi_spec:
+          type: string
+          description: OpenAPI规范文件路径（可选）
+        base_url:
+          type: string
+          default: http://localhost:8080
+          description: 测试服务器地址
+        auth_config:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [bearer, basic, api_key, none]
+              default: bearer
+            token_env_var:
+              type: string
+              default: API_TOKEN
+            token_value:
+              type: string
+              description: 直接提供token值（可选）
+        output_dir:
+          type: string
+          default: 代码/tests/api
+          description: 输出目录
+      required:
+        - action
+
+# ============================================================
+# 执行流程定义
+# ============================================================
+execution_flow:
+  generate_collection:
+    description: 生成Postman Collection
+    steps:
+      - name: parse
+        description: 解析API设计文档或OpenAPI规范
+        parser: openapi_parser
+      - name: generate
+        description: 生成Postman Collection JSON
+        generator: postman_generator
+      - name: add_auth
+        description: 添加鉴权配置
+        configurator: auth_configurator
+      - name: add_tests
+        description: 添加测试脚本
+        generator: test_script_generator
+        scripts:
+          - status_check
+          - response_format
+          - pagination_format
+          - error_format
+      - name: output
+        description: 输出Collection文件
+        format: json
+
+  run_test:
+    description: 执行测试
+    steps:
+      - name: load
+        description: 加载Postman Collection
+        loader: collection_loader
+      - name: start_server
+        description: 检查服务器状态
+        checker: health_checker
+        endpoint: /actuator/health
+      - name: execute
+        description: 使用Newman执行测试
+        runner: newman_runner
+        options:
+          reporters: [cli, junit, html]
+          timeout: 30000
+      - name: report
+        description: 生成测试报告
+        format: junit
+
+  validate_spec:
+    description: 验证OpenAPI规范
+    steps:
+      - name: load
+        description: 加载OpenAPI规范
+        loader: spec_loader
+      - name: lint
+        description: 检查规范完整性
+        linter: spectral_linter
+        rules:
+          - info-contact
+          - info-description
+          - operation-description
+          - operation-tags
+          - operation-success-response
+      - name: validate
+        description: 验证是否符合OpenAPI 3.0标准
+        validator: swagger_validator
+      - name: report
+        description: 生成验证报告
+        format: json
+
+# ============================================================
+# 测试脚本模板
+# ============================================================
+test_scripts:
+  status_check:
+    name: 状态码检查
+    script: |
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+  response_format:
+    name: 响应格式检查
+    script: |
+      pm.test("Response has correct format", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('code');
+          pm.expect(jsonData).to.have.property('message');
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData).to.have.property('timestamp');
+      });
+
+  pagination_format:
+    name: 分页格式检查
+    script: |
+      pm.test("Pagination format is correct", function () {
+          var jsonData = pm.response.json().data;
+          pm.expect(jsonData).to.have.property('list');
+          pm.expect(jsonData).to.have.property('total');
+          pm.expect(jsonData).to.have.property('pageNo');
+          pm.expect(jsonData).to.have.property('pageSize');
+          pm.expect(jsonData.list).to.be.an('array');
+      });
+
+  error_format:
+    name: 错误响应格式检查
+    script: |
+      pm.test("Error response has correct format", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData.code).to.not.equal(0);
+          pm.expect(jsonData.message).to.be.a('string');
+      });
+
+  field_type:
+    name: 字段类型检查
+    script: |
+      pm.test("Field types are correct", function () {
+          var data = pm.response.json().data;
+          pm.expect(data.id).to.be.a('number');
+          pm.expect(data.name).to.be.a('string');
+      });
+
+# ============================================================
+# Postman Collection 模板
+# ============================================================
+collection_template:
+  info:
+    name: "{module} API Tests"
+    schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  auth:
+    type: bearer
+    bearer:
+      - key: token
+        value: "{{api_token}}"
+  variable:
+    - key: base_url
+      value: "http://localhost:8080"
+    - key: api_token
+      value: ""
+
+# ============================================================
+# 输出报告格式
+# ============================================================
+report_format:
+  junit:
+    filename: api-test-results.xml
+    schema: JUnit XML Schema
+    path: "{output_dir}/reports/"
+
+  html:
+    filename: api-test-report.html
+    template: newman-html-reporter
+    path: "{output_dir}/reports/"
+
+  json:
+    filename: api-test-results.json
+    path: "{output_dir}/reports/"
+
+# ============================================================
+# 错误处理
+# ============================================================
+error_handling:
+  connection_error:
+    code: API001
+    message: 无法连接服务器
+    action: 检查base_url和服务器状态，确保服务已启动
+  auth_error:
+    code: API002
+    message: 鉴权失败
+    action: 检查token配置，确保token有效且未过期
+  validation_error:
+    code: API003
+    message: 响应格式不符合预期
+    action: 返回实际响应和预期格式对比，便于调试
+  timeout_error:
+    code: API004
+    message: 请求超时
+    action: 增加超时时间或检查服务器性能
+  spec_error:
+    code: API005
+    message: OpenAPI规范验证失败
+    action: 返回验证错误列表，提供修复建议
