@@ -459,6 +459,62 @@ confluence_add_label(page_id="12345", name="reviewed")
 confluence_remove_label(page_id="12345", name="draft")
 ```
 
+### Markdown to Confluence (`scripts.markdown_to_confluence`)
+
+Convert Markdown content to Confluence Storage Format for seamless page creation.
+
+```python
+from scripts.markdown_to_confluence import (
+    markdown_to_confluence,
+    markdown_file_to_confluence,
+    create_confluence_page_from_markdown,
+    update_confluence_page_from_markdown
+)
+
+# Convert Markdown text to Confluence format
+result = markdown_to_confluence(
+    markdown="# Overview\\nThis is **bold** text with `inline code`."
+)
+# Returns: {"success": true, "content": "<h1>Overview</h1><p>This is <strong>bold</strong> text with <code>inline code</code>.</p>"}
+
+# Convert a Markdown file
+result = markdown_file_to_confluence(
+    file_path="/path/to/document.md"
+)
+
+# Create a Confluence page directly from Markdown
+result = create_confluence_page_from_markdown(
+    space_key="DEV",
+    title="API Documentation",
+    markdown="# API Overview\\n## Endpoints\\n- GET /users\\n- POST /users",
+    parent_id="12345"
+)
+
+# Update an existing page from Markdown
+result = update_confluence_page_from_markdown(
+    page_id="67890",
+    title="Updated Documentation",
+    markdown="# Updated Content\\nNew information here."
+)
+```
+
+**Supported Markdown elements:**
+- Headers: `#` through `######`
+- Bold: `**text**` or `__text__`
+- Italic: `*text*` or `_text_`
+- Strikethrough: `~~text~~`
+- Inline code: `` `code` ``
+- Code blocks with language: ` ```python ... ``` `
+- Bullet lists: `- item`, `* item`, `+ item`
+- Numbered lists: `1. item`, `2) item`
+- Task lists: `- [ ] task`, `- [x] completed`
+- Links: `[text](url)`
+- Internal Confluence links: `[text](spaceKey:Page Title)`
+- Images: `![alt](url)` or `![alt|width,height](url)`
+- Tables: `| col1 | col2 |`
+- Blockquotes: `> quote text`
+- Horizontal rules: `---`, `***`, `___`
+
 ### Bitbucket Projects (`scripts.bitbucket_projects`)
 
 ```python
