@@ -195,6 +195,11 @@ Once configured, simply ask Claude to perform Atlassian operations:
 
 ### Confluence
 
+**confluence_spaces**
+- `confluence_get_spaces` - Get all spaces (with optional type filter)
+- `confluence_get_space` - Get a single space by key
+- `confluence_get_space_content` - Get content (pages/blog posts) from a space
+
 **confluence_pages**
 - `confluence_get_page` - Get a page by ID or title
 - `confluence_create_page` - Create a new page

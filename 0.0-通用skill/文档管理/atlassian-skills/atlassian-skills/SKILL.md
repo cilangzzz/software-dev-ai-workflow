@@ -363,6 +363,35 @@ jira_create_version(
 )
 ```
 
+### Confluence Spaces (`scripts.confluence_spaces`)
+
+```python
+from scripts.confluence_spaces import (
+    confluence_get_spaces,
+    confluence_get_space,
+    confluence_get_space_content
+)
+
+# Get all spaces
+confluence_get_spaces(
+    limit=50,
+    space_type='global'  # 'global', 'personal', or None for all
+)
+
+# Get single space details
+confluence_get_space(
+    space_key='DEV',
+    expand='description,icon,homepage'
+)
+
+# Get content from a space
+confluence_get_space_content(
+    space_key='DEV',
+    content_type='page',  # 'page', 'blogpost', or None for all
+    depth='root'  # 'root' for top-level, 'all' for all
+)
+```
+
 ### Confluence Pages (`scripts.confluence_pages`)
 
 ```python
