@@ -1,0 +1,294 @@
+# Vue3项目脚手架 Skill
+# 快速生成Vue3前端项目结构
+
+skill:
+  id: "vue-scaffold"
+  name: "Vue3项目脚手架"
+  version: "1.0.0"
+  category: "frontend/vue"
+  description: "快速生成Vue3前端项目结构，包含Vite构建、TypeScript、Pinia状态管理、Vue Router路由"
+  priority: "P0"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/vue-scaffold"
+    - "/scaffold vue"
+
+  keywords:
+    - "创建Vue项目"
+    - "Vue脚手架"
+    - "生成Vue项目"
+    - "新建Vue应用"
+
+# ============================================
+# 第二部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "project_name"
+      type: "string"
+      required: true
+      description: "项目名称"
+      examples: ["admin-dashboard", "user-portal"]
+
+    - name: "ui_framework"
+      type: "string"
+      required: false
+      default: "element-plus"
+      enum: ["element-plus", "ant-design-vue", "naive-ui", "none"]
+      description: "UI组件库"
+
+    - name: "features"
+      type: "array"
+      required: false
+      default: ["router", "pinia", "axios"]
+      description: "需要的功能特性"
+      options:
+        - "router"      # Vue Router
+        - "pinia"       # 状态管理
+        - "axios"       # HTTP请求
+        - "tailwind"    # Tailwind CSS
+        - "eslint"      # ESLint
+        - "prettier"    # Prettier
+
+# ============================================
+# 第三部分：执行流程
+# ============================================
+workflow:
+  phases:
+    - name: "参数解析"
+      description: "解析用户输入参数"
+      steps:
+        - step: "确定项目名称"
+        - step: "选择UI组件库"
+        - step: "确定功能特性"
+
+    - name: "项目初始化"
+      description: "使用Vite创建Vue项目"
+      steps:
+        - step: "执行npm create vite命令"
+          action: "npm create vite@latest {project_name} -- --template vue-ts"
+        - step: "安装依赖"
+          action: "npm install"
+
+    - name: "功能扩展"
+      description: "添加选定的功能特性"
+      steps:
+        - step: "安装Vue Router"
+          condition: "features contains 'router'"
+          action: "npm install vue-router@4"
+        - step: "安装Pinia"
+          condition: "features contains 'pinia'"
+          action: "npm install pinia"
+        - step: "安装Axios"
+          condition: "features contains 'axios'"
+          action: "npm install axios"
+        - step: "安装Tailwind"
+          condition: "features contains 'tailwind'"
+          action: "npm install -D tailwindcss postcss autoprefixer"
+
+    - name: "目录创建"
+      description: "创建标准目录结构"
+      steps:
+        - step: "创建api目录"
+        - step: "创建stores目录"
+        - step: "创建views目录"
+        - step: "创建components目录"
+
+# ============================================
+# 第四部分：项目结构模板
+# ============================================
+project_template:
+  structure: |
+    {project_name}/
+    ├── src/
+    │   ├── main.ts
+    │   ├── App.vue
+    │   ├── api/
+    │   │   ├── index.ts          # Axios实例
+    │   │   └── modules/
+    │   │       └── userApi.ts
+    │   ├── assets/
+    │   │   └── styles/
+    │   │       └── main.css
+    │   ├── components/
+    │   │   └── common/
+    │   ├── composables/
+    │   ├── router/
+    │   │   └── index.ts
+    │   ├── stores/
+    │   │   ├── index.ts
+    │   │   └── modules/
+    │   │       └── userStore.ts
+    │   ├── types/
+    │   │   └── index.ts
+    │   ├── utils/
+    │   │   └── index.ts
+    │   └── views/
+    │       └── home/
+    │           └── index.vue
+    ├── public/
+    ├── .env
+    ├── .env.development
+    ├── index.html
+    ├── package.json
+    ├── tsconfig.json
+    └── vite.config.ts
+
+# ============================================
+# 第五部分：基础代码模板
+# ============================================
+code_templates:
+  main_ts: |
+    import { createApp } from 'vue'
+    import { createPinia } from 'pinia'
+    import App from './App.vue'
+    import router from './router'
+    import './assets/styles/main.css'
+
+    const app = createApp(App)
+
+    app.use(createPinia())
+    app.use(router)
+
+    app.mount('#app')
+
+  api_index: |
+    import axios from 'axios'
+
+    const api = axios.create({
+      baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    // 请求拦截器
+    api.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem('token')
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`
+        }
+        return config
+      },
+      (error) => Promise.reject(error)
+    )
+
+    // 响应拦截器
+    api.interceptors.response.use(
+      (response) => response.data,
+      (error) => {
+        console.error('API Error:', error)
+        return Promise.reject(error)
+      }
+    )
+
+    export default api
+
+  router_index: |
+    import { createRouter, createWebHistory } from 'vue-router'
+    import type { RouteRecordRaw } from 'vue-router'
+
+    const routes: RouteRecordRaw[] = [
+      {
+        path: '/',
+        name: 'Home',
+        component: () => import('@/views/home/index.vue')
+      }
+    ]
+
+    const router = createRouter({
+      history: createWebHistory(),
+      routes
+    })
+
+    export default router
+
+  store_example: |
+    import { defineStore } from 'pinia'
+    import { ref, computed } from 'vue'
+
+    export const useUserStore = defineStore('user', () => {
+      // State
+      const user = ref<User | null>(null)
+      const token = ref<string>('')
+
+      // Getters
+      const isLoggedIn = computed(() => !!token.value)
+      const userName = computed(() => user.value?.name || '')
+
+      // Actions
+      function setUser(userData: User) {
+        user.value = userData
+      }
+
+      function setToken(newToken: string) {
+        token.value = newToken
+        localStorage.setItem('token', newToken)
+      }
+
+      function logout() {
+        user.value = null
+        token.value = ''
+        localStorage.removeItem('token')
+      }
+
+      return {
+        user,
+        token,
+        isLoggedIn,
+        userName,
+        setUser,
+        setToken,
+        logout
+      }
+    })
+
+# ============================================
+# 第六部分：输出产物
+# ============================================
+output:
+  artifacts:
+    - name: "项目目录"
+      description: "完整的Vue3项目结构"
+    - name: "配置文件"
+      files: ["vite.config.ts", "tsconfig.json", "package.json"]
+    - name: "入口文件"
+      files: ["main.ts", "App.vue"]
+    - name: "API封装"
+      files: ["api/index.ts"]
+    - name: "路由配置"
+      files: ["router/index.ts"]
+    - name: "状态管理"
+      files: ["stores/index.ts"]
+
+# ============================================
+# 第七部分：使用示例
+# ============================================
+examples:
+  - name: "创建Element Plus管理后台"
+    input: |
+      project_name: admin-dashboard
+      ui_framework: element-plus
+      features: [router, pinia, axios]
+    output_summary: |
+      项目 admin-dashboard 创建成功！
+
+      下一步:
+      1. cd admin-dashboard
+      2. npm install
+      3. npm run dev
+
+# ============================================
+# 第八部分：注意事项
+# ============================================
+notes:
+  - "需要Node.js 18+版本"
+  - "推荐使用pnpm管理依赖"
+  - "TypeScript配置使用strict模式"

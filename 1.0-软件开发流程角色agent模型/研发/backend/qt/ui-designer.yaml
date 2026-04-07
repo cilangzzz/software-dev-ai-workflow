@@ -1,0 +1,354 @@
+# Qt界面设计规范 Skill
+# 定义Qt桌面应用界面设计规范
+
+skill:
+  id: "qt-ui-designer"
+  name: "Qt界面设计规范"
+  version: "1.0.0"
+  category: "backend/qt"
+  description: "定义Qt桌面应用界面设计规范，包括布局管理、控件使用、样式设计、用户体验等方面"
+  priority: "P0"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：设计原则
+# ============================================
+philosophy:
+  design_principles:
+    - principle: "布局优先"
+      description: "使用布局管理器而非固定坐标，确保窗口可伸缩"
+      reason: "Qt应用需要在不同分辨率下正常显示"
+
+    - principle: "信号槽驱动"
+      description: "界面交互通过信号槽机制实现解耦"
+      reason: "Qt的核心机制，实现松耦合"
+
+    - principle: "Model-View分离"
+      description: "数据与展示分离，使用Model-View架构"
+      reason: "便于数据管理和界面复用"
+
+    - principle: "样式统一"
+      description: "使用QSS统一应用样式"
+      reason: "保持视觉一致性"
+
+# ============================================
+# 第二部分：布局管理规范
+# ============================================
+layout_management:
+  # 布局类型选择
+  layout_types:
+    - name: "QVBoxLayout"
+      use_case: "垂直排列的控件"
+      example: "设置页面的表单项"
+
+    - name: "QHBoxLayout"
+      use_case: "水平排列的控件"
+      example: "底部按钮栏（确定/取消）"
+
+    - name: "QGridLayout"
+      use_case: "网格排列的控件"
+      example: "数据录入表单"
+
+    - name: "QFormLayout"
+      use_case: "标签-字段表单"
+      example: "设置对话框"
+
+    - name: "QStackedLayout"
+      use_case: "切换显示的页面"
+      example: "向导页面、标签页内容"
+
+  # 布局代码模板
+  layout_template:
+    description: "标准布局设置代码"
+    code: |
+      void setupLayout()
+      {
+          QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
+          // 顶部区域
+          QHBoxLayout *topLayout = new QHBoxLayout();
+          topLayout->addWidget(m_searchEdit);
+          topLayout->addWidget(m_searchButton);
+          mainLayout->addLayout(topLayout);
+
+          // 中间内容区域
+          mainLayout->addWidget(m_tableView, 1);  // stretch=1，占据剩余空间
+
+          // 底部按钮区域
+          QHBoxLayout *buttonLayout = new QHBoxLayout();
+          buttonLayout->addStretch();  // 右对齐
+          buttonLayout->addWidget(m_okButton);
+          buttonLayout->addWidget(m_cancelButton);
+          mainLayout->addLayout(buttonLayout);
+      }
+
+  # 布局规范
+  layout_rules:
+    - rule: "边距设置"
+      values:
+        - margin: 9
+          description: "默认边距，适合大多数场景"
+        - margin: 11
+          description: "对话框推荐边距"
+      code: "layout->setContentsMargins(9, 9, 9, 9);"
+
+    - rule: "间距设置"
+      values:
+        - spacing: 6
+          description: "默认间距"
+        - spacing: 9
+          description: "表单间距"
+      code: "layout->setSpacing(6);"
+
+# ============================================
+# 第三部分：常用控件规范
+# ============================================
+widget_standards:
+  # 主窗口
+  main_window:
+    description: "QMainWindow结构规范"
+    structure:
+      - component: "QMenuBar"
+        description: "菜单栏"
+        position: "顶部"
+      - component: "QToolBar"
+        description: "工具栏"
+        position: "菜单栏下方"
+      - component: "QDockWidget"
+        description: "停靠窗口"
+        position: "两侧"
+      - component: "Central Widget"
+        description: "中心控件"
+        position: "主区域"
+      - component: "QStatusBar"
+        description: "状态栏"
+        position: "底部"
+
+    template: |
+      class MainWindow : public QMainWindow {
+          Q_OBJECT
+      public:
+          explicit MainWindow(QWidget *parent = nullptr);
+      private:
+          void setupMenuBar();
+          void setupToolBar();
+          void setupStatusBar();
+          void setupDockWidgets();
+      };
+
+  # 对话框
+  dialog:
+    description: "QDialog结构规范"
+    types:
+      - type: "QDialog"
+        use_case: "自定义对话框"
+      - type: "QMessageBox"
+        use_case: "消息提示"
+      - type: "QFileDialog"
+        use_case: "文件选择"
+      - type: "QInputDialog"
+        use_case: "简单输入"
+
+    template: |
+      // 标准对话框结构
+      QDialogButtonBox *buttonBox = new QDialogButtonBox(
+          QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+      connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+      connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+  # 输入控件
+  input_widgets:
+    - widget: "QLineEdit"
+      use_case: "单行文本输入"
+      signal: "textChanged(const QString&)"
+
+    - widget: "QTextEdit"
+      use_case: "多行文本输入"
+      signal: "textChanged()"
+
+    - widget: "QComboBox"
+      use_case: "下拉选择"
+      signal: "currentIndexChanged(int)"
+
+    - widget: "QSpinBox"
+      use_case: "整数输入"
+      signal: "valueChanged(int)"
+
+    - widget: "QCheckBox"
+      use_case: "复选框"
+      signal: "stateChanged(int)"
+
+    - widget: "QRadioButton"
+      use_case: "单选按钮"
+      signal: "toggled(bool)"
+
+  # 显示控件
+  display_widgets:
+    - widget: "QLabel"
+      use_case: "文本/图片显示"
+
+    - widget: "QProgressBar"
+      use_case: "进度显示"
+
+    - widget: "QTableView"
+      use_case: "表格数据展示"
+      model_required: true
+
+    - widget: "QTreeView"
+      use_case: "树形数据展示"
+      model_required: true
+
+    - widget: "QListView"
+      use_case: "列表数据展示"
+      model_required: true
+
+# ============================================
+# 第四部分：样式设计规范
+# ============================================
+style_design:
+  # QSS基础语法
+  qss_syntax:
+    description: "Qt样式表语法"
+    example: |
+      /* 全局样式 */
+      QWidget {
+          font-family: "Microsoft YaHei";
+          font-size: 12px;
+      }
+
+      /* 按钮样式 */
+      QPushButton {
+          background-color: #0078d4;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          padding: 6px 16px;
+      }
+
+      QPushButton:hover {
+          background-color: #106ebe;
+      }
+
+      QPushButton:pressed {
+          background-color: #005a9e;
+      }
+
+  # 样式文件管理
+  style_management:
+    - method: "外部QSS文件"
+      code: |
+        QFile styleFile(":/styles/style.qss");
+        if (styleFile.open(QFile::ReadOnly)) {
+            qApp->setStyleSheet(styleFile.readAll());
+        }
+
+    - method: "代码内设置"
+      code: |
+        widget->setStyleSheet("background-color: white;");
+
+# ============================================
+# 第五部分：界面设计流程
+# ============================================
+design_workflow:
+  steps:
+    - step: 1
+      name: "界面规划"
+      action: "确定界面类型（MainWindow/Dialog/Widget）"
+      input: ["需求文档", "交互设计稿"]
+
+    - step: 2
+      name: "布局设计"
+      action: "选择合适的布局管理器"
+      output: "布局结构图"
+
+    - step: 3
+      name: "控件选择"
+      action: "确定需要的Qt控件"
+      output: "控件清单"
+
+    - step: 4
+      name: "信号槽规划"
+      action: "设计信号槽连接关系"
+      output: "信号槽连接图"
+      reference: "signal-slot.yaml"
+
+    - step: 5
+      name: "样式设计"
+      action: "设计QSS样式"
+      output: "样式表文件"
+
+    - step: 6
+      name: "Qt Designer设计"
+      action: "使用Qt Designer创建.ui文件"
+      output: ".ui文件"
+
+# ============================================
+# 第六部分：检查清单
+# ============================================
+checklist:
+  before_design:
+    - item: "确认界面类型"
+      check: "MainWindow/Dialog/Widget选择正确"
+    - item: "确认屏幕适配需求"
+      check: "是否需要支持高分屏、不同分辨率"
+    - item: "参考现有界面风格"
+      check: "保持应用内风格一致"
+
+  during_design:
+    - item: "布局管理器正确使用"
+      check: "不使用固定坐标，使用布局管理器"
+    - item: "控件命名规范"
+      check: "遵循命名规范（m_前缀成员变量）"
+    - item: "信号槽设计合理"
+      check: "交互逻辑清晰"
+
+  after_design:
+    - item: "窗口可伸缩"
+      check: "窗口调整大小时界面正常"
+    - item: "高分屏适配"
+      check: "在高分屏上显示正常"
+    - item: "键盘导航"
+      check: "Tab键导航顺序正确"
+
+# ============================================
+# 第七部分：常见问题与解决方案
+# ============================================
+common_issues:
+  - issue: "控件位置固定，窗口缩放时错位"
+    solution: "使用布局管理器，不使用move()/resize()固定位置"
+
+  - issue: "高分屏显示模糊"
+    solution: |
+      QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+      QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+  - issue: "信号槽不触发"
+    solution: |
+      1. 检查Q_OBJECT宏是否存在
+      2. 检查connect语法是否正确
+      3. 检查信号和槽函数签名是否匹配
+
+  - issue: "样式不生效"
+    solution: |
+      1. 检查QSS语法
+      2. 检查选择器是否正确
+      3. 检查样式优先级
+
+# ============================================
+# 第八部分：关联文档
+# ============================================
+references:
+  primary:
+    - path: "backend/qt/signal-slot.yaml"
+      relationship: "协作"
+      description: "信号槽机制是界面交互的核心"
+
+    - path: "backend/qt/model-view.yaml"
+      relationship: "协作"
+      description: "Model-View架构用于数据展示"
+
+  official_docs:
+    - url: "https://doc.qt.io/qt-6/qtwidgets-index.html"
+      description: "Qt Widgets官方文档"
+    - url: "https://doc.qt.io/qt-6/stylesheet.html"
+      description: "Qt样式表官方文档"

@@ -1,0 +1,373 @@
+# Qt信号槽机制规范 Skill
+# 定义Qt信号槽机制的使用规范
+
+skill:
+  id: "qt-signal-slot"
+  name: "Qt信号槽机制规范"
+  version: "1.0.0"
+  category: "backend/qt"
+  description: "定义Qt信号槽机制的规范用法，包括信号声明、槽函数定义、连接语法、跨线程通信等"
+  priority: "P1"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：核心概念
+# ============================================
+core_concepts:
+  signal:
+    definition: "信号是对象发出的事件通知"
+    characteristics:
+      - "只需声明，不需要实现"
+      - "返回类型为void"
+      - "可以带参数"
+      - "使用emit关键字触发"
+
+  slot:
+    definition: "槽是响应信号的函数"
+    characteristics:
+      - "需要声明和实现"
+      - "可以是任意访问权限"
+      - "可以带参数（与信号参数匹配）"
+      - "可以有返回值（但通常不使用）"
+
+  connection:
+    definition: "信号与槽之间的绑定关系"
+    characteristics:
+      - "一个信号可以连接多个槽"
+      - "一个槽可以连接多个信号"
+      - "连接可以在对象间建立"
+
+# ============================================
+# 第二部分：信号声明规范
+# ============================================
+signal_declaration:
+  # 声明位置
+  location: "在类声明的signals部分"
+
+  # 声明语法
+  syntax:
+    basic: |
+      signals:
+          void dataChanged();
+          void itemSelected(int index);
+          void errorOccurred(const QString &message);
+
+  # 命名规范
+  naming_conventions:
+    - rule: "使用动词或事件名称"
+      good_examples: ["clicked()", "dataChanged()", "errorOccurred()"]
+      bad_examples: ["click()", "DataChange()", "error()"]
+
+    - rule: "使用camelCase（小驼峰）"
+      examples: ["itemSelected", "dataLoaded", "connectionLost"]
+
+    - rule: "参数命名清晰表达含义"
+      good_examples: ["void itemMoved(int fromIndex, int toIndex)"]
+      bad_examples: ["void moved(int a, int b)"]
+
+  # 信号声明模板
+  templates:
+    notification_signal: |
+      // 状态变化通知
+      signals:
+          void dataChanged();
+          void statusChanged(int newStatus);
+          void progressUpdated(int percentage);
+
+    data_signal: |
+      // 数据传递信号
+      signals:
+          void itemSelected(const QModelIndex &index);
+          void dataReceived(const QByteArray &data);
+
+    error_signal: |
+      // 错误处理信号
+      signals:
+          void errorOccurred(const QString &errorMessage);
+          void connectionFailed(int errorCode);
+
+# ============================================
+# 第三部分：槽函数规范
+# ============================================
+slot_declaration:
+  # 声明位置
+  location: "在类声明的public slots/private slots/protected slots部分"
+
+  # 访问权限
+  access_levels:
+    - level: "public slots"
+      use_case: "外部对象可以连接的槽"
+      example: "按钮点击响应"
+
+    - level: "private slots"
+      use_case: "仅类内部使用的槽"
+      example: "内部定时器响应"
+
+    - level: "protected slots"
+      use_case: "子类可以访问的槽"
+      example: "模板方法中的响应"
+
+  # 槽函数声明模板
+  templates:
+    event_handler: |
+      private slots:
+          void onButtonClicked();
+          void onTimerTimeout();
+          void onDataReceived(const QByteArray &data);
+
+    auto_connection: |
+      // 自动连接命名规范：on_<对象名>_<信号名>
+      private slots:
+          void on_btnAdd_clicked();      // QPushButton *btnAdd的clicked信号
+          void on_tableView_doubleClicked(const QModelIndex &index);
+
+  # 槽函数实现规范
+  implementation_rules:
+    - rule: "槽函数应该短小精悍"
+      reason: "避免阻塞UI线程"
+
+    - rule: "耗时操作应使用线程"
+      example: "使用QThread或QtConcurrent"
+
+    - rule: "避免槽函数内的递归调用信号"
+      reason: "可能导致无限循环"
+
+# ============================================
+# 第四部分：连接语法规范
+# ============================================
+connection_syntax:
+  # 新式connect（Qt5+推荐）
+  new_style:
+    description: "使用函数指针，编译时检查"
+    syntax: |
+      // 基本语法
+      connect(sender, &Sender::signalName,
+              receiver, &Receiver::slotName);
+
+    examples:
+      basic: |
+        connect(button, &QPushButton::clicked,
+                this, &MainWindow::onButtonClicked);
+
+      with_lambda: |
+        connect(button, &QPushButton::clicked, this, [this]() {
+            qDebug() << "Button clicked";
+            updateData();
+        });
+
+      with_parameters: |
+        connect(slider, &QSlider::valueChanged,
+                this, &MainWindow::onValueChanged);
+
+      signal_to_signal: |
+        connect(this, &Widget::dataChanged,
+                this, &Widget::updateDisplay);
+
+  # 旧式connect（Qt4兼容）
+  old_style:
+    description: "使用SIGNAL/SLOT宏，运行时检查"
+    syntax: |
+      connect(sender, SIGNAL(signalName(params)),
+              receiver, SLOT(slotName(params)));
+
+    warning: "不推荐使用，编译时无法检查类型"
+
+  # 连接类型
+  connection_types:
+    - type: "Qt::AutoConnection"
+      description: "默认，自动选择Direct或Queued"
+      use_case: "大多数场景"
+
+    - type: "Qt::DirectConnection"
+      description: "信号发出时立即调用槽函数"
+      use_case: "同线程，需要立即执行"
+
+    - type: "Qt::QueuedConnection"
+      description: "槽函数在接收者线程事件循环中执行"
+      use_case: "跨线程通信"
+
+    - type: "Qt::BlockingQueuedConnection"
+      description: "阻塞等待槽函数执行完成"
+      use_case: "需要等待结果的跨线程调用"
+
+  # 连接最佳实践
+  best_practices:
+    - practice: "使用新式connect"
+      code: |
+        // 推荐
+        connect(btn, &QPushButton::clicked, this, &MyClass::onClick);
+        // 不推荐
+        connect(btn, SIGNAL(clicked()), this, SLOT(onClick()));
+
+    - practice: "断开不需要的连接"
+      code: |
+        QMetaObject::Connection conn = connect(...);
+        // 需要时断开
+        disconnect(conn);
+
+# ============================================
+# 第五部分：跨线程信号槽
+# ============================================
+cross_thread:
+  # 线程安全规则
+  thread_safety:
+    - rule: "跨线程信号槽使用Qt::QueuedConnection"
+      reason: "避免并发问题"
+
+    - rule: "槽函数在接收者线程执行"
+      reason: "保证线程安全"
+
+    - rule: "不要在槽函数中直接操作其他线程的对象"
+      reason: "可能导致竞争条件"
+
+  # 跨线程连接示例
+  example: |
+      // Worker类在子线程
+      class Worker : public QObject {
+          Q_OBJECT
+      signals:
+          void resultReady(const QString &result);
+      public slots:
+          void doWork() {
+              QString result = /* 耗时操作 */;
+              emit resultReady(result);
+          }
+      };
+
+      // 主窗口在主线程
+      class MainWindow : public QMainWindow {
+          Q_OBJECT
+      public:
+          MainWindow() {
+              QThread *thread = new QThread;
+              Worker *worker = new Worker;
+              worker->moveToThread(thread);
+
+              // 跨线程连接，自动使用QueuedConnection
+              connect(this, &MainWindow::startWork,
+                      worker, &Worker::doWork);
+              connect(worker, &Worker::resultReady,
+                      this, &MainWindow::handleResult);
+
+              thread->start();
+          }
+      signals:
+          void startWork();
+      private slots:
+          void handleResult(const QString &result);
+      };
+
+# ============================================
+# 第六部分：常见错误与解决方案
+# ============================================
+common_errors:
+  - error: "信号槽不触发"
+    causes:
+      - "缺少Q_OBJECT宏"
+      - "connect语法错误"
+      - "信号槽参数不匹配"
+    solution: |
+      1. 确保类声明中有Q_OBJECT宏
+      2. 使用新式connect获得编译时检查
+      3. 检查信号和槽的参数类型是否匹配
+
+  - error: "编译错误：no matching function"
+    causes:
+      - "信号槽参数不匹配"
+      - "信号/槽名称拼写错误"
+    solution: |
+      1. 检查信号和槽的参数数量和类型
+      2. 使用lambda适配参数
+
+  - error: "跨线程访问崩溃"
+    causes:
+      - "直接访问其他线程的对象"
+      - "使用了错误的连接类型"
+    solution: |
+      1. 使用Qt::QueuedConnection
+      2. 通过信号槽通信，不要直接调用方法
+
+  - error: "内存泄漏"
+    causes:
+      - "信号槽连接未断开"
+      - "对象生命周期管理不当"
+    solution: |
+      1. 对象销毁时自动断开连接
+      2. 使用disconnect()手动断开
+
+# ============================================
+# 第七部分：信号槽设计模式
+# ============================================
+design_patterns:
+  - pattern: "观察者模式"
+    description: "一个对象状态变化通知多个观察者"
+    example: |
+      // 数据模型通知多个视图
+      class DataModel : public QObject {
+          Q_OBJECT
+      signals:
+          void dataChanged();
+      };
+
+      // 多个视图连接同一信号
+      connect(model, &DataModel::dataChanged,
+              view1, &View::update);
+      connect(model, &DataModel::dataChanged,
+              view2, &View::update);
+
+  - pattern: "命令模式"
+    description: "通过信号触发远程操作"
+    example: |
+      // 按钮触发远程命令
+      connect(ui->btnExecute, &QPushButton::clicked,
+              this, [this]() { executeCommand(); });
+
+  - pattern: "状态机"
+    description: "使用信号触发状态转换"
+    example: |
+      // QStateMachine使用
+      QState *s1 = new QState();
+      QState *s2 = new QState();
+      s1->addTransition(button, &QPushButton::clicked, s2);
+
+# ============================================
+# 第八部分：检查清单
+# ============================================
+checklist:
+  signal_declaration:
+    - item: "信号在signals部分声明"
+    - item: "信号返回类型为void"
+    - item: "信号命名使用camelCase"
+    - item: "信号参数类型完整（含const和引用）"
+
+  slot_declaration:
+    - item: "槽函数有声明和实现"
+    - item: "槽函数参数与信号匹配"
+    - item: "槽函数命名清晰表达用途"
+
+  connection:
+    - item: "使用新式connect语法"
+    - item: "检查连接返回值（可选）"
+    - item: "跨线程使用正确的连接类型"
+
+  runtime:
+    - item: "Q_OBJECT宏存在"
+    - item: "moc文件正确生成"
+    - item: "信号能正确触发槽函数"
+
+# ============================================
+# 第九部分：关联文档
+# ============================================
+references:
+  primary:
+    - path: "backend/qt/ui-designer.yaml"
+      relationship: "协作"
+      description: "界面设计需要信号槽实现交互"
+
+    - path: "backend/qt/implement.yaml"
+      relationship: "实现指导"
+      description: "功能实现包含信号槽连接"
+
+  official_docs:
+    - url: "https://doc.qt.io/qt-6/signalsandslots.html"
+      description: "Qt信号槽官方文档"

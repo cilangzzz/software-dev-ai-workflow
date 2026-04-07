@@ -1,331 +1,394 @@
 # 研发部 Skill 协作关系配置
+# 支持按技术栈按需加载skill
 
-# ==================== Skill 注册表 ====================
+# ============================================
+# 核心配置：技术栈选择器
+# ============================================
+tech_selector:
+  config_file: "tech-selector.yaml"
+  description: "技术栈选择器，根据项目类型自动加载对应skill"
 
-skills:
+  # 检测流程
+  detection_flow:
+    - step: 1
+      action: "扫描项目文件"
+      rules: "tech-selector.yaml -> detection.by_files"
+    - step: 2
+      action: "分析用户输入关键词"
+      rules: "tech-selector.yaml -> detection.by_keywords"
+    - step: 3
+      action: "确定技术栈"
+      output: "tech_stack变量"
+    - step: 4
+      action: "加载对应skill"
+      rules: "tech-selector.yaml -> skill_mapping"
+    - step: 5
+      action: "排除无关skill"
+      rules: "tech-selector.yaml -> exclude_patterns"
+
+# ============================================
+# 公共Skill注册表（所有技术栈共用）
+# ============================================
+common_skills:
   requirement-review:
     name: "需求评审"
+    path: "common/requirement-review.md"
     version: "1.0.0"
     priority: "P0"
     description: "辅助研发团队进行需求评审，分析需求完整性、识别设计冲突"
-    class: "RequirementReviewSkill"
-    config_schema: "schemas/requirement-review-config.json"
 
   requirement-change:
     name: "需求变更处理"
+    path: "common/requirement-change.md"
     version: "1.0.0"
     priority: "P0"
     description: "管理需求变更全流程，分析变更对设计文档的影响"
-    class: "RequirementChangeSkill"
-    config_schema: "schemas/requirement-change-config.json"
-
-  architect:
-    name: "架构设计"
-    version: "2.0.0"
-    priority: "P0"
-    description: "架构设计主入口，生成架构方案和ADR"
-    class: "ArchitectSkill"
-    config_schema: "schemas/architect-config.json"
-
-  adr:
-    name: "架构决策记录"
-    version: "1.0.0"
-    priority: "P0"
-    description: "创建和管理架构决策记录"
-    class: "AdrSkill"
-    config_schema: "schemas/adr-config.json"
-
-  scaffold:
-    name: "项目脚手架"
-    version: "1.0.0"
-    priority: "P0"
-    description: "快速生成项目脚手架代码"
-    class: "ScaffoldSkill"
-    config_schema: "schemas/scaffold-config.json"
-
-  implement:
-    name: "功能实现"
-    version: "1.0.0"
-    priority: "P0"
-    description: "根据设计文档实现功能代码"
-    class: "ImplementSkill"
-    config_schema: "schemas/implement-config.json"
 
   code-review:
     name: "代码审查"
+    path: "common/code-review.md"
     version: "1.0.0"
     priority: "P0"
     description: "对代码变更进行自动化审查"
-    class: "CodeReviewSkill"
-    config_schema: "schemas/code-review-config.json"
 
-# ==================== 协作关系定义 ====================
+  adr:
+    name: "架构决策记录"
+    path: "common/adr.md"
+    version: "1.0.0"
+    priority: "P1"
+    description: "创建和管理架构决策记录"
 
+# ============================================
+# 技术栈特定Skill注册表
+# ============================================
+tech_stack_skills:
+  # ==========================================
+  # Java/Spring Boot后端
+  # ==========================================
+  backend/java:
+    display_name: "Java/Spring Boot后端"
+    role_config: "backend/java/role-config.yaml"
+
+    skills:
+      architect:
+        name: "架构设计"
+        path: "backend/java/architect.yaml"
+        priority: "P0"
+
+      scaffold:
+        name: "项目脚手架"
+        path: "backend/java/scaffold.yaml"
+        priority: "P0"
+
+      implement:
+        name: "功能实现"
+        path: "backend/java/implement.yaml"
+        priority: "P0"
+
+      api-designer:
+        name: "API设计规范"
+        path: "backend/java/api-designer.yaml"
+        priority: "P0"
+
+      entity-designer:
+        name: "实体类设计"
+        path: "backend/java/entity-designer.yaml"
+        priority: "P1"
+
+      crud-designer:
+        name: "CRUD代码生成"
+        path: "backend/java/crud-designer.yaml"
+        priority: "P1"
+
+      db-designer:
+        name: "数据库设计"
+        path: "backend/java/db-designer.yaml"
+        priority: "P1"
+
+    # 明确排除其他技术栈的skill
+    excludes:
+      - "backend/qt/*"
+      - "backend/python/*"
+      - "backend/go/*"
+      - "frontend/*"
+
+  # ==========================================
+  # Qt/C++桌面应用
+  # ==========================================
+  backend/qt:
+    display_name: "Qt/C++桌面应用"
+    role_config: "backend/qt/role-config.yaml"
+
+    skills:
+      architect:
+        name: "Qt应用架构设计"
+        path: "backend/qt/architect.yaml"
+        priority: "P0"
+
+      scaffold:
+        name: "Qt项目脚手架"
+        path: "backend/qt/scaffold.yaml"
+        priority: "P0"
+
+      implement:
+        name: "Qt功能实现"
+        path: "backend/qt/implement.yaml"
+        priority: "P0"
+
+      ui-designer:
+        name: "Qt界面设计规范"
+        path: "backend/qt/ui-designer.yaml"
+        priority: "P0"
+
+      signal-slot:
+        name: "Qt信号槽机制规范"
+        path: "backend/qt/signal-slot.yaml"
+        priority: "P1"
+
+      model-view:
+        name: "Qt模型视图架构"
+        path: "backend/qt/model-view.yaml"
+        priority: "P1"
+
+    # 明确排除其他技术栈的skill
+    excludes:
+      - "backend/java/*"        # 不加载Java相关skill
+      - "backend/python/*"
+      - "backend/go/*"
+      - "frontend/vue/*"
+      - "frontend/react/*"
+
+  # ==========================================
+  # Python/FastAPI后端
+  # ==========================================
+  backend/python:
+    display_name: "Python/FastAPI后端"
+    role_config: "backend/python/role-config.yaml"
+
+    skills: {}  # 待实现
+
+    excludes:
+      - "backend/java/*"
+      - "backend/qt/*"
+      - "backend/go/*"
+      - "frontend/*"
+
+  # ==========================================
+  # Go/Gin后端
+  # ==========================================
+  backend/go:
+    display_name: "Go/Gin后端"
+    role_config: "backend/go/role-config.yaml"
+
+    skills: {}  # 待实现
+
+    excludes:
+      - "backend/java/*"
+      - "backend/qt/*"
+      - "backend/python/*"
+      - "frontend/*"
+
+  # ==========================================
+  # Vue3前端
+  # ==========================================
+  frontend/vue:
+    display_name: "Vue3前端"
+    role_config: "frontend/vue/role-config.yaml"
+
+    skills:
+      scaffold:
+        name: "Vue项目脚手架"
+        path: "frontend/vue/scaffold.yaml"
+        priority: "P0"
+
+      implement:
+        name: "Vue功能实现"
+        path: "frontend/vue/implement.yaml"
+        priority: "P0"
+
+      component-designer:
+        name: "Vue组件设计"
+        path: "frontend/vue/component-designer.yaml"
+        priority: "P0"
+
+      api-client:
+        name: "API调用规范"
+        path: "frontend/vue/api-client.yaml"
+        priority: "P1"
+
+      state-management:
+        name: "状态管理规范"
+        path: "frontend/vue/state-management.yaml"
+        priority: "P1"
+
+    excludes:
+      - "backend/*"              # 不加载后端skill
+      - "frontend/react/*"
+
+  # ==========================================
+  # React前端
+  # ==========================================
+  frontend/react:
+    display_name: "React前端"
+    role_config: "frontend/react/role-config.yaml"
+
+    skills: {}  # 待实现
+
+    excludes:
+      - "backend/*"
+      - "frontend/vue/*"
+
+# ============================================
+# 协作关系定义（基于技术栈）
+# ============================================
 collaboration:
 
-  # 需求评审 -> 架构设计 / 需求变更
-  requirement-review:
-    # 触发条件
-    triggers:
-      - type: "event"
-        event: "requirement_submitted"
-        source: "product"
-      - type: "command"
-        command: "/requirement-review"
-      - type: "keyword"
-        keywords: ["评审需求", "需求评审", "分析需求影响"]
+  # 通用协作流程（所有技术栈）
+  common_flow:
+    requirement-review:
+      triggers:
+        - type: "command"
+          command: "/requirement-review"
+        - type: "keyword"
+          keywords: ["评审需求", "需求评审"]
 
-    # 输入要求
-    inputs:
-      requirement_doc:
-        type: "string"
-        required: true
-        description: "需求文档路径或内容"
-      review_depth:
-        type: "string"
-        default: "standard"
-        enum: ["quick", "standard", "deep"]
+      next:
+        - skill: "architect"
+          condition: "${review_result == 'passed'}"
+          # architect的具体实现由tech_selector决定
 
-    # 输出
-    outputs:
-      - "评审报告"
-      - "待澄清问题清单"
-      - "设计冲突列表"
+    requirement-change:
+      triggers:
+        - type: "command"
+          command: "/requirement-change"
+        - type: "event"
+          event: "change_request_submitted"
 
-    # 后续触发
-    next:
-      - skill: "architect"
-        condition: "${review_result == 'passed'}"
-        pass_params:
-          requirements: "${requirement_doc}"
-          review_report: "${output.report}"
+      next:
+        - skill: "implement"
+          condition: "${change_approved == true}"
 
-      - skill: "requirement-change"
-        condition: "${conflicts_detected == true}"
-        pass_params:
-          change_request: "${output.conflicts}"
-          source: "requirement-review"
+  # Java/Spring Boot协作流程
+  backend/java:
+    architect:
+      triggers:
+        - type: "command"
+          command: "/architect"
+        - type: "skill"
+          skill: "requirement-review"
+          condition: "评审通过"
 
-  # 需求变更 -> 功能实现
-  requirement-change:
-    triggers:
-      - type: "skill"
-        skill: "requirement-review"
-        condition: "设计冲突"
-      - type: "event"
-        event: "change_request_submitted"
-      - type: "command"
-        command: "/requirement-change"
+      next:
+        - skill: "adr"
+          condition: "${major_decisions_count > 0}"
 
-    inputs:
-      change_request:
-        type: "string"
-        required: true
-      design_docs:
-        type: "object"
-        properties:
-          data_model: { type: "string" }
-          domain_design: { type: "string" }
-          database_design: { type: "string" }
+        - skill: "scaffold"
+          condition: "${is_new_project == true}"
 
-    outputs:
-      - "变更影响分析报告"
-      - "变更实施方案"
-      - "DDL迁移脚本"
+        - skill: "implement"
+          condition: "${is_incremental == true}"
 
-    uses_documents:
-      - "docs/design/data-model.md"
-      - "docs/design/domain-design.md"
-      - "docs/design/database-design.md"
+    scaffold:
+      next:
+        - skill: "implement"
 
-    next:
-      - skill: "implement"
-        condition: "${change_approved == true}"
-        pass_params:
-          implementation_plan: "${output.plan}"
+    implement:
+      triggers:
+        - type: "command"
+          command: "/implement"
+        - type: "skill"
+          skill: "scaffold"
 
-  # 架构设计 -> ADR / 脚手架 / 功能实现
-  architect:
-    triggers:
-      - type: "skill"
-        skill: "requirement-review"
-        condition: "评审通过"
-      - type: "event"
-        event: "project_initiated"
-      - type: "command"
-        command: "/architect"
+      uses_skills:
+        - "api-designer"
+        - "entity-designer"
+        - "crud-designer"
 
-    inputs:
-      requirements:
-        type: "string"
-        required: true
-      constraints:
-        type: "string"
-        required: false
-      scale:
-        type: "string"
-        default: "medium"
-        enum: ["small", "medium", "large"]
-      template:
-        type: "string"
-        default: "default"
+      next:
+        - skill: "code-review"
+          condition: "${code_completed == true}"
 
-    outputs:
-      - "架构设计文档"
-      - "技术选型报告"
-      - "模块划分方案"
-      - "数据模型草案"
+  # Qt/C++协作流程
+  backend/qt:
+    architect:
+      triggers:
+        - type: "command"
+          command: "/architect"
+        - type: "keyword"
+          keywords: ["Qt架构", "桌面应用架构"]
 
-    next:
-      - skill: "adr"
-        condition: "${major_decisions_count > 0}"
-        pass_params:
-          decisions: "${output.decisions}"
+      uses_skills:
+        - "ui-designer"
 
-      - skill: "scaffold"
-        condition: "${is_new_project == true}"
-        pass_params:
-          architecture: "${output.architecture}"
-          tech_stack: "${output.tech_stack}"
+      next:
+        - skill: "adr"
+          condition: "${major_decisions_count > 0}"
 
-      - skill: "implement"
-        condition: "${is_incremental == true}"
-        pass_params:
-          architecture: "${output.architecture}"
+        - skill: "scaffold"
+          condition: "${is_new_project == true}"
 
-    updates_documents:
-      - path: "docs/design/data-model.md"
-        section: "实体定义"
-        trigger: "架构确定"
-      - path: "docs/design/domain-design.md"
-        section: "领域边界"
-        trigger: "架构确定"
+    scaffold:
+      triggers:
+        - type: "command"
+          command: "/scaffold qt"
+        - type: "keyword"
+          keywords: ["创建Qt项目", "Qt脚手架"]
 
-  # ADR - 独立使用或被触发
-  adr:
-    triggers:
-      - type: "skill"
-        skill: "architect"
-        condition: "重大决策"
-      - type: "command"
-        command: "/adr"
+      next:
+        - skill: "implement"
 
-    inputs:
-      title:
-        type: "string"
-        required: true
-      context:
-        type: "string"
-        required: true
-      alternatives:
-        type: "array"
-        required: false
+    implement:
+      triggers:
+        - type: "command"
+          command: "/implement qt"
+        - type: "keyword"
+          keywords: ["实现Qt功能", "Qt开发"]
 
-    outputs:
-      - "ADR文档"
+      uses_skills:
+        - "ui-designer"
+        - "signal-slot"
+        - "model-view"
 
-    next: []
+      next:
+        - skill: "code-review"
 
-  # 脚手架 -> 功能实现
-  scaffold:
-    triggers:
-      - type: "skill"
-        skill: "architect"
-        condition: "新项目"
-      - type: "command"
-        command: "/scaffold"
+  # Vue3协作流程
+  frontend/vue:
+    scaffold:
+      triggers:
+        - type: "command"
+          command: "/scaffold vue"
+        - type: "keyword"
+          keywords: ["创建Vue项目", "Vue脚手架"]
 
-    inputs:
-      project_name:
-        type: "string"
-        required: true
-      tech_stack:
-        type: "string"
-        required: true
-      features:
-        type: "array"
-        required: false
+      next:
+        - skill: "implement"
 
-    outputs:
-      - "项目脚手架"
-      - "配置文件"
-      - "基础代码框架"
+    implement:
+      triggers:
+        - type: "command"
+          command: "/implement vue"
 
-    next:
-      - skill: "implement"
-        pass_params:
-          project_path: "${output.project_path}"
+      uses_skills:
+        - "component-designer"
+        - "api-client"
+        - "state-management"
 
-  # 功能实现 -> 代码审查
-  implement:
-    triggers:
-      - type: "skill"
-        skill: "scaffold"
-      - type: "skill"
-        skill: "requirement-change"
-        condition: "变更批准"
-      - type: "command"
-        command: "/implement"
-
-    inputs:
-      specification:
-        type: "string"
-        required: true
-      target_file:
-        type: "string"
-        required: false
-
-    outputs:
-      - "源代码"
-      - "单元测试"
-      - "API文档"
-
-    next:
-      - skill: "code-review"
-        condition: "${code_completed == true}"
-        pass_params:
-          target: "${output.files}"
-
-  # 代码审查 -> 功能实现(修复)
-  code-review:
-    triggers:
-      - type: "skill"
-        skill: "implement"
-        condition: "代码完成"
-      - type: "event"
-        event: "pull_request_created"
-      - type: "command"
-        command: "/code-review"
-
-    inputs:
-      target:
-        type: "string"
-        required: true
-      review_type:
-        type: "string"
-        default: "full"
-        enum: ["quick", "full", "security"]
-
-    outputs:
-      - "审查报告"
-      - "问题清单"
-      - "质量评分"
-
-    next:
-      - skill: "implement"
-        condition: "${issues_count > 0}"
-        pass_params:
-          fix_issues: "${output.issues}"
-
-# ==================== 工作流定义 ====================
-
+# ============================================
+# 工作流定义
+# ============================================
 workflows:
 
-  # 新功能开发流程
+  # 新功能开发流程（通用）
   new_feature:
     name: "新功能开发流程"
     description: "从需求评审到代码审查的完整流程"
     steps:
+      - id: "tech_detect"
+        type: "auto"
+        action: "detect_tech_stack"
+        config: "tech-selector.yaml"
+
       - id: "review"
         skill: "requirement-review"
         input:
@@ -335,197 +398,72 @@ workflows:
       - id: "architecture"
         skill: "architect"
         condition: "${review.output.result == 'passed'}"
-        input:
-          requirements: "${workflow.input.requirement}"
-        on_failure:
-          skill: "scaffold"
-          fallback: true
+        tech_stack_aware: true  # 根据技术栈选择具体实现
+        on_failure: "notify"
 
       - id: "development"
         skill: "implement"
+        tech_stack_aware: true
         input:
           specification: "${review.output.spec}"
           architecture: "${architecture.output}"
-        on_failure: "notify"
 
       - id: "review_code"
         skill: "code-review"
         input:
           target: "${development.output.files}"
 
-    output:
-      code: "${development.output}"
-      review: "${review_code.output}"
-
-  # 需求变更流程
-  change_request:
-    name: "需求变更流程"
-    description: "处理需求变更的完整流程"
+  # Qt桌面应用开发流程
+  qt_desktop_app:
+    name: "Qt桌面应用开发流程"
+    description: "Qt/C++桌面应用完整开发流程"
+    tech_stack: "backend/qt"
     steps:
-      - id: "analyze"
-        skill: "requirement-change"
-        input:
-          change_request: "${workflow.input.change}"
-          design_docs: "${workflow.input.designs}"
-
-      - id: "approval"
-        type: "human"
-        description: "等待变更审批"
-        timeout: "24h"
-
-      - id: "implement"
-        skill: "implement"
-        condition: "${approval.result == 'approved'}"
-        input:
-          implementation_plan: "${analyze.output.plan}"
-
       - id: "review"
-        skill: "code-review"
-        input:
-          target: "${implement.output.files}"
+        skill: "requirement-review"
 
-  # 快速原型流程
-  quick_prototype:
-    name: "快速原型流程"
-    description: "快速生成原型代码"
-    steps:
+      - id: "architecture"
+        skill: "backend/qt/architect.yaml"
+
+      - id: "ui_design"
+        skill: "backend/qt/ui-designer.yaml"
+
       - id: "scaffold"
-        skill: "scaffold"
-        input:
-          project_name: "${workflow.input.name}"
-          tech_stack: "${workflow.input.stack}"
+        skill: "backend/qt/scaffold.yaml"
+        condition: "${is_new_project}"
 
       - id: "implement"
-        skill: "implement"
-        input:
-          specification: "${workflow.input.features}"
+        skill: "backend/qt/implement.yaml"
 
-# ==================== 设计文档注册 ====================
+      - id: "review_code"
+        skill: "code-review"
 
-design_documents:
-  data_model:
-    path: "docs/design/data-model.md"
-    format: "markdown"
-    schema: "schemas/data-model-schema.json"
-    maintained_by:
-      - "architect"
-      - "requirement-change"
-    sections:
-      - "实体定义"
-      - "属性列表"
-      - "关系图"
-      - "枚举定义"
-
-  domain_design:
-    path: "docs/design/domain-design.md"
-    format: "markdown"
-    schema: "schemas/domain-design-schema.json"
-    maintained_by:
-      - "architect"
-      - "requirement-change"
-    sections:
-      - "领域边界"
-      - "聚合根"
-      - "领域服务"
-      - "领域事件"
-
-  database_design:
-    path: "docs/design/database-design.md"
-    format: "markdown"
-    schema: "schemas/database-design-schema.json"
-    maintained_by:
-      - "architect"
-      - "requirement-change"
-    sections:
-      - "表结构定义"
-      - "索引设计"
-      - "数据迁移脚本"
-      - "存储过程"
-
-  api_design:
-    path: "docs/design/api-design.md"
-    format: "markdown"
-    schema: "schemas/api-design-schema.json"
-    maintained_by:
-      - "architect"
-      - "implement"
-    sections:
-      - "接口定义"
-      - "请求响应格式"
-      - "错误码定义"
-
-# ==================== 错误处理配置 ====================
-
+# ============================================
+# 错误处理配置
+# ============================================
 error_handling:
-
-  # 全局默认配置
   defaults:
     retry_count: 3
     retry_delay: "5s"
     timeout: "30m"
-    fallback_enabled: true
 
-  # 各 Skill 的错误处理
-  skills:
-    architect:
-      errors:
-        - type: "input_invalid"
-          action: "request_correction"
-        - type: "execution_timeout"
-          action: "fallback"
-          fallback_skill: "scaffold"
-        - type: "document_write_failed"
-          action: "retry"
-          retry_count: 2
+  errors:
+    - code: "TECH_STACK_NOT_DETECTED"
+      message: "无法自动检测技术栈"
+      solution: "请手动指定技术栈参数"
+      action: "ask_user"
 
-    implement:
-      errors:
-        - type: "syntax_error"
-          action: "auto_fix"
-        - type: "test_failed"
-          action: "report_and_continue"
-        - type: "dependency_missing"
-          action: "install_and_retry"
+    - code: "SKILL_NOT_FOUND"
+      message: "指定技术栈下未找到skill"
+      solution: "检查skill文件路径"
+      action: "fallback_to_common"
 
-    code-review:
-      errors:
-        - type: "file_too_large"
-          action: "partial_review"
-        - type: "unsupported_language"
-          action: "skip_and_notify"
-
-# ==================== 通知配置 ====================
-
-notifications:
-  channels:
-    - type: "email"
-      config:
-        smtp_host: "${SMTP_HOST}"
-        smtp_port: 587
-    - type: "webhook"
-      config:
-        url: "${WEBHOOK_URL}"
-    - type: "in_app"
-      config:
-        database: "notifications"
-
-  rules:
-    - event: "skill_completed"
-      skill: "architect"
-      notify:
-        - role: "tech_lead"
-          channel: ["email", "in_app"]
-          template: "architecture_completed"
-
-    - event: "skill_failed"
-      skill: "*"
-      notify:
-        - role: "developer"
-          channel: ["in_app"]
-          template: "skill_failed"
-
-    - event: "human_approval_required"
-      notify:
-        - role: "reviewer"
-          channel: ["email", "in_app"]
-          template: "approval_required"
+# ============================================
+# 注意事项
+# ============================================
+notes:
+  - "技术栈检测优先执行，确保只加载相关skill"
+  - "exclude_patterns必须严格执行，避免加载无关skill"
+  - "tech_stack_aware标记的skill会根据技术栈自动路由"
+  - "公共skill（requirement-review等）对所有技术栈都适用"
+  - "新增技术栈需要在tech_stack_skills中注册"

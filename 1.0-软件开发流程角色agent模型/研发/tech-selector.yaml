@@ -1,0 +1,553 @@
+# 技术栈选择器 - 根据项目类型按需加载对应研发skill
+# 这是研发模块的核心控制器，确保只加载与项目技术栈匹配的skill
+
+skill:
+  id: "tech-selector"
+  name: "技术栈选择器"
+  version: "1.0.0"
+  category: "core"
+  priority: "P0"
+  description: "根据项目特征自动识别技术栈，按需加载对应的研发skill，避免加载无关技术栈造成混乱"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：自动检测规则
+# ============================================
+detection:
+  # 通过项目文件检测
+  by_files:
+    - pattern: ["pom.xml", "build.gradle", "build.gradle.kts"]
+      tech_stack: "backend/java"
+      confidence: 0.95
+      indicators:
+        - "src/main/java目录存在"
+        - "Spring Boot相关依赖"
+
+    - pattern: ["requirements.txt", "pyproject.toml"]
+      combined_with: ["main.py", "app.py"]
+      tech_stack: "backend/python"
+      confidence: 0.85
+      indicators:
+        - "fastapi依赖"
+        - "flask依赖"
+
+    - pattern: ["go.mod", "go.sum"]
+      tech_stack: "backend/go"
+      confidence: 0.95
+      indicators:
+        - "gin框架"
+        - "echo框架"
+
+    - pattern: ["CMakeLists.txt"]
+      combined_with: ["*.ui", "*.pro"]
+      tech_stack: "backend/qt"
+      confidence: 0.90
+      indicators:
+        - "Qt相关CMake配置"
+        - "Q_OBJECT宏"
+
+    - pattern: ["*.pro"]
+      combined_with: ["*.ui"]
+      tech_stack: "backend/qt"
+      confidence: 0.90
+      indicators:
+        - "qmake项目文件"
+
+    - pattern: ["package.json"]
+      combined_with: ["vite.config.*", "vue.config.*"]
+      tech_stack: "frontend/vue"
+      confidence: 0.90
+      indicators:
+        - "vue依赖"
+
+    - pattern: ["package.json"]
+      combined_with: ["next.config.*", "next.config.js"]
+      tech_stack: "frontend/react"
+      confidence: 0.90
+      indicators:
+        - "react依赖"
+        - "next.js"
+
+    - pattern: ["package.json"]
+      combined_with: ["tsconfig.json"]
+      excludes: ["vite.config.*", "next.config.*"]
+      tech_stack: "frontend/react"
+      confidence: 0.70
+
+    - pattern: ["*.qml", "*.qmlproject"]
+      tech_stack: "frontend/desktop"
+      confidence: 0.85
+      indicators:
+        - "Qt Quick应用"
+
+  # 通过用户输入关键词检测
+  by_keywords:
+    - keywords: ["Qt", "Qt应用", "桌面应用", "C++界面", "Qt界面", "Qt开发"]
+      tech_stack: "backend/qt"
+      weight: 1.0
+
+    - keywords: ["Vue", "Vue3", "Vue.js", "Vue前端", "Vue开发"]
+      tech_stack: "frontend/vue"
+      weight: 1.0
+
+    - keywords: ["React", "React前端", "React开发", "Next.js"]
+      tech_stack: "frontend/react"
+      weight: 1.0
+
+    - keywords: ["Java后端", "Spring Boot", "Java Web", "Spring开发"]
+      tech_stack: "backend/java"
+      weight: 1.0
+
+    - keywords: ["Python后端", "FastAPI", "Flask", "Django"]
+      tech_stack: "backend/python"
+      weight: 1.0
+
+    - keywords: ["Go后端", "Gin", "Go开发", "Golang"]
+      tech_stack: "backend/go"
+      weight: 1.0
+
+    - keywords: ["Electron", "桌面前端", "Electron应用"]
+      tech_stack: "frontend/desktop"
+      weight: 1.0
+
+    - keywords: ["移动端", "App", "React Native", "Flutter"]
+      tech_stack: "frontend/mobile"
+      weight: 1.0
+
+# ============================================
+# 第二部分：技术栈skill映射
+# ============================================
+skill_mapping:
+  # Java/Spring Boot后端
+  backend/java:
+    display_name: "Java/Spring Boot后端"
+    base_path: "backend/java"
+    description: "Java后端开发，Spring Boot框架，MyBatis Plus ORM"
+
+    load_skills:
+      - name: "scaffold"
+        file: "scaffold.yaml"
+        description: "Spring Boot项目脚手架"
+      - name: "implement"
+        file: "implement.yaml"
+        description: "Java功能实现"
+      - name: "api-designer"
+        file: "api-designer.yaml"
+        description: "Spring Boot REST API设计规范"
+      - name: "entity-designer"
+        file: "entity-designer.yaml"
+        description: "MyBatis Plus实体类设计"
+      - name: "crud-designer"
+        file: "crud-designer.yaml"
+        description: "Java CRUD代码生成"
+      - name: "db-designer"
+        file: "db-designer.yaml"
+        description: "数据库设计规范"
+
+    load_common:
+      - "requirement-review"
+      - "requirement-change"
+      - "architect"
+      - "code-review"
+      - "adr"
+
+    exclude_patterns:
+      - "backend/qt/*"
+      - "backend/python/*"
+      - "backend/go/*"
+      - "frontend/*"
+
+  # Qt/C++桌面应用
+  backend/qt:
+    display_name: "Qt/C++桌面应用"
+    base_path: "backend/qt"
+    description: "Qt桌面应用开发，C++，信号槽机制"
+
+    load_skills:
+      - name: "scaffold"
+        file: "scaffold.yaml"
+        description: "Qt项目脚手架"
+      - name: "implement"
+        file: "implement.yaml"
+        description: "Qt功能实现"
+      - name: "ui-designer"
+        file: "ui-designer.yaml"
+        description: "Qt界面设计规范"
+      - name: "signal-slot"
+        file: "signal-slot.yaml"
+        description: "Qt信号槽机制规范"
+      - name: "model-view"
+        file: "model-view.yaml"
+        description: "Qt模型视图架构"
+
+    load_common:
+      - "requirement-review"
+      - "requirement-change"
+      - "architect"
+      - "code-review"
+      - "adr"
+
+    exclude_patterns:
+      - "backend/java/*"
+      - "backend/python/*"
+      - "backend/go/*"
+      - "frontend/vue/*"
+      - "frontend/react/*"
+      # 明确排除Java特有的skill
+      - "api-designer"  # 这是Spring Boot API规范，不适用于Qt
+      - "entity-designer"  # 这是MyBatis实体，不适用于Qt
+      - "crud-designer"  # 这是Java CRUD模板，不适用于Qt
+      - "db-designer"  # 这是数据库ORM相关，Qt有自己方式
+
+  # Python/FastAPI后端
+  backend/python:
+    display_name: "Python/FastAPI后端"
+    base_path: "backend/python"
+    description: "Python后端开发，FastAPI框架，SQLAlchemy ORM"
+
+    load_skills:
+      - name: "scaffold"
+        file: "scaffold.yaml"
+        description: "FastAPI项目脚手架"
+      - name: "implement"
+        file: "implement.yaml"
+        description: "Python功能实现"
+      - name: "api-designer"
+        file: "api-designer.yaml"
+        description: "FastAPI接口设计规范"
+      - name: "entity-designer"
+        file: "entity-designer.yaml"
+        description: "SQLAlchemy模型设计"
+      - name: "crud-designer"
+        file: "crud-designer.yaml"
+        description: "Python CRUD代码生成"
+
+    load_common:
+      - "requirement-review"
+      - "requirement-change"
+      - "architect"
+      - "code-review"
+      - "adr"
+
+    exclude_patterns:
+      - "backend/java/*"
+      - "backend/qt/*"
+      - "backend/go/*"
+      - "frontend/*"
+
+  # Go/Gin后端
+  backend/go:
+    display_name: "Go/Gin后端"
+    base_path: "backend/go"
+    description: "Go后端开发，Gin框架，GORM"
+
+    load_skills:
+      - name: "scaffold"
+        file: "scaffold.yaml"
+        description: "Gin项目脚手架"
+      - name: "implement"
+        file: "implement.yaml"
+        description: "Go功能实现"
+      - name: "api-designer"
+        file: "api-designer.yaml"
+        description: "Gin接口设计规范"
+
+    load_common:
+      - "requirement-review"
+      - "requirement-change"
+      - "architect"
+      - "code-review"
+      - "adr"
+
+    exclude_patterns:
+      - "backend/java/*"
+      - "backend/qt/*"
+      - "backend/python/*"
+      - "frontend/*"
+
+  # Vue前端
+  frontend/vue:
+    display_name: "Vue3前端"
+    base_path: "frontend/vue"
+    description: "Vue3前端开发，Vite构建，Pinia状态管理"
+
+    load_skills:
+      - name: "scaffold"
+        file: "scaffold.yaml"
+        description: "Vue3项目脚手架"
+      - name: "implement"
+        file: "implement.yaml"
+        description: "Vue功能实现"
+      - name: "component-designer"
+        file: "component-designer.yaml"
+        description: "Vue组件设计规范"
+      - name: "api-client"
+        file: "api-client.yaml"
+        description: "API调用规范（Axios封装）"
+      - name: "state-management"
+        file: "state-management.yaml"
+        description: "Pinia状态管理规范"
+      - name: "router-designer"
+        file: "router-designer.yaml"
+        description: "Vue Router路由设计"
+
+    load_common:
+      - "requirement-review"
+      - "requirement-change"
+      - "architect"
+      - "code-review"
+      - "adr"
+
+    exclude_patterns:
+      - "backend/*"
+      - "frontend/react/*"
+      - "frontend/desktop/*"
+      - "frontend/mobile/*"
+
+  # React前端
+  frontend/react:
+    display_name: "React前端"
+    base_path: "frontend/react"
+    description: "React前端开发，Next.js/CSR，状态管理"
+
+    load_skills:
+      - name: "scaffold"
+        file: "scaffold.yaml"
+        description: "React项目脚手架"
+      - name: "implement"
+        file: "implement.yaml"
+        description: "React功能实现"
+      - name: "component-designer"
+        file: "component-designer.yaml"
+        description: "React组件设计规范"
+      - name: "hooks"
+        file: "hooks.yaml"
+        description: "React Hooks规范"
+      - name: "state-management"
+        file: "state-management.yaml"
+        description: "Redux/Zustand状态管理"
+
+    load_common:
+      - "requirement-review"
+      - "requirement-change"
+      - "architect"
+      - "code-review"
+      - "adr"
+
+    exclude_patterns:
+      - "backend/*"
+      - "frontend/vue/*"
+
+# ============================================
+# 第三部分：架构师分支选择
+# ============================================
+architect_branching:
+  default_skill: "common/architect.yaml"
+
+  branches:
+    - tech_stack: "backend/java"
+      skill_file: "backend/java/architect.yaml"
+      additional_skills:
+        - "backend/java/db-designer.yaml"
+      focus: "微服务架构、数据库设计、REST API规划"
+
+    - tech_stack: "backend/qt"
+      skill_file: "backend/qt/architect.yaml"
+      additional_skills:
+        - "backend/qt/ui-designer.yaml"
+      focus: "桌面应用架构、模块划分、界面布局"
+
+    - tech_stack: "backend/python"
+      skill_file: "backend/python/architect.yaml"
+      focus: "FastAPI架构、异步设计、API规划"
+
+    - tech_stack: "backend/go"
+      skill_file: "backend/go/architect.yaml"
+      focus: "高性能后端架构、并发设计"
+
+    - tech_stack: "frontend/vue"
+      skill_file: "frontend/vue/architect.yaml"
+      focus: "前端架构、组件层级、状态管理策略"
+
+    - tech_stack: "frontend/react"
+      skill_file: "frontend/react/architect.yaml"
+      focus: "React架构、组件设计、SSR/CSR策略"
+
+# ============================================
+# 第四部分：scaffold分支选择
+# ============================================
+scaffold_branching:
+  default_behavior: "根据tech_stack参数选择对应模板"
+
+  templates:
+    - tech_stack: "spring-boot"
+      skill_file: "backend/java/scaffold.yaml"
+      template_dir: "templates/backend/java"
+
+    - tech_stack: "qt"
+      skill_file: "backend/qt/scaffold.yaml"
+      template_dir: "templates/backend/qt"
+
+    - tech_stack: "fastapi"
+      skill_file: "backend/python/scaffold.yaml"
+      template_dir: "templates/backend/python"
+
+    - tech_stack: "gin"
+      skill_file: "backend/go/scaffold.yaml"
+      template_dir: "templates/backend/go"
+
+    - tech_stack: "vue3"
+      skill_file: "frontend/vue/scaffold.yaml"
+      template_dir: "templates/frontend/vue"
+
+    - tech_stack: "react"
+      skill_file: "frontend/react/scaffold.yaml"
+      template_dir: "templates/frontend/react"
+
+# ============================================
+# 第五部分：implement分支选择
+# ============================================
+implement_branching:
+  default_behavior: "根据当前项目技术栈选择对应实现skill"
+
+  rules:
+    - if_project_has: "pom.xml"
+      use: "backend/java/implement.yaml"
+
+    - if_project_has: "*.ui, CMakeLists.txt"
+      use: "backend/qt/implement.yaml"
+
+    - if_project_has: "vite.config.*"
+      use: "frontend/vue/implement.yaml"
+
+    - if_project_has: "next.config.*"
+      use: "frontend/react/implement.yaml"
+
+# ============================================
+# 第六部分：执行流程
+# ============================================
+workflow:
+  description: "技术栈检测与skill加载流程"
+
+  phases:
+    - name: "技术栈检测"
+      description: "自动识别项目技术栈"
+      steps:
+        - step: "扫描项目文件"
+          action: "使用by_files规则匹配"
+        - step: "分析用户输入"
+          action: "使用by_keywords规则匹配"
+        - step: "确定技术栈"
+          action: "综合检测结果，确定最终技术栈"
+
+    - name: "skill加载"
+      description: "按需加载对应技术栈的skill"
+      steps:
+        - step: "加载公共skill"
+          action: "加载common目录下的通用skill"
+        - step: "加载技术栈skill"
+          action: "加载skill_mapping中对应技术栈的skill"
+        - step: "排除无关skill"
+          action: "确保不加载exclude_patterns中的skill"
+
+    - name: "上下文初始化"
+      description: "初始化技术栈上下文"
+      steps:
+        - step: "设置技术栈变量"
+          action: "设置tech_stack、base_path等环境变量"
+        - step: "加载角色配置"
+          action: "加载对应技术栈的role-config.yaml"
+
+# ============================================
+# 第七部分：使用示例
+# ============================================
+examples:
+  - name: "Qt桌面应用检测"
+    input:
+      project_files: ["CMakeLists.txt", "mainwindow.ui", "main.cpp"]
+      user_input: "开发一个Qt库存管理软件"
+    output:
+      detected_tech_stack: "backend/qt"
+      loaded_skills:
+        - "common/requirement-review.yaml"
+        - "common/architect.yaml"
+        - "backend/qt/scaffold.yaml"
+        - "backend/qt/implement.yaml"
+        - "backend/qt/ui-designer.yaml"
+        - "backend/qt/signal-slot.yaml"
+      excluded_skills:
+        - "backend/java/api-designer.yaml"
+        - "backend/java/crud-designer.yaml"
+        - "frontend/vue/component-designer.yaml"
+
+  - name: "Java后端检测"
+    input:
+      project_files: ["pom.xml", "application.yml"]
+      user_input: "开发一个Spring Boot订单管理系统"
+    output:
+      detected_tech_stack: "backend/java"
+      loaded_skills:
+        - "common/requirement-review.yaml"
+        - "common/architect.yaml"
+        - "backend/java/scaffold.yaml"
+        - "backend/java/implement.yaml"
+        - "backend/java/api-designer.yaml"
+        - "backend/java/entity-designer.yaml"
+        - "backend/java/crud-designer.yaml"
+      excluded_skills:
+        - "backend/qt/*"
+        - "frontend/*"
+
+  - name: "Vue前端检测"
+    input:
+      project_files: ["package.json", "vite.config.ts"]
+      user_input: "开发Vue3后台管理系统"
+    output:
+      detected_tech_stack: "frontend/vue"
+      loaded_skills:
+        - "frontend/vue/scaffold.yaml"
+        - "frontend/vue/implement.yaml"
+        - "frontend/vue/component-designer.yaml"
+        - "frontend/vue/api-client.yaml"
+        - "frontend/vue/state-management.yaml"
+      excluded_skills:
+        - "backend/*"
+        - "frontend/react/*"
+
+# ============================================
+# 第八部分：注意事项
+# ============================================
+notes:
+  - "技术栈检测优先级：by_files > by_keywords"
+  - "检测到多个可能的技术栈时，需要用户确认"
+  - "排除规则必须严格执行，避免加载无关skill"
+  - "每个技术栈的skill应该是自包含的，不依赖其他技术栈"
+  - "公共skill（requirement-review等）对所有技术栈都适用"
+  - "用户可以手动指定tech_stack参数覆盖自动检测"
+
+# ============================================
+# 第九部分：API接口（供其他skill调用）
+# ============================================
+api:
+  # 获取当前技术栈
+  get_current_tech_stack:
+    description: "返回当前检测到的技术栈"
+    returns: "tech_stack string"
+
+  # 获取应加载的skill列表
+  get_skills_to_load:
+    description: "返回指定技术栈应加载的skill列表"
+    params: ["tech_stack"]
+    returns: ["skill_file_paths"]
+
+  # 获取应排除的skill列表
+  get_skills_to_exclude:
+    description: "返回指定技术栈应排除的skill列表"
+    params: ["tech_stack"]
+    returns: ["exclude_patterns"]
+
+  # 手动设置技术栈
+  set_tech_stack:
+    description: "手动设置技术栈，覆盖自动检测"
+    params: ["tech_stack"]
+    returns: "success/failure"

@@ -1,0 +1,399 @@
+# Qt模型视图架构规范 Skill
+# 定义Qt Model-View架构的使用规范
+
+skill:
+  id: "qt-model-view"
+  name: "Qt模型视图架构规范"
+  version: "1.0.0"
+  category: "backend/qt"
+  description: "定义Qt Model-View架构的规范用法，包括Model设计、View配置、Delegate定制等"
+  priority: "P1"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：架构概述
+# ============================================
+architecture_overview:
+  concept: "Model-View架构实现数据与展示的分离"
+
+  components:
+    - name: "Model"
+      responsibility: "管理数据，提供统一接口给View"
+      base_classes:
+        - "QAbstractItemModel（所有Model的基类）"
+        - "QAbstractTableModel（表格Model）"
+        - "QAbstractListModel（列表Model）"
+        - "QStandardItemModel（通用Model）"
+
+    - name: "View"
+      responsibility: "展示数据，处理用户交互"
+      classes:
+        - "QTableView（表格视图）"
+        - "QTreeView（树形视图）"
+        - "QListView（列表视图）"
+        - "QColumnView（列视图）"
+
+    - name: "Delegate"
+      responsibility: "渲染和编辑数据项"
+      base_classes:
+        - "QStyledItemDelegate（推荐）"
+        - "QItemDelegate（旧版）"
+
+# ============================================
+# 第二部分：Model设计规范
+# ============================================
+model_design:
+  # 选择合适的基类
+  base_class_selection:
+    - class: "QAbstractTableModel"
+      use_case: "表格数据，二维结构"
+      example: "数据表格、日志列表"
+
+    - class: "QAbstractListModel"
+      use_case: "一维列表数据"
+      example: "文件列表、选项列表"
+
+    - class: "QAbstractItemModel"
+      use_case: "复杂树形或自定义结构"
+      example: "文件系统树、组织架构"
+
+    - class: "QStandardItemModel"
+      use_case: "快速原型，简单数据"
+      note: "性能较低，大数据量不推荐"
+
+  # 必须实现的方法
+  required_methods:
+    table_model:
+      - method: "rowCount()"
+        description: "返回行数"
+      - method: "columnCount()"
+        description: "返回列数"
+      - method: "data()"
+        description: "返回指定位置的数据"
+      - method: "headerData()"
+        description: "返回表头数据"
+
+    list_model:
+      - method: "rowCount()"
+        description: "返回项数"
+      - method: "data()"
+        description: "返回指定位置的数据"
+
+  # 可选实现的方法
+  optional_methods:
+    - method: "setData()"
+      description: "设置数据（支持编辑）"
+    - method: "flags()"
+      description: "设置项标志（可编辑、可选中等）"
+    - method: "insertRows()"
+      description: "插入行"
+    - method: "removeRows()"
+      description: "删除行"
+
+  # Model模板
+  table_model_template:
+    header: |
+      #ifndef TABLEMODEL_H
+      #define TABLEMODEL_H
+
+      #include <QAbstractTableModel>
+      #include <QList>
+
+      struct DataItem {
+          int id;
+          QString name;
+          QString value;
+          int status;
+      };
+
+      class TableModel : public QAbstractTableModel
+      {
+          Q_OBJECT
+
+      public:
+          explicit TableModel(QObject *parent = nullptr);
+
+          // 必须实现的虚方法
+          int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+          int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+          QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+          QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+          // 数据操作方法
+          void setData(const QList<DataItem> &items);
+          void addItem(const DataItem &item);
+          void removeItem(int row);
+          const DataItem& getItem(int row) const;
+
+          // 可选：支持编辑
+          bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+          Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+      private:
+          QList<DataItem> m_data;
+          QStringList m_headers;
+      };
+
+      #endif // TABLEMODEL_H
+
+    implementation: |
+      #include "tablemodel.h"
+
+      TableModel::TableModel(QObject *parent)
+          : QAbstractTableModel(parent)
+          , m_headers({"ID", "名称", "值", "状态"})
+      {
+      }
+
+      int TableModel::rowCount(const QModelIndex &parent) const
+      {
+          if (parent.isValid()) return 0;
+          return m_data.count();
+      }
+
+      int TableModel::columnCount(const QModelIndex &parent) const
+      {
+          if (parent.isValid()) return 0;
+          return m_headers.count();
+      }
+
+      QVariant TableModel::data(const QModelIndex &index, int role) const
+      {
+          if (!index.isValid() || index.row() >= m_data.count())
+              return QVariant();
+
+          if (role == Qt::DisplayRole || role == Qt::EditRole) {
+              const DataItem &item = m_data.at(index.row());
+              switch (index.column()) {
+              case 0: return item.id;
+              case 1: return item.name;
+              case 2: return item.value;
+              case 3: return item.status;
+              }
+          }
+
+          return QVariant();
+      }
+
+      QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
+      {
+          if (role != Qt::DisplayRole || orientation != Qt::Horizontal)
+              return QVariant();
+
+          return m_headers.value(section);
+      }
+
+      void TableModel::setData(const QList<DataItem> &items)
+      {
+          beginResetModel();
+          m_data = items;
+          endResetModel();
+      }
+
+      void TableModel::addItem(const DataItem &item)
+      {
+          beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
+          m_data.append(item);
+          endInsertRows();
+      }
+
+      void TableModel::removeItem(int row)
+      {
+          if (row < 0 || row >= m_data.count()) return;
+
+          beginRemoveRows(QModelIndex(), row, row);
+          m_data.removeAt(row);
+          endRemoveRows();
+      }
+
+# ============================================
+# 第三部分：View配置规范
+# ============================================
+view_configuration:
+  # QTableView配置
+  table_view:
+    basic_setup: |
+      QTableView *tableView = new QTableView(this);
+
+      // 设置Model
+      tableView->setModel(model);
+
+      // 基本配置
+      tableView->setSelectionBehavior(QAbstractItemView::SelectRows);  // 整行选中
+      tableView->setSelectionMode(QAbstractItemView::SingleSelection); // 单选
+      tableView->setAlternatingRowColors(true);  // 交替行颜色
+      tableView->setSortingEnabled(true);  // 启用排序
+
+      // 列宽设置
+      tableView->setColumnWidth(0, 100);
+      tableView->horizontalHeader()->setStretchLastSection(true);  // 最后一列自动拉伸
+
+    selection_handling: |
+      // 连接选择信号
+      connect(tableView->selectionModel(), &QItemSelectionModel::currentRowChanged,
+              this, &MyClass::onCurrentRowChanged);
+
+      // 获取当前选中
+      QModelIndex index = tableView->currentIndex();
+      if (index.isValid()) {
+          int row = index.row();
+          // 处理选中行
+      }
+
+  # QTreeView配置
+  tree_view:
+    basic_setup: |
+      QTreeView *treeView = new QTreeView(this);
+      treeView->setModel(model);
+
+      // 展开/折叠
+      treeView->expandAll();  // 展开所有节点
+      treeView->setAnimated(true);  // 动画效果
+
+  # QListView配置
+  list_view:
+    basic_setup: |
+      QListView *listView = new QListView(this);
+      listView->setModel(model);
+
+      // 显示模式
+      listView->setViewMode(QListView::ListMode);  // 列表模式
+      // listView->setViewMode(QListView::IconMode);  // 图标模式
+
+# ============================================
+# 第四部分：代理（Delegate）规范
+# ============================================
+delegate_design:
+  # 使用场景
+  use_cases:
+    - "自定义单元格渲染（如进度条、图标）"
+    - "自定义编辑器（如颜色选择器、日期选择器）"
+    - "条件格式化显示"
+
+  # 自定义代理模板
+  custom_delegate:
+    header: |
+      #ifndef CUSTOMDELEGATE_H
+      #define CUSTOMDELEGATE_H
+
+      #include <QStyledItemDelegate>
+
+      class CustomDelegate : public QStyledItemDelegate
+      {
+          Q_OBJECT
+
+      public:
+          explicit CustomDelegate(QObject *parent = nullptr);
+
+          // 渲染
+          void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                     const QModelIndex &index) const override;
+
+          // 编辑器
+          QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                               const QModelIndex &index) const override;
+          void setEditorData(QWidget *editor, const QModelIndex &index) const override;
+          void setModelData(QWidget *editor, QAbstractItemModel *model,
+                           const QModelIndex &index) const override;
+          void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option,
+                                   const QModelIndex &index) const override;
+      };
+
+      #endif // CUSTOMDELEGATE_H
+
+  # 进度条代理示例
+  progress_delegate: |
+      void ProgressDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                   const QModelIndex &index) const
+      {
+          int progress = index.data().toInt();
+
+          QStyleOptionProgressBar progressBarOption;
+          progressBarOption.rect = option.rect;
+          progressBarOption.minimum = 0;
+          progressBarOption.maximum = 100;
+          progressBarOption.progress = progress;
+          progressBarOption.text = QString("%1%").arg(progress);
+          progressBarOption.textVisible = true;
+
+          QApplication::style()->drawControl(QStyle::CE_ProgressBar,
+                                             &progressBarOption, painter);
+      }
+
+# ============================================
+# 第五部分：代理模型（Proxy Model）
+# ============================================
+proxy_model:
+  # 使用场景
+  use_cases:
+    - "排序：QSortFilterProxyModel"
+    - "过滤：QSortFilterProxyModel"
+    - "数据转换"
+
+  # 排序过滤示例
+  sort_filter: |
+      QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
+      proxyModel->setSourceModel(sourceModel);
+      proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+      proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+      // 设置过滤
+      proxyModel->setFilterKeyColumn(1);  // 按第2列过滤
+      proxyModel->setFilterFixedString("关键词");
+
+      // 设置给View
+      tableView->setModel(proxyModel);
+
+# ============================================
+# 第六部分：性能优化
+# ============================================
+performance:
+  best_practices:
+    - practice: "大数据量使用canFetchMore/fetchMore"
+      description: "分批加载数据，避免一次性加载"
+
+    - practice: "避免频繁调用beginResetModel/endResetModel"
+      description: "使用beginInsertRows/endInsertRows等增量更新"
+
+    - practice: "缓存计算结果"
+      description: "在data()中避免重复计算"
+
+    - practice: "使用QIdentityProxyModel缓存数据"
+      description: "当需要频繁访问相同数据时"
+
+# ============================================
+# 第七部分：检查清单
+# ============================================
+checklist:
+  model_design:
+    - item: "选择正确的Model基类"
+    - item: "实现所有必需的虚方法"
+    - item: "正确使用begin/end方法通知变化"
+    - item: "处理无效索引"
+
+  view_setup:
+    - item: "正确设置Model"
+    - item: "配置选择行为"
+    - item: "设置合理的列宽/行高"
+
+  delegate:
+    - item: "继承QStyledItemDelegate"
+    - item: "正确实现paint方法"
+    - item: "编辑器内存管理正确"
+
+# ============================================
+# 第八部分：关联文档
+# ============================================
+references:
+  primary:
+    - path: "backend/qt/ui-designer.yaml"
+      relationship: "协作"
+      description: "View是UI的组成部分"
+
+    - path: "backend/qt/signal-slot.yaml"
+      relationship: "协作"
+      description: "View通过信号槽通知用户操作"
+
+  official_docs:
+    - url: "https://doc.qt.io/qt-6/model-view-programming.html"
+      description: "Qt Model/View官方文档"

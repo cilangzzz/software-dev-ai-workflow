@@ -1,0 +1,342 @@
+# Vue3组件设计规范 Skill
+# 定义Vue3组件设计规范
+
+skill:
+  id: "vue-component-designer"
+  name: "Vue3组件设计规范"
+  version: "1.0.0"
+  category: "frontend/vue"
+  description: "定义Vue3组件设计规范，包括组件结构、Props/Emits设计、插槽使用、组合式函数等"
+  priority: "P0"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：设计原则
+# ============================================
+design_principles:
+  - principle: "单一职责"
+    description: "每个组件只负责一个功能"
+    benefit: "提高可维护性和复用性"
+
+  - principle: "Props Down, Events Up"
+    description: "数据通过Props向下传递，事件通过Emits向上冒泡"
+    benefit: "单向数据流，状态可预测"
+
+  - principle: "组合优于继承"
+    description: "使用组合式函数共享逻辑，而非继承"
+    benefit: "更灵活的代码复用"
+
+  - principle: "类型安全"
+    description: "使用TypeScript定义Props、Emits和类型"
+    benefit: "编译时错误检查"
+
+# ============================================
+# 第二部分：组件结构规范
+# ============================================
+component_structure:
+  # SFC结构顺序
+  sfc_order:
+    - section: "<script setup>"
+      description: "逻辑部分，放在最前面"
+    - section: "<template>"
+      description: "模板部分"
+    - section: "<style scoped>"
+      description: "样式部分，放在最后"
+
+  # 标准组件模板
+  standard_template: |
+    <script setup lang="ts">
+    // 1. 导入
+    import { ref, computed, watch, onMounted } from 'vue'
+    import type { PropType } from 'vue'
+
+    // 2. Props定义
+    interface Props {
+      title: string
+      data?: Item[]
+      loading?: boolean
+    }
+    const props = withDefaults(defineProps<Props>(), {
+      data: () => [],
+      loading: false
+    })
+
+    // 3. Emits定义
+    const emit = defineEmits<{
+      update: [value: string]
+      select: [item: Item]
+    }>()
+
+    // 4. 响应式状态
+    const localState = ref('')
+
+    // 5. 计算属性
+    const filteredData = computed(() => {
+      return props.data.filter(item => item.active)
+    })
+
+    // 6. 方法
+    const handleClick = (item: Item) => {
+      emit('select', item)
+    }
+
+    // 7. 生命周期
+    onMounted(() => {
+      // 初始化
+    })
+    </script>
+
+    <template>
+      <div class="component">
+        <!-- 模板内容 -->
+      </div>
+    </template>
+
+    <style scoped>
+    .component {
+      /* 样式 */
+    }
+    </style>
+
+# ============================================
+# 第三部分：Props设计规范
+# ============================================
+props_design:
+  # 基本语法
+  basic_syntax:
+    with_defaults: |
+      interface Props {
+        title: string
+        count?: number
+        items?: Item[]
+      }
+      const props = withDefaults(defineProps<Props>(), {
+        count: 0,
+        items: () => []
+      })
+
+  # 命名规范
+  naming:
+    - rule: "小驼峰命名"
+      examples: ["userName", "isVisible", "itemList"]
+    - rule: "布尔值以is/has/show开头"
+      examples: ["isVisible", "hasError", "showHeader"]
+    - rule: "数组/对象提供默认值函数"
+      example: "items: () => []"
+
+  # 类型定义
+  types:
+    primitive: |
+      interface Props {
+        title: string
+        count: number
+        isActive: boolean
+      }
+
+    complex: |
+      interface Props {
+        user: {
+          id: number
+          name: string
+        }
+        items: Item[]
+      }
+
+    with_validation: |
+      const props = defineProps({
+        title: { type: String, required: true },
+        count: { type: Number, default: 0 },
+        items: { type: Array as PropType<Item[]>, default: () => [] }
+      })
+
+# ============================================
+# 第四部分：Emits设计规范
+# ============================================
+emits_design:
+  # 类型化Emits
+  typed_emits: |
+    const emit = defineEmits<{
+      change: [value: string]
+      select: [item: Item, index: number]
+      update: []
+    }>()
+
+  # 命名规范
+  naming:
+    - rule: "动词形式"
+      examples: ["change", "select", "update", "delete", "submit"]
+    - rule: "v-model使用update:xxx"
+      example: "emit('update:modelValue', newValue)"
+    - rule: "事件参数明确类型"
+      example: "change: [value: string]"
+
+  # 双向绑定模式
+  v_model_pattern: |
+    // 父组件: v-model="value"
+    // 子组件:
+    const props = defineProps<{ modelValue: string }>()
+    const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
+
+    const localValue = computed({
+      get: () => props.modelValue,
+      set: (val) => emit('update:modelValue', val)
+    })
+
+# ============================================
+# 第五部分：插槽设计规范
+# ============================================
+slots_design:
+  # 默认插槽
+  default_slot: |
+    <!-- 子组件 -->
+    <template>
+      <div class="card">
+        <slot></slot>
+      </div>
+    </template>
+
+    <!-- 父组件使用 -->
+    <Card>
+      <p>内容</p>
+    </Card>
+
+  # 具名插槽
+  named_slots: |
+    <!-- 子组件 -->
+    <template>
+      <div class="card">
+        <header><slot name="header"></slot></header>
+        <main><slot></slot></main>
+        <footer><slot name="footer"></slot></footer>
+      </div>
+    </template>
+
+    <!-- 父组件使用 -->
+    <Card>
+      <template #header>标题</template>
+      <p>内容</p>
+      <template #footer>底部</template>
+    </Card>
+
+  # 作用域插槽
+  scoped_slots: |
+    <!-- 子组件 -->
+    <template>
+      <ul>
+        <li v-for="item in items" :key="item.id">
+          <slot :item="item" :index="index"></slot>
+        </li>
+      </ul>
+    </template>
+
+    <!-- 父组件使用 -->
+    <List :items="data">
+      <template #default="{ item, index }">
+        <span>{{ index }}: {{ item.name }}</span>
+      </template>
+    </List>
+
+# ============================================
+# 第六部分：组合式函数规范
+# ============================================
+composables_design:
+  # 命名规范
+  naming: "以use开头，如useUserStore, useSearch"
+
+  # 结构规范
+  structure: |
+    export interface Use{Feature}Options {
+      // 配置项
+    }
+
+    export function use{Feature}(options: Use{Feature}Options = {}) {
+      // 1. 状态
+      const state = ref()
+
+      // 2. 计算属性
+      const computed = computed(() => {})
+
+      // 3. 方法
+      const method = () => {}
+
+      // 4. 返回
+      return {
+        state,
+        computed,
+        method
+      }
+    }
+
+  # 最佳实践
+  best_practices:
+    - "返回响应式引用，而非包装对象"
+    - "提供重置方法"
+    - "支持配置选项"
+    - "处理清理逻辑（onUnmounted）"
+
+# ============================================
+# 第七部分：组件分类
+# ============================================
+component_categories:
+  # 页面组件
+  page_components:
+    location: "views/"
+    characteristics:
+      - "与路由绑定"
+      - "包含业务逻辑"
+      - "组合多个组件"
+
+  # 业务组件
+  business_components:
+    location: "components/business/"
+    characteristics:
+      - "包含业务逻辑"
+      - "可复用于多个页面"
+
+  # 通用组件
+  common_components:
+    location: "components/common/"
+    characteristics:
+      - "不包含业务逻辑"
+      - "高度可复用"
+      - "Props驱动"
+
+  # 基础组件
+  base_components:
+    location: "components/base/"
+    characteristics:
+      - "原子级别组件"
+      - "如按钮、输入框封装"
+
+# ============================================
+# 第八部分：检查清单
+# ============================================
+checklist:
+  design:
+    - item: "组件职责单一"
+      check: "组件只做一件事"
+    - item: "Props类型完整"
+      check: "所有Props有类型定义"
+    - item: "Emits定义清晰"
+      check: "事件名称和参数类型明确"
+    - item: "使用scoped样式"
+      check: "样式不污染全局"
+
+  implementation:
+    - item: "使用script setup"
+      check: "使用<script setup lang='ts'>"
+    - item: "TypeScript严格模式"
+      check: "无any类型"
+    - item: "v-for使用key"
+      check: "列表渲染有唯一key"
+    - item: "避免v-if和v-for同时使用"
+
+# ============================================
+# 第九部分：注意事项
+# ============================================
+notes:
+  - "Props命名避免与HTML属性冲突"
+  - "Emits应在组件emits选项中声明"
+  - "插槽提供默认内容提升可用性"
+  - "组合式函数在setup顶层调用"
+  - "组件命名使用多词避免与HTML冲突"

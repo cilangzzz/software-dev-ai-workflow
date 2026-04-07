@@ -1,0 +1,568 @@
+# Qt项目脚手架 Skill
+# 快速生成Qt桌面应用项目结构
+
+skill:
+  id: "qt-scaffold"
+  name: "Qt项目脚手架"
+  version: "1.0.0"
+  category: "backend/qt"
+  description: "根据Qt版本和项目类型快速生成Qt桌面应用项目结构。支持CMake和qmake两种构建系统，包含标准目录结构、配置文件、基础代码模板"
+  priority: "P0"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/qt-scaffold"
+    - "/scaffold qt"
+
+  keywords:
+    - "创建Qt项目"
+    - "Qt脚手架"
+    - "生成Qt项目"
+    - "新建Qt应用"
+
+  events:
+    - name: "qt_architecture_completed"
+      condition: "Qt架构设计完成"
+    - name: "qt_project_initiated"
+      condition: "Qt项目启动"
+
+# ============================================
+# 第二部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "project_name"
+      type: "string"
+      required: true
+      description: "项目名称"
+      examples: ["InventoryManager", "DataVisualizer"]
+
+    - name: "qt_version"
+      type: "string"
+      required: false
+      default: "Qt6"
+      enum: ["Qt5", "Qt6"]
+      description: "Qt版本"
+
+    - name: "build_system"
+      type: "string"
+      required: false
+      default: "cmake"
+      enum: ["cmake", "qmake"]
+      description: "构建系统"
+
+    - name: "project_type"
+      type: "string"
+      required: false
+      default: "gui"
+      enum: ["gui", "console", "widget", "qml"]
+      description: "项目类型"
+      meanings:
+        - gui: "GUI应用（QMainWindow）"
+        - console: "控制台应用"
+        - widget: "自定义Widget应用"
+        - qml: "Qt Quick/QML应用"
+
+    - name: "features"
+      type: "array"
+      required: false
+      default: []
+      description: "需要的功能特性"
+      options:
+        - "network"      # 网络功能
+        - "database"     # 数据库SQLite
+        - "multimedia"   # 多媒体
+        - "charts"       # QtCharts图表
+        - "webengine"    # QtWebEngine浏览器
+
+# ============================================
+# 第三部分：执行流程
+# ============================================
+workflow:
+  description: "Qt项目脚手架按以下5个阶段执行"
+
+  phases:
+    - name: "参数解析"
+      description: "解析用户输入参数"
+      duration: "1-2min"
+      steps:
+        - step: "解析项目名称"
+          action: "确认项目名称符合命名规范"
+        - step: "确定Qt版本"
+          action: "Qt5或Qt6，影响API选择"
+        - step: "确定构建系统"
+          action: "CMake或qmake"
+        - step: "确定项目类型"
+          action: "GUI/Console/Widget/QML"
+
+    - name: "模板选择"
+      description: "选择对应的项目模板"
+      duration: "1-2min"
+      steps:
+        - step: "匹配项目类型模板"
+          action: "根据project_type选择模板"
+        - step: "匹配构建系统模板"
+          action: "根据build_system选择CMake或qmake模板"
+        - step: "匹配功能特性"
+          action: "根据features添加对应模块"
+
+    - name: "目录创建"
+      description: "创建标准Qt项目目录结构"
+      duration: "2-3min"
+      steps:
+        - step: "创建基础目录"
+          action: "src, include, resources, tests, docs"
+        - step: "创建模块目录"
+          action: "widgets, models, dialogs, utils"
+        - step: "创建资源目录"
+          action: "images, icons, styles"
+
+    - name: "文件生成"
+      description: "生成项目文件"
+      duration: "3-5min"
+      steps:
+        - step: "生成构建配置"
+          action: "CMakeLists.txt或.pro文件"
+        - step: "生成主入口"
+          action: "main.cpp"
+        - step: "生成主窗口"
+          action: "mainwindow.cpp/.h/.ui（GUI类型）"
+        - step: "生成资源文件"
+          action: "resources.qrc"
+        - step: "生成配置文件"
+          action: "Qt配置、应用图标等"
+
+    - name: "依赖配置"
+      description: "配置Qt模块依赖"
+      duration: "1-2min"
+      steps:
+        - step: "配置核心模块"
+          action: "QtCore, QtGui, QtWidgets"
+        - step: "配置扩展模块"
+          action: "根据features添加QtNetwork等"
+        - step: "生成依赖清单"
+          action: "列出所有Qt模块依赖"
+
+# ============================================
+# 第四部分：项目结构模板
+# ============================================
+project_templates:
+  cmake_gui:
+    description: "CMake GUI应用项目结构"
+    structure: |
+      {project_name}/
+      ├── CMakeLists.txt              # CMake配置
+      ├── src/
+      │   ├── main.cpp                # 主入口
+      │   ├── mainwindow.cpp          # 主窗口实现
+      │   ├── mainwindow.h            # 主窗口头文件
+      │   ├── mainwindow.ui           # Qt Designer界面
+      │   ├── app/
+      │   │   ├── application.cpp/.h  # 应用管理类
+      │   ├── widgets/
+      │   │   ├── customwidget.cpp/.h
+      │   ├── models/
+      │   │   ├── datamodel.cpp/.h
+      │   ├── dialogs/
+      │   │   ├── settingsdialog.cpp/.h/.ui
+      │   ├── utils/
+      │   │   ├── logger.cpp/.h
+      │   │   ├── settings.cpp/.h
+      │   └── controllers/
+      │       ├── maincontroller.cpp/.h
+      ├── include/
+      │   └── {project_name}/
+      │       ├── global.h
+      │       ├── constants.h
+      ├── resources/
+      │   ├── resources.qrc
+      │   ├── images/
+      │   ├── icons/
+      │   ├── styles/
+      │   │   └── style.qss
+      ├── tests/
+      │   ├── test_main.cpp
+      │   ├── test_model.cpp
+      ├── docs/
+      │   ├── README.md
+      │   ├── ARCHITECTURE.md
+      ├── .gitignore
+      └── config/
+          ├── appsettings.json
+
+    cmake_content: |
+      cmake_minimum_required(VERSION 3.16)
+      project({project_name} VERSION 1.0.0 LANGUAGES CXX)
+
+      set(CMAKE_CXX_STANDARD 17)
+      set(CMAKE_CXX_STANDARD_REQUIRED ON)
+      set(CMAKE_AUTOMOC ON)
+      set(CMAKE_AUTORCC ON)
+      set(CMAKE_AUTOUIC ON)
+
+      find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+
+      # 添加扩展模块（根据features）
+      if(FEATURE_NETWORK)
+        find_package(Qt6 REQUIRED COMPONENTS Network)
+      endif()
+      if(FEATURE_DATABASE)
+        find_package(Qt6 REQUIRED COMPONENTS Sql)
+      endif()
+
+      add_executable({project_name}
+        src/main.cpp
+        src/mainwindow.cpp
+        src/mainwindow.h
+        src/mainwindow.ui
+        # ... 其他源文件
+        resources/resources.qrc
+      )
+
+      target_link_libraries({project_name}
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Widgets
+        # 扩展模块
+      )
+
+  qmake_gui:
+    description: "qmake GUI应用项目结构"
+    structure: |
+      {project_name}/
+      ├── {project_name}.pro          # qmake项目文件
+      ├── main.cpp
+      ├── mainwindow.cpp/.h/.ui
+      ├── widgets/
+      ├── models/
+      ├── dialogs/
+      ├── utils/
+      ├── resources/
+      │   └── resources.qrc
+      ├── tests/
+      └── README.md
+
+    pro_content: |
+      QT += core gui widgets
+      # 扩展模块
+      QT += network    # 网络功能
+      QT += sql        # 数据库功能
+
+      greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+      CONFIG += c++17
+      CONFIG += debug_and_release
+
+      # 源文件
+      SOURCES += \
+          main.cpp \
+          mainwindow.cpp
+
+      # 头文件
+      HEADERS += \
+          mainwindow.h
+
+      # UI文件
+      FORMS += \
+          mainwindow.ui
+
+      # 资源文件
+      RESOURCES += \
+          resources/resources.qrc
+
+      # 目标名称
+      TARGET = {project_name}
+      TEMPLATE = app
+
+  qml_app:
+    description: "Qt Quick/QML应用项目结构"
+    structure: |
+      {project_name}/
+      ├── CMakeLists.txt
+      ├── src/
+      │   ├── main.cpp
+      │   ├── main.qml
+      │   ├── pages/
+      │   │   ├── HomePage.qml
+      │   │   ├── SettingsPage.qml
+      │   ├── components/
+      │   │   ├── CustomButton.qml
+      │   ├── models/
+      │   │   ├── DataModel.qml
+      ├── resources/
+      │   ├── images/
+      │   ├── icons/
+      └── docs/
+
+# ============================================
+# 第五部分：基础代码模板
+# ============================================
+code_templates:
+  main_cpp:
+    description: "Qt应用主入口"
+    template: |
+      #include <QApplication>
+      #include <QMainWindow>
+      #include "mainwindow.h"
+
+      int main(int argc, char *argv[])
+      {
+          QApplication app(argc, argv);
+
+          // 设置应用信息
+          app.setApplicationName("{project_name}");
+          app.setApplicationVersion("1.0.0");
+          app.setOrganizationName("{organization}");
+
+          // 加载样式
+          // QFile styleFile(":/styles/style.qss");
+          // if (styleFile.open(QFile::ReadOnly)) {
+          //     app.setStyleSheet(styleFile.readAll());
+          // }
+
+          MainWindow window;
+          window.setWindowTitle("{project_name}");
+          window.resize(800, 600);
+          window.show();
+
+          return app.exec();
+      }
+
+  mainwindow_h:
+    description: "主窗口头文件"
+    template: |
+      #ifndef MAINWINDOW_H
+      #define MAINWINDOW_H
+
+      #include <QMainWindow>
+
+      QT_BEGIN_NAMESPACE
+      namespace Ui { class MainWindow; }
+      QT_END_NAMESPACE
+
+      class MainWindow : public QMainWindow
+      {
+          Q_OBJECT
+
+      public:
+          explicit MainWindow(QWidget *parent = nullptr);
+          ~MainWindow();
+
+      private slots:
+          void on_actionNew_triggered();
+          void on_actionOpen_triggered();
+          void on_actionSave_triggered();
+          void on_actionAbout_triggered();
+
+      private:
+          void setupUi();
+          void setupConnections();
+
+          Ui::MainWindow *ui;
+      };
+
+      #endif // MAINWINDOW_H
+
+  mainwindow_cpp:
+    description: "主窗口实现"
+    template: |
+      #include "mainwindow.h"
+      #include "ui_mainwindow.h"
+
+      #include <QFileDialog>
+      #include <QMessageBox>
+
+      MainWindow::MainWindow(QWidget *parent)
+          : QMainWindow(parent)
+          , ui(new Ui::MainWindow)
+      {
+          ui->setupUi(this);
+          setupConnections();
+      }
+
+      MainWindow::~MainWindow()
+      {
+          delete ui;
+      }
+
+      void MainWindow::setupConnections()
+      {
+          // 信号槽连接
+          connect(ui->actionNew, &QAction::triggered, this, &MainWindow::on_actionNew_triggered);
+          connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::on_actionOpen_triggered);
+      }
+
+      void MainWindow::on_actionNew_triggered()
+      {
+          // 新建文件逻辑
+      }
+
+      void MainWindow::on_actionOpen_triggered()
+      {
+          QString fileName = QFileDialog::getOpenFileName(this, "打开文件", "", "All Files (*)");
+          if (!fileName.isEmpty()) {
+              // 打开文件逻辑
+          }
+      }
+
+      void MainWindow::on_actionSave_triggered()
+      {
+          // 保存文件逻辑
+      }
+
+      void MainWindow::on_actionAbout_triggered()
+      {
+          QMessageBox::about(this, "关于", "{project_name} v1.0.0\n\n一个Qt桌面应用");
+      }
+
+# ============================================
+# 第六部分：输出产物
+# ============================================
+output:
+  base_path: "{project_name}"
+
+  artifacts:
+    - name: "项目目录结构"
+      description: "完整的Qt项目目录"
+
+    - name: "构建配置文件"
+      files: ["CMakeLists.txt", "{project_name}.pro"]
+      description: "CMake或qmake配置"
+
+    - name: "主入口文件"
+      files: ["src/main.cpp"]
+      description: "Qt应用入口"
+
+    - name: "主窗口文件"
+      files: ["mainwindow.cpp", "mainwindow.h", "mainwindow.ui"]
+      condition: "project_type == 'gui'"
+      description: "主窗口实现"
+
+    - name: "资源文件"
+      files: ["resources/resources.qrc"]
+      description: "Qt资源集合"
+
+    - name: "样式文件"
+      files: ["resources/styles/style.qss"]
+      condition: "features contains 'styling'"
+      description: "Qt样式表"
+
+    - name: "README文档"
+      files: ["README.md"]
+      description: "项目说明文档"
+
+# ============================================
+# 第七部分：关联文档引用
+# ============================================
+references:
+  primary:
+    - path: "backend/qt/architect.yaml"
+      relationship: "upstream"
+      description: "依赖Qt架构设计确定项目结构"
+
+    - path: "backend/qt/ui-designer.yaml"
+      relationship: "collaboration"
+      description: "UI设计提供界面结构"
+
+  secondary:
+    - path: "templates/backend/qt/"
+      relationship: "template"
+      description: "Qt项目模板目录"
+
+  collaboration:
+    - skill: "implement"
+      relationship: "downstream"
+      description: "脚手架创建后进入功能开发"
+      path: "backend/qt/implement.yaml"
+
+# ============================================
+# 第八部分：质量标准
+# ============================================
+quality_standards:
+  - standard: "项目结构"
+    requirement: "符合Qt最佳实践"
+    check: "对比标准模板结构"
+
+  - standard: "构建配置"
+    requirement: "CMake/qmake配置完整可用"
+    check: "检查必要配置项"
+
+  - standard: "Qt模块依赖"
+    requirement: "正确配置所需Qt模块"
+    check: "检查find_package或QT +=配置"
+
+  - standard: "代码风格"
+    requirement: "符合Qt代码规范"
+    check: "Q_OBJECT宏、命名规范"
+
+  - standard: "文档"
+    requirement: "包含README和开发指南"
+    check: "检查文档文件"
+
+# ============================================
+# 第九部分：使用示例
+# ============================================
+examples:
+  - name: "创建Qt6 CMake GUI应用"
+    input: |
+      project_name: InventoryManager
+      qt_version: Qt6
+      build_system: cmake
+      project_type: gui
+      features: [network, database]
+    output_summary: |
+      项目 InventoryManager 创建成功！
+
+      项目结构:
+      InventoryManager/
+      ├── CMakeLists.txt
+      ├── src/
+      │   ├── main.cpp
+      │   ├── mainwindow.cpp/.h/.ui
+      │   ├── models/
+      │   ├── widgets/
+      │   └── utils/
+      ├── resources/
+      │   └ resources.qrc
+      └ tests/
+      └ README.md
+
+      Qt模块依赖: Qt6::Core, Qt6::Gui, Qt6::Widgets, Qt6::Network, Qt6::Sql
+
+      下一步:
+      1. cd InventoryManager
+      2. cmake -B build
+      3. cmake --build build
+      4. ./build/InventoryManager
+
+  - name: "创建Qt5 qmake应用"
+    input: |
+      project_name: DataViewer
+      qt_version: Qt5
+      build_system: qmake
+      project_type: gui
+      features: [charts]
+    output_summary: |
+      项目 DataViewer 创建成功！
+
+      项目使用qmake构建系统，包含QtCharts模块。
+
+      下一步:
+      1. cd DataViewer
+      2. qmake
+      3. make
+
+# ============================================
+#第十部分：注意事项
+# ============================================
+notes:
+  - "Qt6与Qt5有API差异，注意版本选择"
+  - "CMake需要3.16以上版本支持Qt6"
+  - "Q_OBJECT宏是信号槽的必要条件"
+  - "UI文件由Qt Designer编辑，不要手动修改"
+  - "资源文件(.qrc)需要正确配置才能加载"
+  - "项目名称需符合命名规范（无空格特殊字符）"

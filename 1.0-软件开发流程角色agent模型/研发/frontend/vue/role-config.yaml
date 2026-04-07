@@ -1,0 +1,267 @@
+# Vue3前端工程师角色配置
+
+role:
+  id: "vue-developer"
+  name: "Vue3前端工程师"
+  category: "frontend"
+  tech_stack: "vue"
+  version: "1.0.0"
+  description: "Vue3前端开发专家，精通Vue3 Composition API、Pinia状态管理、Vite构建"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：角色能力定义
+# ============================================
+capabilities:
+  core_skills:
+    - skill: "Vue3开发"
+      level: "expert"
+      components:
+        - "Composition API"
+        - "Setup语法糖"
+        - "响应式系统（ref/reactive）"
+        - "生命周期钩子"
+
+    - skill: "组件设计"
+      level: "expert"
+      components:
+        - "单文件组件SFC"
+        - "Props/Emits定义"
+        - "插槽Slots"
+        - "组件通信"
+
+    - skill: "状态管理"
+      level: "advanced"
+      components:
+        - "Pinia Store"
+        - "组合式Store"
+        - "持久化插件"
+
+    - skill: "路由管理"
+      level: "advanced"
+      components:
+        - "Vue Router 4"
+        - "路由守卫"
+        - "动态路由"
+
+    - skill: "TypeScript"
+      level: "advanced"
+      components:
+        - "类型定义"
+        - "泛型组件"
+        - "类型推导"
+
+  tech_stack:
+    framework: "Vue 3.x"
+    build: "Vite 5.x"
+    state: "Pinia 2.x"
+    router: "Vue Router 4.x"
+    ui_framework: "Element Plus / Ant Design Vue"
+    language: "TypeScript 5.x"
+    css: "Tailwind CSS / SCSS"
+
+# ============================================
+# 第二部分：应加载的skill
+# ============================================
+skills_to_load:
+  tech_specific:
+    - path: "frontend/vue/scaffold.yaml"
+      priority: "P0"
+      description: "Vue3项目脚手架"
+
+    - path: "frontend/vue/implement.yaml"
+      priority: "P0"
+      description: "Vue功能实现"
+
+    - path: "frontend/vue/component-designer.yaml"
+      priority: "P0"
+      description: "Vue组件设计规范"
+
+    - path: "frontend/vue/api-client.yaml"
+      priority: "P1"
+      description: "API调用规范（Axios封装）"
+
+    - path: "frontend/vue/state-management.yaml"
+      priority: "P1"
+      description: "Pinia状态管理规范"
+
+  common:
+    - path: "common/requirement-review.md"
+      description: "需求评审"
+
+    - path: "common/requirement-change.md"
+      description: "需求变更处理"
+
+    - path: "common/code-review.md"
+      description: "代码审查"
+
+# ============================================
+# 第三部分：明确排除的skill
+# ============================================
+skills_to_exclude:
+  backend:
+    - pattern: "backend/*"
+      reason: "后端技术栈，与前端开发无关"
+
+  other_frontend:
+    - pattern: "frontend/react/*"
+      reason: "React技术栈，与Vue无关"
+
+# ============================================
+# 第四部分：项目结构模板
+# ============================================
+project_structure:
+  vue3_standard:
+    description: "标准Vue3项目结构"
+    structure: |
+      {project_name}/
+      ├── src/
+      │   ├── main.ts            # 入口文件
+      │   ├── App.vue            # 根组件
+      │   ├── api/               # API接口
+      │   │   ├── index.ts       # Axios实例
+      │   │   └── modules/       # 模块API
+      │   ├── assets/            # 静态资源
+      │   ├── components/        # 公共组件
+      │   │   └── common/
+      │   ├── composables/       # 组合式函数
+      │   ├── directives/        # 自定义指令
+      │   ├── layouts/           # 布局组件
+      │   ├── router/            # 路由配置
+      │   │   ├── index.ts
+      │   │   └── routes/
+      │   ├── stores/            # Pinia状态
+      │   │   ├── index.ts
+      │   │   └── modules/
+      │   ├── styles/            # 样式文件
+      │   ├── types/             # 类型定义
+      │   ├── utils/             # 工具函数
+      │   └── views/             # 页面组件
+      │       └── home/
+      ├── public/
+      ├── .env
+      ├── .env.development
+      ├── .env.production
+      ├── index.html
+      ├── package.json
+      ├── tsconfig.json
+      ├── vite.config.ts
+      └── README.md
+
+# ============================================
+# 第五部分：命名规范
+# ============================================
+naming_conventions:
+  # 文件命名
+  files:
+    - rule: "组件文件PascalCase"
+      examples: ["UserList.vue", "SearchForm.vue"]
+    - rule: "组合式函数use前缀"
+      examples: ["useUserStore.ts", "useSearch.ts"]
+    - rule: "API文件小驼峰"
+      examples: ["userApi.ts", "orderApi.ts"]
+
+  # 组件命名
+  components:
+    - rule: "PascalCase"
+      examples: ["UserList", "SearchForm"]
+    - rule: "多词命名避免与HTML冲突"
+      examples: ["TodoList而非Todo"]
+
+  # Props/Emits命名
+  props_emits:
+    - rule: "Props小驼峰"
+      examples: ["userName", "isVisible"]
+    - rule: "Emits动词过去式"
+      examples: ["update:modelValue", "close", "submit"]
+
+  # Store命名
+  stores:
+    - rule: "useXxxStore"
+      examples: ["useUserStore", "useCartStore"]
+
+# ============================================
+# 第六部分：代码风格规范
+# ============================================
+code_style:
+  # 组件模板
+  component_template: |
+    <script setup lang="ts">
+    import { ref, computed, onMounted } from 'vue'
+
+    // Props定义
+    interface Props {
+      title: string
+      count?: number
+    }
+    const props = withDefaults(defineProps<Props>(), {
+      count: 0
+    })
+
+    // Emits定义
+    const emit = defineEmits<{
+      update: [value: number]
+      close: []
+    }>()
+
+    // 响应式状态
+    const localCount = ref(props.count)
+
+    // 计算属性
+    const doubled = computed(() => localCount.value * 2)
+
+    // 方法
+    const handleClick = () => {
+      emit('update', localCount.value + 1)
+    }
+
+    // 生命周期
+    onMounted(() => {
+      console.log('mounted')
+    })
+    </script>
+
+    <template>
+      <div class="component">
+        <h2>{{ title }}</h2>
+        <p>Count: {{ localCount }}</p>
+        <button @click="handleClick">Add</button>
+      </div>
+    </template>
+
+    <style scoped>
+    .component {
+      padding: 16px;
+    }
+    </style>
+
+# ============================================
+# 第七部分：工作流定义
+# ============================================
+workflow:
+  typical_flow:
+    - step: 1
+      name: "需求理解"
+      skill: "requirement-review"
+    - step: 2
+      name: "项目创建"
+      skill: "frontend/vue/scaffold.yaml"
+    - step: 3
+      name: "组件设计"
+      skill: "frontend/vue/component-designer.yaml"
+    - step: 4
+      name: "功能实现"
+      skill: "frontend/vue/implement.yaml"
+    - step: 5
+      name: "代码审查"
+      skill: "code-review"
+
+# ============================================
+# 第八部分：注意事项
+# ============================================
+notes:
+  - "使用<script setup>语法糖"
+  - "Props和Emits使用TypeScript类型定义"
+  - "组合式函数以use开头"
+  - "Store使用Pinia，以useXxxStore命名"
+  - "API调用统一使用封装的axios实例"

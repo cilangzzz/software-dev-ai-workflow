@@ -1,0 +1,322 @@
+# Vue3功能实现 Skill
+# 根据设计文档实现Vue3前端功能
+
+skill:
+  id: "vue-implement"
+  name: "Vue3功能实现"
+  version: "1.0.0"
+  category: "frontend/vue"
+  description: "根据需求规格实现Vue3前端功能，包含页面组件、组合式函数、API调用、状态管理"
+  priority: "P0"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/vue-implement"
+    - "/implement vue"
+
+  keywords:
+    - "实现Vue功能"
+    - "Vue代码开发"
+    - "开发Vue页面"
+
+# ============================================
+# 第二部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "feature_name"
+      type: "string"
+      required: true
+      description: "功能名称"
+
+    - name: "feature_type"
+      type: "string"
+      required: false
+      default: "page"
+      enum: ["page", "component", "composable", "store", "api"]
+      description: "功能类型"
+
+    - name: "specification"
+      type: "string"
+      required: true
+      description: "功能规格描述"
+
+# ============================================
+# 第三部分：执行流程
+# ============================================
+workflow:
+  phases:
+    - name: "需求理解"
+      steps:
+        - step: "解析功能规格"
+        - step: "识别组件需求"
+        - step: "识别API需求"
+
+    - name: "上下文分析"
+      steps:
+        - step: "读取项目结构"
+        - step: "分析现有组件模式"
+        - step: "识别技术栈版本"
+
+    - name: "代码生成"
+      steps:
+        - step: "生成Vue组件"
+        - step: "生成TypeScript类型"
+        - step: "生成API调用"
+        - step: "生成Store（如需要）"
+
+# ============================================
+# 第四部分：组件模板
+# ============================================
+component_templates:
+  page_component:
+    description: "页面级组件模板"
+    template: |
+      <script setup lang="ts">
+      import { ref, onMounted } from 'vue'
+      import { useRouter } from 'vue-router'
+      // import { use{Feature}Store } from '@/stores/modules/{feature}Store'
+      // import { get{Feature}List } from '@/api/modules/{feature}Api'
+
+      // 路由
+      const router = useRouter()
+
+      // 状态
+      const loading = ref(false)
+      const dataList = ref<{ItemType}[]>([])
+
+      // 方法定义
+      const fetchData = async () => {
+        loading.value = true
+        try {
+          // const res = await get{Feature}List()
+          // dataList.value = res.data
+        } finally {
+          loading.value = false
+        }
+      }
+
+      const handleAdd = () => {
+        router.push('/{feature}/add')
+      }
+
+      const handleEdit = (id: number) => {
+        router.push(`/{feature}/edit/${id}`)
+      }
+
+      const handleDelete = async (id: number) => {
+        // 删除逻辑
+      }
+
+      // 生命周期
+      onMounted(() => {
+        fetchData()
+      })
+      </script>
+
+      <template>
+        <div class="{feature}-page">
+          <div class="page-header">
+            <h2>{Feature}管理</h2>
+            <el-button type="primary" @click="handleAdd">新增</el-button>
+          </div>
+
+          <div class="page-content">
+            <el-table :data="dataList" v-loading="loading">
+              <el-table-column prop="id" label="ID" />
+              <el-table-column prop="name" label="名称" />
+              <el-table-column label="操作">
+                <template #default="{ row }">
+                  <el-button link @click="handleEdit(row.id)">编辑</el-button>
+                  <el-button link type="danger" @click="handleDelete(row.id)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+      </template>
+
+      <style scoped>
+      .{feature}-page {
+        padding: 20px;
+      }
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      </style>
+
+  common_component:
+    description: "通用组件模板"
+    template: |
+      <script setup lang="ts">
+      // Props定义
+      interface Props {
+        modelValue?: string
+        placeholder?: string
+        disabled?: boolean
+      }
+      const props = withDefaults(defineProps<Props>(), {
+        modelValue: '',
+        placeholder: '请输入',
+        disabled: false
+      })
+
+      // Emits定义
+      const emit = defineEmits<{
+        'update:modelValue': [value: string]
+        'change': [value: string]
+      }>()
+
+      // 内部状态
+      const internalValue = ref(props.modelValue)
+
+      // 监听变化
+      watch(internalValue, (val) => {
+        emit('update:modelValue', val)
+        emit('change', val)
+      })
+
+      // 暴露方法
+      defineExpose({
+        focus: () => {
+          // focus逻辑
+        }
+      })
+      </script>
+
+      <template>
+        <div class="custom-component">
+          <input
+            v-model="internalValue"
+            :placeholder="placeholder"
+            :disabled="disabled"
+          />
+        </div>
+      </template>
+
+      <style scoped>
+      .custom-component {
+        display: inline-block;
+      }
+      </style>
+
+  composable:
+    description: "组合式函数模板"
+    template: |
+      import { ref, computed } from 'vue'
+
+      export interface Use{Feature}Options {
+        initialData?: {DataType}
+      }
+
+      export function use{Feature}(options: Use{Feature}Options = {}) {
+        // 状态
+        const data = ref<{DataType} | null>(options.initialData || null)
+        const loading = ref(false)
+        const error = ref<Error | null>(null)
+
+        // 计算属性
+        const hasData = computed(() => !!data.value)
+
+        // 方法
+        const fetchData = async (id: number) => {
+          loading.value = true
+          error.value = null
+          try {
+            // const res = await get{Feature}(id)
+            // data.value = res.data
+          } catch (e) {
+            error.value = e as Error
+          } finally {
+            loading.value = false
+          }
+        }
+
+        const reset = () => {
+          data.value = null
+          error.value = null
+        }
+
+        return {
+          data,
+          loading,
+          error,
+          hasData,
+          fetchData,
+          reset
+        }
+      }
+
+  api_module:
+    description: "API模块模板"
+    template: |
+      import api from '../index'
+      import type { {Feature}Item, {Feature}Query, {Feature}Form } from '@/types/{feature}'
+
+      // 获取列表
+      export function get{Feature}List(params: {Feature}Query) {
+        return api.get('/{feature}/list', { params })
+      }
+
+      // 获取详情
+      export function get{Feature}(id: number) {
+        return api.get(`/{feature}/${id}`)
+      }
+
+      // 创建
+      export function create{Feature}(data: {Feature}Form) {
+        return api.post('/{feature}', data)
+      }
+
+      // 更新
+      export function update{Feature}(id: number, data: {Feature}Form) {
+        return api.put(`/{feature}/${id}`, data)
+      }
+
+      // 删除
+      export function delete{Feature}(id: number) {
+        return api.delete(`/{feature}/${id}`)
+      }
+
+# ============================================
+# 第五部分：命名规范速查
+# ============================================
+naming_standards:
+  files:
+    page: "views/{feature}/index.vue"
+    component: "components/{Feature}Item.vue"
+    composable: "composables/use{Feature}.ts"
+    store: "stores/modules/{feature}Store.ts"
+    api: "api/modules/{feature}Api.ts"
+    type: "types/{feature}.ts"
+
+# ============================================
+# 第六部分：输出产物
+# ============================================
+output:
+  artifacts:
+    - name: "页面组件"
+      path: "views/{feature}/index.vue"
+    - name: "API模块"
+      path: "api/modules/{feature}Api.ts"
+    - name: "类型定义"
+      path: "types/{feature}.ts"
+    - name: "Store（可选）"
+      path: "stores/modules/{feature}Store.ts"
+
+# ============================================
+# 第七部分：注意事项
+# ============================================
+notes:
+  - "使用<script setup lang='ts'>语法"
+  - "Props和Emits使用TypeScript类型定义"
+  - "组合式函数以use开头"
+  - "API函数使用async/await"
+  - "样式使用scoped避免污染"

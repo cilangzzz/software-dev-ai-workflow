@@ -1,0 +1,376 @@
+# Qt应用架构设计 Skill
+# Qt桌面应用架构设计规范
+
+skill:
+  id: "qt-architect"
+  name: "Qt应用架构设计"
+  version: "1.0.0"
+  category: "backend/qt"
+  description: "Qt桌面应用架构设计规范，包括模块划分、类设计、数据流设计、多线程架构等"
+  priority: "P0"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：设计原则
+# ============================================
+design_principles:
+  - principle: "Model-View分离"
+    description: "数据与界面分离，使用Qt的Model-View架构"
+    benefit: "便于数据管理和界面复用"
+
+  - principle: "信号槽解耦"
+    description: "模块间通过信号槽通信，降低耦合度"
+    benefit: "松耦合，易于维护和测试"
+
+  - principle: "单例管理"
+    description: "应用级资源使用单例模式管理"
+    examples: ["配置管理", "日志管理", "数据库连接"]
+
+  - principle: "分层架构"
+    description: "UI层-业务层-数据层分离"
+    benefit: "职责清晰，易于扩展"
+
+# ============================================
+# 第二部分：架构模式
+# ============================================
+architecture_patterns:
+  # MVC模式
+  mvc:
+    description: "Model-View-Controller模式"
+    components:
+      - name: "Model"
+        responsibility: "数据管理"
+        qt_class: "QAbstractItemModel子类"
+      - name: "View"
+        responsibility: "界面展示"
+        qt_class: "QMainWindow/QWidget子类"
+      - name: "Controller"
+        responsibility: "业务逻辑"
+        qt_class: "QObject子类"
+
+  # MVVM模式
+  mvvm:
+    description: "Model-View-ViewModel模式（适合QML）"
+    components:
+      - name: "Model"
+        responsibility: "数据层"
+      - name: "View"
+        responsibility: "QML界面"
+      - name: "ViewModel"
+        responsibility: "暴露给QML的数据和命令"
+
+  # 分层架构
+  layered:
+    description: "三层架构"
+    layers:
+      - layer: "UI层"
+        components: ["MainWindow", "Dialogs", "Widgets"]
+        responsibility: "界面展示和用户交互"
+
+      - layer: "业务层"
+        components: ["Controllers", "Services", "Managers"]
+        responsibility: "业务逻辑处理"
+
+      - layer: "数据层"
+        components: ["Models", "Database", "Network"]
+        responsibility: "数据存取"
+
+# ============================================
+# 第三部分：模块划分
+# ============================================
+module_design:
+  standard_modules:
+    ui:
+      description: "界面模块"
+      components:
+        - "MainWindow - 主窗口"
+        - "Dialogs - 对话框集合"
+        - "Widgets - 自定义控件"
+      files:
+        - "ui/mainwindow.cpp/.h"
+        - "ui/dialogs/*.cpp/.h"
+        - "ui/widgets/*.cpp/.h"
+
+    model:
+      description: "数据模型模块"
+      components:
+        - "TableModel - 表格模型"
+        - "TreeModel - 树模型"
+        - "DataItem - 数据结构"
+      files:
+        - "models/*.cpp/.h"
+
+    controller:
+      description: "控制器模块"
+      components:
+        - "AppController - 应用控制器"
+        - "DataController - 数据控制器"
+      files:
+        - "controllers/*.cpp/.h"
+
+    service:
+      description: "服务模块"
+      components:
+        - "DataService - 数据服务"
+        - "NetworkService - 网络服务"
+        - "FileService - 文件服务"
+      files:
+        - "services/*.cpp/.h"
+
+    utils:
+      description: "工具模块"
+      components:
+        - "Logger - 日志工具"
+        - "Settings - 配置管理"
+        - "Helper - 辅助函数"
+      files:
+        - "utils/*.cpp/.h"
+
+# ============================================
+# 第四部分：多线程架构
+# ============================================
+threading_architecture:
+  # UI线程规则
+  ui_thread:
+    rule: "所有UI操作必须在主线程执行"
+    reason: "Qt GUI不是线程安全的"
+
+  # 后台任务
+  background_tasks:
+    patterns:
+      - pattern: "QThread + Worker"
+        description: "经典线程模式"
+        use_case: "长时间运行的任务"
+        code: |
+          QThread *thread = new QThread;
+          Worker *worker = new Worker;
+          worker->moveToThread(thread);
+          connect(thread, &QThread::started, worker, &Worker::doWork);
+          connect(worker, &Worker::finished, thread, &QThread::quit);
+          thread->start();
+
+      - pattern: "QtConcurrent"
+        description: "高级并发API"
+        use_case: "批量处理、并行计算"
+        code: |
+          QtConcurrent::run([this]() {
+              // 后台任务
+          });
+
+      - pattern: "QThreadPool"
+        description: "线程池"
+        use_case: "多个独立任务"
+
+  # 线程通信
+  thread_communication:
+    method: "信号槽 + Qt::QueuedConnection"
+    example: |
+      // Worker线程发出信号
+      emit resultReady(result);
+
+      // 主线程槽函数处理
+      void MainWindow::handleResult(const Result &result) {
+          // 更新UI
+          ui->label->setText(result.message);
+      }
+
+# ============================================
+# 第五部分：数据流设计
+# ============================================
+data_flow:
+  # 数据流向
+  flow_diagram: |
+      [用户操作] → [View信号] → [Controller槽]
+                  ↓
+      [UI更新] ← [View] ← [Model数据变化] ← [Controller处理]
+
+  # 数据存储
+  data_storage:
+    - type: "SQLite"
+      use_case: "本地数据持久化"
+      qt_module: "QtSql"
+
+    - type: "JSON文件"
+      use_case: "配置、简单数据"
+      qt_class: "QJsonDocument"
+
+    - type: "内存"
+      use_case: "临时数据、缓存"
+      qt_class: "QMap/QHash"
+
+  # 数据绑定
+  data_binding:
+    widgets: "使用信号槽手动绑定"
+    qml: "使用Qt属性绑定"
+
+# ============================================
+# 第六部分：类设计规范
+# ============================================
+class_design:
+  # 主窗口类
+  main_window:
+    responsibilities:
+      - "管理菜单栏、工具栏、状态栏"
+      - "协调各子模块"
+      - "处理主窗口事件"
+    template: |
+      class MainWindow : public QMainWindow {
+          Q_OBJECT
+      public:
+          explicit MainWindow(QWidget *parent = nullptr);
+          ~MainWindow();
+
+      private slots:
+          void on_actionNew_triggered();
+          void on_actionOpen_triggered();
+
+      private:
+          void setupMenuBar();
+          void setupToolBar();
+          void setupStatusBar();
+          void setupConnections();
+
+          Ui::MainWindow *ui;
+          // 子模块
+          DataController *m_dataController;
+          SettingsDialog *m_settingsDialog;
+      };
+
+  # 控制器类
+  controller:
+    responsibilities:
+      - "处理业务逻辑"
+      - "协调Model和View"
+      - "管理数据状态"
+    template: |
+      class DataController : public QObject {
+          Q_OBJECT
+      public:
+          explicit DataController(QObject *parent = nullptr);
+
+          void loadData();
+          void saveData();
+          void processItem(int id);
+
+      signals:
+          void dataLoaded(const QList<DataItem> &items);
+          void errorOccurred(const QString &message);
+
+      private:
+          DataModel *m_model;
+      };
+
+  # 单例类
+  singleton:
+    use_cases:
+      - "应用配置管理"
+      - "日志管理"
+      - "数据库连接池"
+    template: |
+      class Settings : public QObject {
+          Q_OBJECT
+      public:
+          static Settings* instance();
+          QString getValue(const QString &key);
+          void setValue(const QString &key, const QString &value);
+
+      private:
+          explicit Settings(QObject *parent = nullptr);
+          Q_DISABLE_COPY(Settings)
+
+          static Settings *m_instance;
+          QMap<QString, QString> m_values;
+      };
+
+# ============================================
+# 第七部分：配置管理
+# ============================================
+configuration:
+  # 应用配置
+  app_settings:
+    location: "QSettings或JSON文件"
+    items:
+      - "窗口位置和大小"
+      - "用户偏好设置"
+      - "最近打开的文件列表"
+
+  # 代码示例
+  settings_example: |
+      // 使用QSettings
+      QSettings settings("MyCompany", "MyApp");
+      settings.setValue("window/geometry", saveGeometry());
+      settings.setValue("window/state", saveState());
+
+      // 恢复
+      restoreGeometry(settings.value("window/geometry").toByteArray());
+
+# ============================================
+# 第八部分：错误处理
+# ============================================
+error_handling:
+  # 异常处理
+  exception_handling:
+    rule: "Qt通常不使用C++异常，使用信号通知错误"
+    example: |
+      void Worker::doWork() {
+          if (!openFile()) {
+              emit errorOccurred("无法打开文件");
+              return;
+          }
+          // 正常处理
+      }
+
+  # 日志记录
+  logging:
+    method: "qDebug/qWarning/qCritical或自定义Logger"
+    example: |
+      qDebug() << "调试信息";
+      qWarning() << "警告信息";
+      qCritical() << "严重错误";
+
+# ============================================
+# 第九部分：检查清单
+# ============================================
+checklist:
+  architecture:
+    - item: "模块划分合理"
+      check: "各模块职责清晰，耦合度低"
+    - item: "分层架构正确"
+      check: "UI-业务-数据分离"
+    - item: "多线程设计合理"
+      check: "UI不阻塞，线程安全"
+
+  class_design:
+    - item: "类职责单一"
+      check: "每个类只负责一个功能"
+    - item: "信号槽设计合理"
+      check: "模块间通过信号槽通信"
+    - item: "内存管理正确"
+      check: "Qt对象树管理，无内存泄漏"
+
+  data:
+    - item: "数据流清晰"
+      check: "数据来源和去向明确"
+    - item: "数据持久化方案"
+      check: "配置了合适的数据存储方式"
+
+# ============================================
+# 第十部分：关联文档
+# ============================================
+references:
+  primary:
+    - path: "backend/qt/ui-designer.yaml"
+      relationship: "界面设计"
+      description: "UI层设计规范"
+
+    - path: "backend/qt/signal-slot.yaml"
+      relationship: "通信机制"
+      description: "模块间通信规范"
+
+    - path: "backend/qt/model-view.yaml"
+      relationship: "数据架构"
+      description: "Model-View架构规范"
+
+  official_docs:
+    - url: "https://doc.qt.io/qt-6/qtwidgets-index.html"
+      description: "Qt Widgets官方文档"

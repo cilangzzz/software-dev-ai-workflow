@@ -1,0 +1,558 @@
+# Qt功能实现 Skill
+# 根据设计文档实现Qt桌面应用功能
+
+skill:
+  id: "qt-implement"
+  name: "Qt功能实现"
+  version: "1.0.0"
+  category: "backend/qt"
+  description: "根据需求规格和设计文档实现Qt桌面应用功能代码。包含Qt界面控件、信号槽连接、数据模型、业务逻辑等实现"
+  priority: "P0"
+  created_at: "2026-04-07"
+
+# ============================================
+# 第一部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/qt-implement"
+    - "/implement qt"
+
+  keywords:
+    - "实现Qt功能"
+    - "Qt代码开发"
+    - "Qt界面实现"
+    - "开发Qt模块"
+
+  events:
+    - name: "qt_scaffold_completed"
+      condition: "Qt项目脚手架创建完成"
+    - name: "qt_ui_design_completed"
+      condition: "Qt界面设计完成"
+    - name: "qt_requirement_approved"
+      condition: "Qt功能需求审批通过"
+
+# ============================================
+# 第二部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "feature_name"
+      type: "string"
+      required: true
+      description: "功能名称"
+      examples: ["库存管理", "数据可视化", "报表生成"]
+
+    - name: "feature_type"
+      type: "string"
+      required: false
+      default: "widget"
+      enum: ["widget", "dialog", "model", "controller", "utility"]
+      description: "功能类型"
+
+    - name: "specification"
+      type: "string"
+      required: true
+      description: "功能规格描述"
+
+    - name: "ui_file"
+      type: "string"
+      required: false
+      description: "关联的UI文件路径（如果有）"
+
+# ============================================
+# 第三部分：执行流程
+# ============================================
+workflow:
+  description: "Qt功能实现按以下6个阶段执行"
+
+  phases:
+    - name: "需求理解"
+      description: "解析功能需求和设计文档"
+      duration: "2-5min"
+      steps:
+        - step: "解析功能规格"
+          action: "提取功能需求、界面要求"
+        - step: "识别Qt组件"
+          action: "确定需要的Qt控件类型"
+        - step: "识别数据流"
+          action: "确定数据来源和流向"
+
+    - name: "上下文分析"
+      description: "分析现有项目结构和模式"
+      duration: "3-5min"
+      steps:
+        - step: "读取项目结构"
+          action: "使用Glob查找相关文件"
+        - step: "分析现有代码模式"
+          action: "使用Read读取现有Qt实现模式"
+        - step: "识别Qt版本"
+          action: "从CMakeLists.txt或.pro文件推断Qt版本"
+
+    - name: "组件设计"
+      description: "设计Qt组件结构"
+      duration: "5-10min"
+      steps:
+        - step: "设计Widget类结构"
+          action: "确定继承关系、成员变量"
+          reference: "ui-designer.yaml Widget模板"
+        - step: "设计信号槽连接"
+          action: "确定需要信号和槽函数"
+          reference: "signal-slot.yaml 连接规范"
+        - step: "设计数据模型"
+          action: "确定Model类结构"
+          reference: "model-view.yaml Model模板"
+
+    - name: "代码生成"
+      description: "生成Qt功能代码"
+      duration: "10-20min"
+      steps:
+        - step: "生成头文件"
+          action: "生成.h文件，包含类声明、信号槽声明"
+        - step: "生成实现文件"
+          action: "生成.cpp文件，包含方法实现"
+        - step: "生成UI文件（可选）"
+          action: "生成.ui文件模板"
+        - step: "添加到构建系统"
+          action: "更新CMakeLists.txt或.pro文件"
+
+    - name: "信号槽连接"
+      description: "实现信号槽机制"
+      duration: "5-10min"
+      steps:
+        - step: "声明信号"
+          action: "在signals部分添加信号声明"
+        - step: "声明槽函数"
+          action: "在slots部分添加槽函数声明"
+        - step: "实现连接"
+          action: "在setupConnections中实现connect"
+
+    - name: "测试验证"
+      description: "验证功能实现"
+      duration: "5-10min"
+      steps:
+        - step: "编译检查"
+          action: "检查代码编译是否通过"
+        - step: "功能测试"
+          action: "验证基本功能运行"
+        - step: "信号槽测试"
+          action: "验证信号槽连接正确"
+
+# ============================================
+# 第四部分：Qt组件模板
+# ============================================
+component_templates:
+  # 自定义Widget模板
+  custom_widget:
+    description: "自定义QWidget类模板"
+    header_template: |
+      #ifndef {CLASSNAME}_H
+      #define {CLASSNAME}_H
+
+      #include <QWidget>
+      #include <QVBoxLayout>
+      #include <QLabel>
+      #include <QPushButton>
+
+      class {ClassName} : public QWidget
+      {
+          Q_OBJECT
+
+      public:
+          explicit {ClassName}(QWidget *parent = nullptr);
+          ~{ClassName}();
+
+          // 公共方法
+          void setData(const QVariant &data);
+          QVariant getData() const;
+
+      signals:
+          void dataChanged();
+          void actionTriggered(int actionType);
+
+      private slots:
+          void onButtonClicked();
+          void onInternalUpdate();
+
+      private:
+          void setupUi();
+          void setupLayout();
+          void setupConnections();
+
+          // UI组件
+          QVBoxLayout *m_layout;
+          QLabel *m_label;
+          QPushButton *m_button;
+
+          // 数据
+          QVariant m_data;
+      };
+
+      #endif // {CLASSNAME}_H
+
+    implementation_template: |
+      #include "{classname}.h"
+
+      {ClassName}::{ClassName}(QWidget *parent)
+          : QWidget(parent)
+          , m_layout(new QVBoxLayout(this))
+          , m_label(new QLabel(this))
+          , m_button(new QPushButton("操作", this))
+      {
+          setupLayout();
+          setupConnections();
+      }
+
+      {ClassName}::~{ClassName}()
+      {
+      }
+
+      void {ClassName}::setupLayout()
+      {
+          m_layout->addWidget(m_label);
+          m_layout->addWidget(m_button);
+          m_layout->addStretch();
+      }
+
+      void {ClassName}::setupConnections()
+      {
+          connect(m_button, &QPushButton::clicked,
+                  this, &{ClassName}::onButtonClicked);
+      }
+
+      void {ClassName}::setData(const QVariant &data)
+      {
+          m_data = data;
+          emit dataChanged();
+      }
+
+      QVariant {ClassName}::getData() const
+      {
+          return m_data;
+      }
+
+      void {ClassName}::onButtonClicked()
+      {
+          emit actionTriggered(1);
+      }
+
+      void {ClassName}::onInternalUpdate()
+      {
+          m_label->setText(m_data.toString());
+      }
+
+  # 自定义Dialog模板
+  custom_dialog:
+    description: "自定义QDialog类模板"
+    header_template: |
+      #ifndef {CLASSNAME}_H
+      #define {CLASSNAME}_H
+
+      #include <QDialog>
+      #include <QLineEdit>
+      #include <QComboBox>
+      #include <QDialogButtonBox>
+
+      class {ClassName} : public QDialog
+      {
+          Q_OBJECT
+
+      public:
+          explicit {ClassName}(QWidget *parent = nullptr);
+          ~{ClassName}();
+
+          // 获取对话框结果
+          QString getInputValue() const;
+          int getSelectedOption() const;
+
+      private slots:
+          void onAccept();
+          void onReject();
+
+      private:
+          void setupUi();
+          void setupConnections();
+
+          QLineEdit *m_inputField;
+          QComboBox *m_optionCombo;
+          QDialogButtonBox *m_buttonBox;
+      };
+
+      #endif // {CLASSNAME}_H
+
+  # 数据Model模板
+  table_model:
+    description: "QAbstractTableModel模板"
+    header_template: |
+      #ifndef {CLASSNAME}_H
+      #define {CLASSNAME}_H
+
+      #include <QAbstractTableModel>
+      #include <QList>
+
+      struct {DataItem} {
+          QString name;
+          QVariant value;
+          int status;
+      };
+
+      class {ClassName} : public QAbstractTableModel
+      {
+          Q_OBJECT
+
+      public:
+          explicit {ClassName}(QObject *parent = nullptr);
+
+          // Model必需方法
+          int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+          int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+          QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+          QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+          // 数据操作
+          void setData(const QList<{DataItem}> &items);
+          void addItem(const {DataItem} &item);
+          void removeItem(int row);
+
+      private:
+          QList<{DataItem}> m_data;
+      };
+
+      #endif // {CLASSNAME}_H
+
+    implementation_template: |
+      #include "{classname}.h"
+
+      {ClassName}::{ClassName}(QObject *parent)
+          : QAbstractTableModel(parent)
+      {
+      }
+
+      int {ClassName}::rowCount(const QModelIndex &parent) const
+      {
+          if (parent.isValid()) return 0;
+          return m_data.count();
+      }
+
+      int {ClassName}::columnCount(const QModelIndex &parent) const
+      {
+          if (parent.isValid()) return 0;
+          return 3; // name, value, status
+      }
+
+      QVariant {ClassName}::data(const QModelIndex &index, int role) const
+      {
+          if (!index.isValid() || role != Qt::DisplayRole)
+              return QVariant();
+
+          const {DataItem} &item = m_data.at(index.row());
+
+          switch (index.column()) {
+          case 0: return item.name;
+          case 1: return item.value;
+          case 2: return item.status;
+          default: return QVariant();
+          }
+      }
+
+      QVariant {ClassName}::headerData(int section, Qt::Orientation orientation, int role) const
+      {
+          if (role != Qt::DisplayRole || orientation != Qt::Horizontal)
+              return QVariant();
+
+          switch (section) {
+          case 0: return "名称";
+          case 1: return "值";
+          case 2: return "状态";
+          default: return QVariant();
+          }
+      }
+
+      void {ClassName}::setData(const QList<{DataItem}> &items)
+      {
+          beginResetModel();
+          m_data = items;
+          endResetModel();
+      }
+
+# ============================================
+# 第五部分：输出产物
+# ============================================
+output:
+  base_path: "src/{feature}"
+
+  artifacts:
+    - name: "头文件"
+      path: "{classname}.h"
+      description: "Qt类头文件"
+
+    - name: "实现文件"
+      path: "{classname}.cpp"
+      description: "Qt类实现文件"
+
+    - name: "UI文件（可选）"
+      path: "{classname}.ui"
+      condition: "需要Qt Designer设计"
+      description: "Qt Designer界面文件"
+
+    - name: "更新构建配置"
+      path: "CMakeLists.txt或.pro"
+      action: "追加源文件"
+      description: "将新文件加入构建系统"
+
+# ============================================
+# 第六部分：命名规范速查
+# ============================================
+naming_standards:
+  # 类命名
+  classes:
+    - rule: "PascalCase（大驼峰）"
+      examples: ["InventoryWidget", "DataModel", "SettingsDialog"]
+    - rule: "Widget类以Widget结尾"
+    - rule: "Dialog类以Dialog结尾"
+    - rule: "Model类以Model结尾"
+
+  # 文件命名
+  files:
+    - rule: "类名与文件名对应（小驼峰）"
+      examples: ["inventoryWidget.cpp", "dataModel.h"]
+
+  # 信号命名
+  signals:
+    - rule: "动词或事件名称"
+      examples: ["dataChanged()", "clicked()", "errorOccurred()"]
+
+  # 槽函数命名
+  slots:
+    - rule: "on前缀 + 触发源（自动连接）"
+      examples: ["on_button_clicked", "onDataChanged()"]
+    - rule: "普通槽函数用含义命名"
+      examples: ["updateData()", "handleError()"]
+
+  # 成员变量命名
+  member_variables:
+    - rule: "m_前缀 + 小驼峰"
+      examples: ["m_data", "m_model", "m_mainWindow"]
+
+# ============================================
+# 第七部分：质量检查清单
+# ============================================
+checklist:
+  before_implement:
+    - item: "阅读Qt设计文档"
+      check: "了解组件设计和信号槽规划"
+    - item: "分析现有代码模式"
+      check: "读取项目中类似的Qt实现"
+    - item: "确认Qt版本"
+      check: "识别Qt5或Qt6，选择对应API"
+
+  during_implement:
+    - item: "Q_OBJECT宏必须存在"
+      check: "类声明中包含Q_OBJECT宏"
+    - item: "信号槽声明正确"
+      check: "signals和slots关键字使用正确"
+    - item: "connect语法正确"
+      check: "使用新式connect或正确旧式语法"
+    - item: "内存管理正确"
+      check: "Qt对象设置parent，非Qt对象使用智能指针"
+
+  after_implement:
+    - item: "代码编译通过"
+      check: "执行cmake --build或make"
+    - item: "信号槽连接工作"
+      check: "测试信号触发和槽响应"
+    - item: "加入构建系统"
+      check: "CMakeLists.txt或.pro已更新"
+
+# ============================================
+# 第八部分：关联文档引用
+# ============================================
+references:
+  primary:
+    - path: "backend/qt/ui-designer.yaml"
+      description: "Qt界面设计规范、Widget模板"
+      sections:
+        - "Widget类模板"
+        - "布局管理规范"
+
+    - path: "backend/qt/signal-slot.yaml"
+      description: "Qt信号槽机制规范"
+      sections:
+        - "信号声明规范"
+        - "槽函数规范"
+        - "connect连接语法"
+
+    - path: "backend/qt/model-view.yaml"
+      description: "Qt模型视图架构"
+      sections:
+        - "Model类模板"
+        - "View配置"
+
+  collaboration:
+    - skill: "scaffold"
+      relationship: "upstream"
+      description: "依赖项目脚手架提供基础结构"
+
+    - skill: "ui-designer"
+      relationship: "input"
+      description: "UI设计提供界面规格"
+
+# ============================================
+# 第九部分：使用示例
+# ============================================
+examples:
+  - name: "实现库存管理Widget"
+    input: |
+      feature_name: 库存管理
+      feature_type: widget
+      specification: |
+        库存管理Widget需要：
+        - 显示库存列表（表格）
+        - 添加/删除库存项
+        - 搜索过滤功能
+        - 导出Excel功能
+    output_summary: |
+      生成的文件：
+      - inventoryWidget.h (80行)
+      - inventoryWidget.cpp (250行)
+      - inventoryModel.h (60行)
+      - inventoryModel.cpp (180行)
+
+      主要组件：
+      - InventoryWidget: 主界面Widget
+      - InventoryModel: 表格数据Model
+      - 信号: itemAdded(), itemRemoved(), dataExported()
+      - 槽: onAddClicked(), onRemoveClicked(), onSearchChanged()
+
+  - name: "实现设置Dialog"
+    input: |
+      feature_name: 设置对话框
+      feature_type: dialog
+      specification: |
+        设置Dialog需要：
+        - 通用设置（语言、主题）
+        - 数据设置（数据库路径、备份）
+        - 保存/取消按钮
+    output_summary: |
+      生成的文件：
+      - settingsDialog.h (50行)
+      - settingsDialog.cpp (120行)
+      - settingsDialog.ui (Qt Designer)
+
+      主要功能：
+      - getSettings(): 获取设置值
+      - applySettings(): 应用设置
+      - 信号: settingsChanged()
+
+# ============================================
+#第十部分：注意事项
+# ============================================
+notes:
+  - "Q_OBJECT宏是使用信号槽的必要条件"
+  - "信号只需声明，不需要实现"
+  - "槽函数需要声明和实现"
+  - "新式connect语法：connect(sender, &Sender::signal, receiver, &Receiver::slot)"
+  - "跨线程信号槽需要使用Qt::QueuedConnection"
+  - "避免在槽函数中执行耗时操作"
+  - "Qt对象设置parent后自动管理内存"
+  - "使用Qt类型而非标准库类型（QString而非std::string）"
