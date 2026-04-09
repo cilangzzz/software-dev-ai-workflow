@@ -1,6 +1,6 @@
-[submodule "6.0-系统/backend"]
-	path = 6.0-系统/backend
+[submodule "6.0-基础开发系统/backend"]
+	path = 6.0-基础开发系统/backend
 	url = https://github.com/cilangzzz/yudao-skill-pro
-[submodule "6.0-系统/frontend"]
-	path = 6.0-系统/frontend
+[submodule "6.0-基础开发系统/frontend"]
+	path = 6.0-基础开发系统/frontend
 	url = https://github.com/cilangzzz/yudao-skills-ui-admin-vben
