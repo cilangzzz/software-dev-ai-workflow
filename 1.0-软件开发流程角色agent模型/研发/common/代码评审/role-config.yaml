@@ -1,0 +1,305 @@
+# 代码评审角色配置
+
+## 目录说明
+代码评审目录包含代码审查相关的 Skill 和配置，用于对代码变更进行自动化审查，检测潜在问题并提供改进建议。
+
+## 包含的 Skill
+
+### code-review
+- **文件**: code-review.md
+- **功能**: 对代码变更进行自动化审查，检测潜在问题并提供改进建议
+- **触发命令**: `/code-review`
+- **优先级**: P0
+
+## 触发条件配置（Trigger Conditions）
+
+### 自动加载条件
+Skill 只有满足以下条件时才会被自动加载：
+
+```yaml
+trigger_conditions:
+  # Git 相关触发
+  git_events:
+    - pre_commit: true           # Git commit 前触发
+    - pre_push: true             # Git push 前触发
+    - post_merge: false          # 合并后不触发（可选）
+    - branch_create: false       # 创建分支不触发
+
+  # 文件变更触发
+  file_changes:
+    - patterns:
+        - "*.java"               # Java 文件变更
+        - "*.py"                 # Python 文件变更
+        - "*.js"                 # JavaScript 文件变更
+        - "*.ts"                 # TypeScript 文件变更
+        - "*.vue"                # Vue 文件变更
+        - "*.go"                 # Go 文件变更
+        - "*.sql"                # SQL 文件变更
+    - exclude_patterns:
+        - "*.md"                 # 文档文件不触发
+        - "*.txt"                # 文本文件不触发
+        - "*.json"               # JSON 配置不触发
+        - "*.yaml"               # YAML 配置不触发
+
+  # PR/CR 相关触发
+  pull_request:
+    - pr_create: true            # PR 创建时触发
+    - pr_update: true            # PR 更新时触发
+    - pr_merge_request: true     # 合并请求时触发
+
+  # 显式命令触发
+  explicit_trigger:
+    - command: "/code-review"    # 显式命令触发
+    - keywords:
+        - "审查代码"
+        - "检查代码质量"
+        - "review代码"
+        - "代码评审"
+
+  # 禁用条件
+  disable_conditions:
+    - draft_mode: true           # 草稿模式禁用
+    - skip_flag: "[skip-review]" # 提交消息包含跳过标记
+    - test_only: true            # 仅测试文件变更
+```
+
+### 触发优先级
+```yaml
+priority_order:
+  1. explicit_trigger           # 显式命令触发（最高优先级）
+  2. pull_request               # PR/CR 触发
+  3. git_events                 # Git 事件触发
+  4. file_changes               # 文件变更触发
+```
+
+### 触发后行为
+```yaml
+trigger_actions:
+  on_trigger:
+    - load_skill: true          # 加载 Skill
+    - read_changed_files: true  # 读取变更文件
+    - analyze_code: true        # 分析代码
+    - generate_report: true     # 生成报告
+
+  on_complete:
+    - output_report: true       # 输出审查报告
+    - suggest_fixes: true       # 提供修复建议
+    - block_merge: critical_only # 仅严重问题阻止合并
+```
+
+## 角色定义
+
+### 代码审查员 (Code Reviewer)
+代码审查员负责对代码变更进行自动化审查，覆盖代码质量、安全漏洞、性能问题、最佳实践等多个维度。
+
+#### 核心职责
+1. 代码质量检测
+2. 安全漏洞扫描
+3. 性能问题识别
+4. 最佳实践检查
+5. 改进建议生成
+
+#### 能力要求
+- 熟悉多种编程语言语法
+- 理解安全漏洞类型（OWASP Top 10）
+- 掌握性能优化方法
+- 了解编码最佳实践
+
+## 审查类型配置
+
+```yaml
+review_types:
+  quick:
+    description: 快速审查
+    checks:
+      - syntax_errors
+      - obvious_bugs
+      - style_issues
+    duration: "<30s per file"
+
+  full:
+    description: 完整审查
+    checks:
+      - quality_issues
+      - security_vulnerabilities
+      - performance_problems
+      - best_practices
+      - code_smell
+    duration: "2-5min per file"
+
+  security:
+    description: 安全专项审查
+    checks:
+      - sql_injection
+      - xss_vulnerabilities
+      - sensitive_data_leak
+      - hardcoded_credentials
+      - insecure_random
+    focus: security_only
+```
+
+## 检查规则配置
+
+### 安全检查规则
+```yaml
+security_checks:
+  - rule: sql_injection
+    severity: critical
+    patterns:
+      - "SELECT.*FROM.*WHERE.*\\+"
+      - "\"SELECT.*\".*+.*"
+    fix_suggestion: "使用参数化查询"
+
+  - rule: xss_vulnerability
+    severity: critical
+    patterns:
+      - "innerHTML.*="
+      - "document.write"
+    fix_suggestion: "使用安全的DOM操作方法"
+
+  - rule: sensitive_data_leak
+    severity: major
+    patterns:
+      - "password.*=.*\".*\""
+      - "apiKey.*=.*\".*\""
+      - "secret.*=.*\".*\""
+    fix_suggestion: "使用环境变量或配置文件"
+
+  - rule: hardcoded_credentials
+    severity: major
+    patterns:
+      - "jdbc:.*password="
+      - "Authorization: Basic"
+    fix_suggestion: "使用安全的凭证管理"
+```
+
+### 性能检查规则
+```yaml
+performance_checks:
+  - rule: n_plus_one_query
+    severity: major
+    detection: "循环中调用数据库查询"
+    fix_suggestion: "使用JOIN FETCH或批量查询"
+
+  - rule: memory_leak
+    severity: major
+    patterns:
+      - "未清理的定时器"
+      - "未解绑的事件监听"
+      - "未关闭的连接"
+    fix_suggestion: "在生命周期钩子中清理资源"
+
+  - rule: unnecessary_loop
+    severity: minor
+    detection: "可用流式操作替代的循环"
+    fix_suggestion: "使用Stream API或函数式操作"
+```
+
+### 代码质量检查规则
+```yaml
+quality_checks:
+  - rule: code_duplication
+    severity: minor
+    threshold: "重复代码块>10行"
+    fix_suggestion: "提取公共方法或组件"
+
+  - rule: long_method
+    severity: minor
+    threshold: "方法行数>50行"
+    fix_suggestion: "拆分为多个小方法"
+
+  - rule: deep_nesting
+    severity: minor
+    threshold: "嵌套层级>4"
+    fix_suggestion: "使用卫语句或提取方法"
+
+  - rule: magic_number
+    severity: suggestion
+    detection: "硬编码的数字常量"
+    fix_suggestion: "提取为有意义的常量"
+```
+
+## 输出格式配置
+
+```yaml
+output_format:
+  report_sections:
+    - summary                    # 摘要统计
+    - critical_issues            # 严重问题列表
+    - major_issues               # 重要问题列表
+    - minor_suggestions          # 改进建议列表
+    - quality_score              # 质量评分
+    - detailed_analysis          # 详细分析
+
+  severity_levels:
+    critical: "🔴"               # 必须修复
+    major: "🟠"                  # 建议修复
+    minor: "🟡"                  # 可选优化
+    suggestion: "🔵"             # 改进建议
+
+  blocking_rules:
+    critical_count: ">0"         # 有严重问题则阻止合并
+    major_count: ">=3"           # 重要问题>=3则警告
+```
+
+## 质量标准配置
+
+```yaml
+quality_standards:
+  detection_accuracy:
+    critical_detection: ">=95%"
+    major_detection: ">=90%"
+    false_positive_rate: "<=15%"
+
+  performance:
+    review_speed: "1000行<=30秒"
+    max_file_size: "100KB"
+
+  coverage:
+    security_checks: "OWASP Top 10全覆盖"
+    language_support:
+      - Java
+      - Python
+      - JavaScript/TypeScript
+      - Vue
+      - Go
+```
+
+## 禁用和豁免配置
+
+```yaml
+exemptions:
+  skip_conditions:
+    - commit_message_contains: "[skip-review]"
+    - commit_message_contains: "[ci-skip]"
+    - file_pattern: "*.md"
+    - file_pattern: "docs/**"
+
+  legacy_code:
+    - paths: ["legacy/**"]
+      action: "warning_only"
+      message: "遗留代码区域，仅进行基础检查"
+
+  generated_code:
+    - patterns: ["*.generated.*", "dist/**"]
+      action: "skip"
+      reason: "自动生成代码不进行审查"
+```
+
+## 协作关系
+
+### 上游协作
+- Git hooks：触发审查时机
+- CI/CD pipeline：集成审查流程
+
+### 下游协作
+- 开发人员：根据报告修复问题
+- 技术负责人：审批严重问题豁免
+- QA团队：验证修复效果
+
+## 注意事项
+- AI审查不能完全替代人工Code Review
+- 严重问题必须修复后才能合并
+- 建议性问题可根据实际情况决定是否修复
+- 定期更新检查规则以适应新威胁
+- 使用 `[skip-review]` 标记需谨慎，需记录原因

@@ -80,6 +80,8 @@ class MarkdownToConfluenceConverter:
     def __init__(self):
         """Initialize the converter."""
         self.list_stack: List[Tuple[str, int]] = []  # [(type, level), ...]
+        self.in_table: bool = False  # Track if we're inside a table
+        self.table_has_header: bool = False  # Track if table has header row
 
     def convert(self, markdown: str) -> str:
         """Convert Markdown content to Confluence Storage Format.
@@ -103,16 +105,24 @@ class MarkdownToConfluenceConverter:
         i = 0
         while i < len(lines):
             line = lines[i]
+            stripped = line.strip()
 
             # Check for code blocks first (they need special handling)
-            if line.strip().startswith('```'):
+            if stripped.startswith('```'):
                 code_block, consumed = self._process_code_block(lines, i)
                 result_lines.append(code_block)
                 i += consumed
                 continue
 
+            # Check for table start (process entire table at once)
+            if stripped.startswith('|'):
+                table_content, consumed = self._process_table(lines, i)
+                result_lines.append(table_content)
+                i += consumed
+                continue
+
             # Process other elements
-            processed = self._process_line(line, lines, i)
+            processed = self._process_line(line)
             result_lines.append(processed)
             i += 1
 
@@ -129,13 +139,11 @@ class MarkdownToConfluenceConverter:
 
         return result
 
-    def _process_line(self, line: str, lines: List[str], index: int) -> str:
+    def _process_line(self, line: str) -> str:
         """Process a single line of Markdown.
 
         Args:
             line: Current line to process
-            lines: All lines in the document
-            index: Current line index
 
         Returns:
             Converted line in Confluence format
@@ -184,10 +192,6 @@ class MarkdownToConfluenceConverter:
             quote_content = stripped[1:].strip()
             processed_content = self._process_inline(quote_content)
             return f'<blockquote><p>{processed_content}</p></blockquote>'
-
-        # Table rows
-        if stripped.startswith('|'):
-            return self._process_table_row(stripped)
 
         # Regular paragraph content
         self._close_all_lists()
@@ -452,25 +456,19 @@ class MarkdownToConfluenceConverter:
             result.append(f'</{list_type}>')
         return '\n'.join(result) if result else ''
 
-    def _process_table_row(self, line: str) -> str:
+    def _process_table_row(self, row: str, is_header: bool = False) -> str:
         """Process a table row.
 
         Args:
-            line: Table row line starting with |
+            row: Table row line starting with |
+            is_header: Whether this is a header row
 
         Returns:
             Table row in Confluence format
         """
-        # Check if it's a header separator row
-        if re.match(r'^\|[-:]+\|[-:]+\|', line):
-            return ''  # Skip separator rows
 
         # Split cells
-        cells = [c.strip() for c in line.strip('|').split('|')]
-
-        # Determine if this is a header row (based on previous/next row being separator)
-        # For simplicity, we'll check if cells contain only formatting chars
-        is_header = False
+        cells = [c.strip() for c in row.strip('|').split('|')]
 
         row_content = []
         for cell in cells:
@@ -479,6 +477,51 @@ class MarkdownToConfluenceConverter:
             row_content.append(f'<{tag}>{processed_cell}</{tag}>')
 
         return f'<tr>{"".join(row_content)}</tr>'
+
+    def _process_table(self, lines: List[str], start_index: int) -> Tuple[str, int]:
+        """Process a complete table.
+
+        Args:
+            lines: All lines in the document
+            start_index: Starting index of the table
+
+        Returns:
+            Tuple of (complete table in Confluence format, number of lines consumed)
+        """
+        result = ['<table>']
+
+        # Collect all table rows
+        table_rows = []
+        i = start_index
+        while i < len(lines):
+            current_line = lines[i].strip()
+            if not current_line.startswith('|'):
+                break
+            table_rows.append(current_line)
+            i += 1
+
+        # Calculate lines consumed
+        consumed = len(table_rows)
+
+        # Process rows
+        for row_idx, row in enumerate(table_rows):
+            # Check if this is a separator row
+            if re.match(r'^\|[\s\-:]+\|[\s\-:]+\|', row):
+                # Mark the last added row to be converted to header
+                if result and result[-1].startswith('<tr>'):
+                    result[-1] = result[-1].replace('<td>', '<th>').replace('</td>', '</th>')
+                continue
+
+            # Check if next row is a separator (then this is header)
+            is_header = (row_idx + 1 < len(table_rows) and
+                        re.match(r'^\|[\s\-:]+\|[\s\-:]+\|', table_rows[row_idx + 1]))
+
+            row_content = self._process_table_row(row, is_header=is_header)
+            if row_content:
+                result.append(row_content)
+
+        result.append('</table>')
+        return '\n'.join(result), consumed
 
     def _wrap_text_in_paragraphs(self, text: str) -> str:
         """Wrap orphan text lines in paragraph tags.

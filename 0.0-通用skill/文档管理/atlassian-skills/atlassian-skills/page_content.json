@@ -1,0 +1,122 @@
+{
+  "id": "3571966",
+  "type": "page",
+  "status": "current",
+  "title": "法制新加需求与第二批需求20260331",
+  "space": {
+    "id": 3964930,
+    "key": "fz",
+    "name": "法制",
+    "type": "global",
+    "_links": {
+      "webui": "/display/fz",
+      "self": "http://192.168.3.241:8090/rest/api/space/fz"
+    },
+    "_expandable": {
+      "metadata": "",
+      "icon": "",
+      "description": "",
+      "retentionPolicy": "",
+      "homepage": "/rest/api/content/3571762"
+    }
+  },
+  "history": {
+    "latest": true,
+    "createdBy": {
+      "type": "known",
+      "username": "zhoujunyu",
+      "userKey": "ff8080819c512ee1019c513475f00000",
+      "profilePicture": {
+        "path": "/images/icons/profilepics/default.svg",
+        "width": 48,
+        "height": 48,
+        "isDefault": true
+      },
+      "displayName": "zhoujunyu",
+      "_links": {
+        "self": "http://192.168.3.241:8090/rest/api/user?key=ff8080819c512ee1019c513475f00000"
+      },
+      "_expandable": {
+        "status": ""
+      }
+    },
+    "createdDate": "2026-03-31T09:18:49.030+08:00",
+    "_links": {
+      "self": "http://192.168.3.241:8090/rest/api/content/3571966/history"
+    },
+    "_expandable": {
+      "lastUpdated": "",
+      "previousVersion": "",
+      "contributors": "",
+      "nextVersion": ""
+    }
+  },
+  "version": {
+    "by": {
+      "type": "known",
+      "username": "zhoujunyu",
+      "userKey": "ff8080819c512ee1019c513475f00000",
+      "profilePicture": {
+        "path": "/images/icons/profilepics/default.svg",
+        "width": 48,
+        "height": 48,
+        "isDefault": true
+      },
+      "displayName": "zhoujunyu",
+      "_links": {
+        "self": "http://192.168.3.241:8090/rest/api/user?key=ff8080819c512ee1019c513475f00000"
+      },
+      "_expandable": {
+        "status": ""
+      }
+    },
+    "when": "2026-03-31T09:19:19.160+08:00",
+    "message": "",
+    "number": 2,
+    "minorEdit": false,
+    "hidden": false,
+    "_links": {
+      "self": "http://192.168.3.241:8090/rest/experimental/content/3571966/version/2"
+    },
+    "_expandable": {
+      "content": "/rest/api/content/3571966"
+    }
+  },
+  "body": {
+    "storage": {
+      "value": "<table class=\"relative-table\" data-snooker-col-series=\"numbers\" data-snooker-locked-cols=\"0\" style=\"width: 96.5603%;\"><colgroup class=\"\"><col class=\"\" style=\"width: 3.45024%;\" /><col class=\"\" style=\"width: 6.58683%;\" /><col class=\"\" style=\"width: 8.40605%;\" /><col class=\"\" style=\"width: 22.3325%;\" /><col class=\"\" style=\"width: 28.5429%;\" /><col class=\"\" style=\"width: 4.01483%;\" /><col class=\"\" style=\"width: 3.7639%;\" /><col class=\"\" style=\"width: 3.57571%;\" /><col class=\"\" style=\"width: 4.20302%;\" /><col class=\"\" style=\"width: 3.57571%;\" /><col class=\"\" style=\"width: 4.07756%;\" /><col class=\"\" style=\"width: 7.46507%;\" /></colgroup><tbody class=\"\"><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">17</td><td>公安网</td><td>警告牌规则</td><td>警告牌功能逻辑修改，多级重新计时影响答复效率</td><td><p>本站点警告牌：</p><p>1.警告牌设置设置的功能只限接收单位使用，省厅管理员、地市管理员、举报公安民警；</p><p>2.按留言时间开始计算，并以工作日作为单位，到达设置的预警时间就显示预警标签，接收单位和办理单位均可见；</p><p>3.接收单位指派后，办理单位指派和答复不影响警告牌计算，只有接收单位首次答复网民，警告牌才消除；</p></td><td>1</td><td><br /></td><td><br /></td><td>第一批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">18</td><td><br /></td><td><br /></td><td><br /></td><td><p>未结案警告牌：</p><p>1.按答复时间开始计算，并以工作日作为单位，到达设置的预警时间，还没进行再次答复，就显示预警标签，接收单位和办理单位均可见；</p><p>2.一直是未结案状态的留言，每次“再次答复”后要重新开始计时，只有接收单位答复时答复时勾选了“已结案”，未结案警告牌才消除；</p></td><td>1</td><td><br /></td><td><br /></td><td>第一批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">19</td><td>公安网</td><td>答复校验</td><td><p>A和B同时打开一封信件，无视【多人编辑预警】同时答复网民情况<br />现系统：同时答复只会保留最后点“审核通过”那个用户的答复内容（不会同时存在两个答复）</p><p>客户想要效果：A首先答复了，B后答复，B 答复时校验留言状态，检测到已完成就答复失败</p></td><td><br /></td><td>2</td><td><br /></td><td><br /></td><td>第一批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">20</td><td>公安网</td><td>督办、协办调整</td><td><p>1.督办、协办均可以往下指派<br />2.督办、主办、协办均可看到答复流转中的所有信息、记录；</p><p>3.督办、协办均无强制填写填写办理表要求</p></td><td>1.厅督办单位指派留言给下级督办，信息也要显示在督办下，例如：督办单位：厅治安总队-治安信息工作支队；（协办同理）<br />2.办理单位均可接收同级的主办/督办/协办的办理信息表及答复</td><td>1</td><td><br /></td><td><br /></td><td>第一批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">21</td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">22</td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">23</td><td>公安网</td><td>流转记录</td><td>记录来信人是否已经查看留言答复内容</td><td>1.操作记录：网民已查看留言答复；<br />2.只记录第一次查看<br />3.若是网民没有查看，不用记录</td><td>1</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">24</td><td>公安网</td><td>数据修正</td><td>可对已完成/已回复留言相关数据进行修正维护，包括留言属性、督办单位、协办单位</td><td>1.接收单位修改督办、协办单位，保存后，办理单位收到信件要走流程提交办理或答复，留言状态才会转变，否则一直是受理中；<br />2.在角色管理-菜单权限做授权管理，根据相关权限配置决定是否可用；</td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">25</td><td>公安网</td><td>高级搜索</td><td>搜索界面中， XX字段查询，支持多选，</td><td>有下拉选项的，都可多选，选项之间是“或”的关系</td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">26</td><td>公安网</td><td>高级搜索</td><td>留言内容，增加且/或的选择，以按钮勾选方式体现</td><td><br /></td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">27</td><td>公安网</td><td>高级搜索</td><td>筛选条件显示“警告牌状态”：默认全部，可多选，字典项黄、红、橙</td><td><br /></td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">28</td><td>公安网</td><td>绩效统计分析</td><td>针对本单位（同级）进行统计分析，根据时间范围进行3个维度统计，分别是指派、回复，执法标注，显示具体指派人/回复人的信件数量、执法标注数量<br />增加留言相关内容查询，包括留言基本信息、执法标注信息</td><td>1.指派：多人编辑过同一个信件时，每个人都算一个绩效；<br />2.回复：多次答复的每一次答复也算一个绩效；<br />3.执法标注：需求未定</td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">29</td><td>安网</td><td>批量操作</td><td>勾选对应留言后可以批量指派，批量回复，批量修改留言属性（所有属性）、指派单位，且该功能需有授权管理，根据相关权限配置决定是否可用该功能</td><td>1.厅长信箱+局长信箱+信访件列表界面，新增按钮“批量操作”，在角色管理-菜单权限做授权管理，根据相关权限配置决定是否可用；</td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td><br /></td><td>需跟客户再确认细节，只能限定同一留言状态操作，不然填入信息冲突，问题信件会增多</td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">30</td><td><br /></td><td><br /></td><td><br /></td><td>2.批量指派：对勾选第一封信件的留言属性和办理单位进行编辑，填写内容自动应用到剩余的信件中，用户只需点击一次指派，勾选信件就全指派出去，留言状态全部转为受理中；</td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td>需求8h，4月2日</td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">31</td><td><br /></td><td><br /></td><td><br /></td><td>3.批量修改：对勾选第一封信件的留言属性进行编辑，填写内容自动应用到剩余的信件中，留言状态不变；</td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td>需求8h，4月2日</td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">32</td><td><br /></td><td><br /></td><td><br /></td><td>4.批量回复：对勾选第一封信件的“本站答复”内容进行编辑，填写内容自动应用到剩余的信件中，用户只需一次答复-审核通过，勾选信件就全部回复，留言状态全部转为已完成；</td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td>需求8h，4月2日</td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">33</td><td>公安网</td><td>督办、协办调整</td><td><p>1.督办、协办均可以往下指派<br />2.督办、主办、协办均可看到答复流转中的所有信息、记录；</p><p>3.督办、协办均无强制填写填写办理表要求</p></td><td>1.厅督办单位指派留言给下级督办，信息也要显示在督办下，例如：督办单位：厅治安总队-治安信息工作支队；（协办同理）<br />2.办理单位均可接收同级的主办/督办/协办的办理信息表及答复</td><td>2</td><td><br /></td><td><br /></td><td>第二批</td><td><br /></td><td><br /></td><td>需求16h，要跟客户再确认细节，改动会影响现在系统的业务逻辑和指派流程</td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">34</td><td>公安网</td><td>抄送/知会</td><td>增加知会单位功能，勾选对应单位后，该单位用户可以接收到通知并查看留言内容，且知会单位只到最后一级，不通知关联上级</td><td><br /></td><td>3</td><td><br /></td><td><br /></td><td>第三批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">35</td><td>公安网</td><td>办理表配置</td><td>1.办理表配置，省厅加留言来源应用，比如只对厅长信箱生效，信访件不生效<br />2.需要开放给地市使用，只对局长信箱生效</td><td><br /></td><td>2</td><td><br /></td><td><br /></td><td>第三批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">36</td><td>公安网</td><td>案事件类型</td><td>展示界面加分隔符进行分类归纳展示</td><td>1.先进行中文字典改造（来信类型+业务类型+案事件指向都要）<br />2.案事件指向类型-不规范指向下的选项分类归纳展示</td><td>2</td><td><br /></td><td><br /></td><td>第三批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">37</td><td>公安网</td><td>来信类型关联必填</td><td>关联必填功能异常，配置后无法生效</td><td>1.在来信类型、业务类型、案事件指向类型进行中文字典改造后实现；<br />2.来信类型选项可选一级和二级，案事件指向指向只选到一级</td><td>2</td><td><br /></td><td><br /></td><td>第三批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">38</td><td>公安网</td><td>执法标注</td><td>在信息办理表界面增加执法标注功能，有权限的用户可以填写执法标注，必填，默认内容为：无问题，考虑是否固定内容列表</td><td>客户需求未定，具体操作入口在哪</td><td>5</td><td><br /></td><td><br /></td><td>第四批</td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">39</td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td></tr><tr class=\"\"><td class=\"numberingColumn\" contenteditable=\"false\" data-mce-resize=\"false\">40</td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td><td><br /></td></tr></tbody></table><p><br /></p>",
+      "representation": "storage",
+      "_expandable": {
+        "content": "/rest/api/content/3571966"
+      }
+    },
+    "_expandable": {
+      "editor": "",
+      "view": "",
+      "export_view": "",
+      "styled_view": "",
+      "anonymous_export_view": ""
+    }
+  },
+  "extensions": {
+    "position": "none"
+  },
+  "_links": {
+    "webui": "/pages/viewpage.action?pageId=3571966",
+    "edit": "/pages/resumedraft.action?draftId=3571966&draftShareId=40e577a7-2094-45d6-8066-2a7c054568b0",
+    "tinyui": "/x/-oA2",
+    "collection": "/rest/api/content",
+    "base": "http://192.168.3.241:8090",
+    "context": "",
+    "self": "http://192.168.3.241:8090/rest/api/content/3571966"
+  },
+  "_expandable": {
+    "container": "/rest/api/space/fz",
+    "metadata": "",
+    "operations": "",
+    "children": "/rest/api/content/3571966/child",
+    "restrictions": "/rest/api/content/3571966/restriction/byOperation",
+    "ancestors": "",
+    "descendants": "/rest/api/content/3571966/descendant"
+  }
+}
