@@ -1,0 +1,96 @@
+# Skill协作关系配置模板
+# 定义Skill之间的上下游关系和数据流
+
+collaboration:
+  version: "1.0.0"
+  description: "{协作关系描述}"
+  created_at: "{YYYY-MM-DD}"
+
+# ============================================
+# Skill协作关系定义
+# ============================================
+skills:
+  - skill_id: "{skill_id}"
+    skill_name: "{skill名称}"
+    category: "{category}"
+
+    relationships:
+      # 上游依赖
+      upstream:
+        - skill: "{上游skill}"
+          condition: "{触发条件}"
+          data_flow:
+            from: "{上游输出}"
+            to: "{本skill输入参数}"
+          required: {true/false}
+
+      # 下游输出
+      downstream:
+        - skill: "{下游skill}"
+          condition: "{触发条件}"
+          data_flow:
+            from: "{本skill输出}"
+            to: "{下游skill输入}"
+
+      # 并行执行
+      parallel:
+        - skill: "{并行skill}"
+          condition: "{并行执行条件}"
+          sync_point: "{同步点}"
+
+      # 参考关系
+      reference:
+        - skill: "{参考skill}"
+          condition: "{引用条件}"
+          sections: ["{引用章节}"]
+
+# ============================================
+# 协作流程定义
+# ============================================
+workflows:
+  - name: "{流程名称}"
+    description: "{流程描述}"
+
+    sequence:
+      - step: 1
+        skill: "{skill}"
+        action: "{动作}"
+        produces: "{输出}"
+
+      - step: 2
+        skill: "{skill}"
+        action: "{动作}"
+        consumes: "{输入}"
+        produces: "{输出}"
+
+      - step: 3
+        skill: "{skill}"
+        action: "{动作}"
+        condition: "{条件}"
+
+# ============================================
+# 数据流定义
+# ============================================
+data_flows:
+  - name: "{数据流名称}"
+    source_skill: "{源skill}"
+    source_output: "{源输出}"
+    target_skill: "{目标skill}"
+    target_input: "{目标输入参数}"
+    transformation: "{转换规则（可选）}"
+
+# ============================================
+# 同步点定义
+# ============================================
+sync_points:
+  - name: "{同步点名称}"
+    skills: ["{skill1}", "{skill2}"]
+    condition: "{同步条件}"
+    action: "{同步后动作}"
+
+# ============================================
+# 注意事项
+# ============================================
+notes:
+  - "{注意事项1}"
+  - "{注意事项2}"

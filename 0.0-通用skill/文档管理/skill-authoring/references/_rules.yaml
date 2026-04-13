@@ -1,0 +1,414 @@
+# Skill编写专家 - 按需加载规则配置
+# 定义不同研发类型和部门类型的Skill编写规则按需加载
+
+rules:
+  version: "1.0.0"
+  description: "按需加载规则配置，根据研发类型/部门类型动态加载对应的编写规范"
+
+# ============================================
+# 研发类型规则配置
+# ============================================
+development_types:
+  # Java后端开发
+  backend_java:
+    id: "backend-java"
+    name: "Java后端开发"
+    tech_stack: "Java, Spring Boot, MyBatis Plus"
+    rules_file: "rules/backend-java.md"
+
+    skill_format:
+      preferred: "yaml"
+      reason: "技术实现类Skill，需要详细参数和流程定义"
+
+    required_sections:
+      - "trigger.keywords"
+      - "input.parameters"
+      - "workflow.phases"
+      - "output.artifacts"
+      - "tech_stacks"
+      - "quality_standards"
+      - "examples"
+
+    naming_conventions:
+      skill_id: "小写字母+连字符，如 crud-designer, api-designer"
+      parameters: "驼峰命名，如 project_name, tech_stack"
+
+    template: "templates/skill-yaml-tech.yaml"
+
+    common_skills_to_reference:
+      - "scaffold.yaml"
+      - "implement.yaml"
+      - "architect.yaml"
+      - "code-review.md"
+
+    quality_focus:
+      - "代码示例可直接运行"
+      - "配置文件完整可用"
+      - "依赖版本明确"
+
+  # Python后端开发
+  backend_python:
+    id: "backend-python"
+    name: "Python后端开发"
+    tech_stack: "Python, FastAPI, Django, Flask"
+    rules_file: "rules/backend-python.md"
+
+    skill_format:
+      preferred: "yaml"
+      reason: "技术实现类Skill"
+
+    required_sections:
+      - "trigger.keywords"
+      - "input.parameters"
+      - "workflow.phases"
+      - "output.artifacts"
+      - "tech_stacks"
+
+    naming_conventions:
+      skill_id: "小写字母+连字符，如 fastapi-scaffold, django-model"
+
+    template: "templates/skill-yaml-tech.yaml"
+
+    common_skills_to_reference:
+      - "fastapi-scaffold.yaml"
+      - "django-implement.yaml"
+
+  # Go后端开发
+  backend_go:
+    id: "backend-go"
+    name: "Go后端开发"
+    tech_stack: "Go, Gin, Gorm"
+    rules_file: "rules/backend-go.md"
+
+    skill_format:
+      preferred: "yaml"
+
+    required_sections:
+      - "trigger.keywords"
+      - "input.parameters"
+      - "workflow.phases"
+      - "output.artifacts"
+
+    template: "templates/skill-yaml-tech.yaml"
+
+  # Vue前端开发
+  frontend_vue:
+    id: "frontend-vue"
+    name: "Vue前端开发"
+    tech_stack: "Vue3, TypeScript, Pinia, Vite"
+    rules_file: "rules/frontend-vue.md"
+
+    skill_format:
+      preferred: "yaml"
+
+    required_sections:
+      - "trigger.keywords"
+      - "input.parameters"
+      - "workflow.phases"
+      - "output.artifacts"
+      - "tech_stacks"
+
+    naming_conventions:
+      skill_id: "小写字母+连字符，如 vue-scaffold, component-designer"
+
+    template: "templates/skill-yaml-tech.yaml"
+
+  # React前端开发
+  frontend_react:
+    id: "frontend-react"
+    name: "React前端开发"
+    tech_stack: "React, TypeScript, Redux"
+    rules_file: "rules/frontend-react.md"
+
+    skill_format:
+      preferred: "yaml"
+
+    template: "templates/skill-yaml-tech.yaml"
+
+  # Qt桌面开发
+  frontend_qt:
+    id: "frontend-qt"
+    name: "Qt桌面应用开发"
+    tech_stack: "Qt, PyQt, C++"
+    rules_file: "rules/frontend-qt.md"
+
+    skill_format:
+      preferred: "yaml"
+
+    required_sections:
+      - "trigger.keywords"
+      - "input.parameters"
+      - "workflow.phases"
+      - "signal_slot_patterns"  # Qt特有
+
+    naming_conventions:
+      skill_id: "小写字母+连字符，如 qt-scaffold, signal-slot"
+
+    template: "templates/skill-yaml-tech.yaml"
+
+  # 通用研发
+  common_dev:
+    id: "common-dev"
+    name: "通用研发"
+    tech_stack: "跨技术栈通用"
+    rules_file: "rules/common-dev.md"
+
+    skill_format:
+      preferred: "markdown"
+      reason: "流程分析类Skill，如代码审查、需求评审"
+
+    required_sections:
+      - "基本信息"
+      - "功能描述"
+      - "触发条件"
+      - "执行流程"
+      - "输出格式"
+      - "质量标准"
+
+    template: "templates/skill-md-process.md"
+
+# ============================================
+# 部门类型规则配置
+# ============================================
+department_types:
+  # 产品部
+  product:
+    id: "product"
+    name: "产品部"
+    rules_file: "rules/product.md"
+
+    skill_format:
+      preferred: "markdown"
+      reason: "需求分析、PRD编写等文档类Skill"
+
+    required_sections:
+      - "基本信息"
+      - "功能描述"
+      - "触发条件"
+      - "输入参数"
+      - "执行流程"
+      - "输出格式"
+      - "使用示例"
+      - "质量标准"
+      - "注意事项"
+
+    output_types:
+      - "PRD文档"
+      - "需求分析报告"
+      - "用户故事"
+      - "验收标准"
+
+    naming_conventions:
+      skill_id: "小写字母+连字符，如 requirement-analyzer, user-story-generator"
+
+    template: "templates/skill-md-process.md"
+
+  # 设计部
+  design:
+    id: "design"
+    name: "设计部"
+    rules_file: "rules/design.md"
+
+    skill_format:
+      preferred: "markdown"
+
+    output_types:
+      - "设计规范"
+      - "UI/UX设计文档"
+      - "设计系统"
+
+    template: "templates/skill-md-process.md"
+
+  # 测试部
+  testing:
+    id: "testing"
+    name: "测试部"
+    rules_file: "rules/testing.md"
+
+    skill_format:
+      preferred: "markdown"
+
+    required_sections:
+      - "基本信息"
+      - "功能描述"
+      - "触发条件"
+      - "测试类型"
+      - "执行流程"
+      - "输出格式"
+      - "质量标准"
+
+    output_types:
+      - "测试用例"
+      - "测试报告"
+      - "Bug分析"
+
+    template: "templates/skill-md-process.md"
+
+  # 运维部
+  operations:
+    id: "operations"
+    name: "运维部"
+    rules_file: "rules/operations.md"
+
+    skill_format:
+      preferred: "yaml"
+      reason: "部署、CI/CD等技术操作类Skill"
+
+    required_sections:
+      - "trigger.keywords"
+      - "input.parameters"
+      - "workflow.phases"
+      - "output.artifacts"
+      - "tools"
+
+    output_types:
+      - "部署配置"
+      - "CI/CD配置"
+      - "监控配置"
+
+    template: "templates/skill-yaml-tech.yaml"
+
+  # 安全部
+  security:
+    id: "security"
+    name: "安全部"
+    rules_file: "rules/security.md"
+
+    skill_format:
+      preferred: "markdown"
+
+    required_sections:
+      - "基本信息"
+      - "功能描述"
+      - "触发条件"
+      - "输入参数"
+      - "安全方法论"  # 如STRIDE
+      - "执行流程"
+      - "输出格式"
+      - "使用示例"
+      - "质量标准"
+
+    output_types:
+      - "威胁模型"
+      - "安全审计报告"
+      - "漏洞扫描报告"
+      - "合规报告"
+
+    special_sections:
+      - name: "安全方法论"
+        examples:
+          - "STRIDE威胁分类"
+          - "OWASP Top 10"
+          - "安全检查清单"
+
+    template: "templates/skill-md-process.md"
+
+  # 数据部
+  data:
+    id: "data"
+    name: "数据部"
+    rules_file: "rules/data.md"
+
+    skill_format:
+      preferred: "markdown"
+
+    output_types:
+      - "数据质量报告"
+      - "血缘追踪报告"
+      - "数据模型"
+
+    template: "templates/skill-md-process.md"
+
+  # 项目管理
+  project_management:
+    id: "project-management"
+    name: "项目管理"
+    rules_file: "rules/project-management.md"
+
+    skill_format:
+      preferred: "markdown"
+
+    output_types:
+      - "项目状态报告"
+      - "门禁检查报告"
+      - "里程碑报告"
+
+    template: "templates/skill-md-process.md"
+
+# ============================================
+# 加载规则映射
+# ============================================
+load_mapping:
+  # 根据关键词自动识别类型
+  keyword_detection:
+    backend_java:
+      keywords: ["java", "spring", "spring boot", "mybatis", "后端"]
+    backend_python:
+      keywords: ["python", "fastapi", "django", "flask"]
+    backend_go:
+      keywords: ["go", "golang", "gin", "gorm"]
+    frontend_vue:
+      keywords: ["vue", "vue3", "pinia", "前端"]
+    frontend_react:
+      keywords: ["react", "redux", "jsx"]
+    frontend_qt:
+      keywords: ["qt", "pyqt", "桌面应用", "c++桌面"]
+    product:
+      keywords: ["需求", "prd", "用户故事", "产品"]
+    security:
+      keywords: ["安全", "威胁", "审计", "漏洞", "渗透"]
+    testing:
+      keywords: ["测试", "用例", "bug", "自动化测试"]
+    operations:
+      keywords: ["部署", "运维", "ci/cd", "监控"]
+
+# ============================================
+# 规则加载流程
+# ============================================
+load_workflow:
+  steps:
+    - step: 1
+      name: "类型识别"
+      action: "根据关键词或用户指定识别研发类型/部门类型"
+
+    - step: 2
+      name: "规则加载"
+      action: "读取对应的rules_file内容"
+
+    - step: 3
+      name: "模板选择"
+      action: "根据skill_format.preferred选择模板"
+
+    - step: 4
+      name: "必填项检查"
+      action: "确保required_sections全部填写"
+
+    - step: 5
+      name: "命名验证"
+      action: "检查命名是否符合naming_conventions"
+
+    - step: 6
+      name: "质量检查"
+      action: "执行quality_focus检查项"
+
+# ============================================
+# 特殊场景配置
+# ============================================
+special_scenarios:
+  # 多类型融合场景
+  multi_type:
+    example: "Java后端 + 安全代码审查"
+    action: "加载backend-java和security规则，按优先级合并"
+    priority: "部门类型 > 研发类型"
+
+  # 新类型场景
+  new_type:
+    action: "使用common-dev规则作为基础，扩展特有规则"
+
+  # 协作配置场景
+  collaboration:
+    action: "使用collaboration.yaml模板，定义上下游关系"
+
+  # 角色配置场景
+  role_config:
+    action: "使用role-config.yaml模板，定义技能加载和排除"

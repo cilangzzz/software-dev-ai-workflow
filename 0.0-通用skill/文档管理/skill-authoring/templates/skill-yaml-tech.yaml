@@ -1,0 +1,192 @@
+# 技术实现类Skill模板 (YAML格式)
+# 适用场景：研发、运维、数据等技术操作类Skill
+
+skill:
+  id: "{skill_id}"
+  name: "{skill_name}"
+  version: "1.0.0"
+  category: "{category}"  # implement/design/analysis/review
+  description: "{详细功能描述，1-3句话说明Skill的核心功能}"
+  priority: "{P0/P1/P2}"
+  created_at: "{YYYY-MM-DD}"
+  updated_at: "{YYYY-MM-DD}"
+
+# ============================================
+# 第一部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/{command}"
+
+  keywords:
+    - "{关键词1}"
+    - "{关键词2}"
+    - "{关键词3}"
+
+  events:
+    - name: "{event_name}"
+      condition: "{触发条件描述}"
+
+# ============================================
+# 第二部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "{param_name}"
+      type: "string"  # string/number/boolean/array/object
+      required: true
+      description: "{参数描述}"
+      examples: ["{example1}"]
+
+    - name: "{param_name_optional}"
+      type: "string"
+      required: false
+      default: "{default_value}"
+      description: "{参数描述}"
+      enum: ["{option1}", "{option2}"]
+
+# ============================================
+# 第三部分：执行流程
+# ============================================
+workflow:
+  description: "{整体流程概述}"
+
+  phases:
+    - name: "阶段1名称"
+      description: "{阶段描述}"
+      duration: "{预计时间}"
+      steps:
+        - step: "步骤1"
+          action: "{动作描述}"
+        - step: "步骤2"
+          action: "{动作描述}"
+          condition: "{条件（可选）}"
+          reference: "{引用文档（可选）}"
+
+    - name: "阶段2名称"
+      description: "{阶段描述}"
+      duration: "{预计时间}"
+      steps:
+        - step: "步骤1"
+          action: "{动作描述}"
+
+# ============================================
+# 第四部分：支持的技术栈
+# ============================================
+tech_stacks:
+  - name: "{技术栈名称}"
+    identifier: "{identifier}"
+    features: ["{feature1}", "{feature2}"]
+    base_structure: |
+      {项目结构模板}
+
+  - name: "{技术栈名称2}"
+    identifier: "{identifier2}"
+    features: ["{feature1}"]
+
+# ============================================
+# 第五部分：输出产物
+# ============================================
+output:
+  base_path: "{输出路径}"
+
+  artifacts:
+    - name: "{产物名称1}"
+      files: ["{file1}", "{file2}"]
+      description: "{产物描述}"
+
+    - name: "{产物名称2}"
+      files: ["{file1}"]
+      description: "{产物描述}"
+
+# ============================================
+# 第六部分：关联文档引用
+# ============================================
+references:
+  primary:
+    - path: "{引用路径}"
+      description: "{引用描述}"
+      relationship: "{input/output/reference}"
+      sections:
+        - "{引用章节1}"
+
+  collaboration:
+    - skill: "{关联skill名称}"
+      relationship: "{upstream/downstream/parallel}"
+      condition: "{协作条件}"
+      description: "{协作描述}"
+      path: "{关联skill路径}"
+
+# ============================================
+# 第七部分：质量标准
+# ============================================
+quality_standards:
+  - standard: "{标准名称}"
+    requirement: "{要求描述}"
+    check: "{检查方式}"
+
+  - standard: "{标准名称2}"
+    requirement: "{要求描述}"
+    check: "{检查方式}"
+
+# ============================================
+# 第八部分：使用示例
+# ============================================
+examples:
+  - name: "{示例名称}"
+    input: |
+      {输入参数示例}
+    output_summary: |
+      {输出摘要}
+
+  - name: "{示例名称2}"
+    input: |
+      {输入参数示例}
+    output_summary: |
+      {输出摘要}
+
+# ============================================
+# 第九部分：依赖工具
+# ============================================
+tools:
+  - name: "{工具名}"
+    usage: "{使用说明}"
+
+  - name: "{工具名2}"
+    usage: "{使用说明}"
+
+# ============================================
+# 第十部分：质量检查清单
+# ============================================
+checklist:
+  before_execute:
+    - item: "{检查项}"
+      check: "{检查方式}"
+
+  during_execute:
+    - item: "{检查项}"
+      check: "{检查方式}"
+
+  after_execute:
+    - item: "{检查项}"
+      check: "{检查方式}"
+
+# ============================================
+# 注意事项
+# ============================================
+notes:
+  - "{注意事项1}"
+  - "{注意事项2}"
+  - "{注意事项3}"
+
+# ============================================
+# 快速参考
+# ============================================
+quick_reference:
+  common_commands:
+    - command: "{命令}"
+      description: "{描述}"
+
+  common_features:
+    - feature: "{特性}"
+      description: "{描述}"

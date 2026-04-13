@@ -1,0 +1,131 @@
+# 角色配置模板
+# 定义角色需要加载和排除的Skill
+
+role:
+  id: "{role_id}"
+  name: "{角色名称}"
+  category: "{category}"  # backend/frontend/common
+  tech_stack: "{tech_stack}"  # java/vue/qt等
+  version: "1.0.0"
+  description: "{角色描述}"
+  created_at: "{YYYY-MM-DD}"
+
+# ============================================
+# 第一部分：角色能力定义
+# ============================================
+capabilities:
+  core_skills:
+    - skill: "{技能名称}"
+      level: "{expert/advanced/intermediate}"
+      components:
+        - "{组件1}"
+        - "{组件2}"
+
+    - skill: "{技能名称2}"
+      level: "{level}"
+      components:
+        - "{组件1}"
+
+  tech_stack:
+    language: "{语言}"
+    framework: "{框架}"
+    orm: "{ORM框架}"
+    database: "{数据库}"
+
+# ============================================
+# 第二部分：应加载的Skill
+# ============================================
+skills_to_load:
+  tech_specific:
+    - path: "{skill路径}"
+      priority: "{P0/P1/P2}"
+      description: "{描述}"
+
+    - path: "{skill路径2}"
+      priority: "{priority}"
+      description: "{描述}"
+
+  common:
+    - path: "common/{skill}.md"
+      description: "{描述}"
+
+    - path: "common/{skill2}.md"
+      description: "{描述}"
+
+# ============================================
+# 第三部分：明确排除的Skill
+# ============================================
+skills_to_exclude:
+  {category}:
+    - pattern: "{匹配模式}"
+      reason: "{排除原因}"
+
+  other:
+    - pattern: "{匹配模式}"
+      reason: "{排除原因}"
+
+# ============================================
+# 第四部分：项目结构模板
+# ============================================
+project_structure:
+  standard:
+    description: "{结构描述}"
+    structure: |
+      {project_name}/
+      ├── src/
+      │   ├── {目录1}/
+      │   ├── {目录2}/
+      │   └── {目录3}/
+      ├── config/
+      ├── docs/
+      └── README.md
+
+# ============================================
+# 第五部分：命名规范
+# ============================================
+naming_conventions:
+  classes:
+    - rule: "{命名规则}"
+      examples: ["{示例1}", "{示例2}"]
+
+  methods:
+    - rule: "{命名规则}"
+      examples: ["{示例1}", "{示例2}"]
+
+  database:
+    - rule: "{命名规则}"
+      examples: ["{示例1}", "{示例2}"]
+
+# ============================================
+# 第六部分：代码风格规范
+# ============================================
+code_style:
+  annotations:
+    - rule: "{规则描述}"
+      example: |
+        {代码示例}
+
+  error_codes:
+    format: "{错误码格式}"
+    example: "{示例}"
+
+# ============================================
+# 第七部分：工作流定义
+# ============================================
+workflow:
+  typical_flow:
+    - step: 1
+      name: "{步骤名称}"
+      skill: "{关联skill}"
+
+    - step: 2
+      name: "{步骤名称}"
+      skill: "{关联skill}"
+
+# ============================================
+# 第八部分：注意事项
+# ============================================
+notes:
+  - "{注意事项1}"
+  - "{注意事项2}"
+  - "{注意事项3}"

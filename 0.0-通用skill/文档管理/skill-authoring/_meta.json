@@ -1,0 +1,56 @@
+{
+  "owner": "ai-assistant",
+  "slug": "skill-authoring",
+  "displayName": "Skill编写专家",
+  "latest": {
+    "version": "1.0.0",
+    "publishedAt": 1744934400000,
+    "commit": "initial"
+  },
+  "history": [],
+  "description": "专门用于创建、编辑和验证Claude Code Skill的专业工具，支持多种研发类型按需加载规则、YAML+MD混合格式、输入输出规范定义",
+  "keywords": [
+    "skill",
+    "编写",
+    "创建",
+    "验证",
+    "模板",
+    "按需加载"
+  ],
+  "supported_types": [
+    "backend-java",
+    "backend-python",
+    "backend-go",
+    "frontend-vue",
+    "frontend-react",
+    "frontend-qt",
+    "common-dev",
+    "product",
+    "design",
+    "testing",
+    "operations",
+    "security",
+    "data",
+    "project-management"
+  ],
+  "templates": [
+    "skill-yaml-tech.yaml",
+    "skill-md-process.md",
+    "role-config.yaml",
+    "collaboration.yaml"
+  ],
+  "files": {
+    "main": "SKILL.md",
+    "rules": "references/_rules.yaml",
+    "templates": [
+      "templates/skill-yaml-tech.yaml",
+      "templates/skill-md-process.md",
+      "templates/role-config.yaml",
+      "templates/collaboration.yaml"
+    ],
+    "references": [
+      "references/checklist.md",
+      "references/naming-convention.md"
+    ]
+  }
+}
