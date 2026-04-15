@@ -1,0 +1,653 @@
+# 产品角色配置
+
+# ============================================
+# 主配置：定义产品角色体系
+# ============================================
+product_roles:
+  version: "1.0.0"
+  created_at: "2026-04-15"
+  description: "产品角色按需加载配置，参考研发agent模型结构设计"
+
+# ============================================
+# 第一部分：角色细分定义
+# ============================================
+roles:
+  # 角色1：通用产品经理
+  general_pm:
+    id: "product-manager"
+    name: "产品经理"
+    category: "product"
+    sub_category: "general"
+    version: "1.0.0"
+    description: "通用产品经理，负责产品规划、需求管理、优先级决策"
+    capabilities:
+      core_skills:
+        - skill: "需求管理"
+          level: "expert"
+          components:
+            - "需求收集与分析"
+            - "需求优先级排序"
+            - "需求变更管理"
+            - "需求追溯管理"
+        - skill: "产品规划"
+          level: "expert"
+          components:
+            - "产品路线图设计"
+            - "版本规划"
+            - "功能迭代计划"
+        - skill: "文档编写"
+          level: "advanced"
+          components:
+            - "PRD编写"
+            - "BRD编写"
+            - "用户故事编写"
+        - skill: "跨部门协作"
+          level: "advanced"
+          components:
+            - "与研发协作"
+            - "与设计协作"
+            - "与测试协作"
+            - "与运营协作"
+
+  # 角色2：B端产品经理
+  b2b_pm:
+    id: "b2b-product-manager"
+    name: "B端产品经理"
+    category: "product"
+    sub_category: "b2b"
+    version: "1.0.0"
+    description: "企业级产品经理，精通B端产品设计、业务流程分析、权限体系设计"
+    capabilities:
+      core_skills:
+        - skill: "业务流程分析"
+          level: "expert"
+          components:
+            - "业务场景梳理"
+            - "流程建模"
+            - "角色权限矩阵"
+            - "多角色协作流程"
+        - skill: "企业级功能设计"
+          level: "expert"
+          components:
+            - "权限体系设计（RBAC）"
+            - "多租户设计"
+            - "审批流程设计"
+            - "数据权限控制"
+        - skill: "系统集成"
+          level: "advanced"
+          components:
+            - "API接口对接"
+            - "数据迁移方案"
+            - "第三方系统集成"
+        - skill: "文档编写"
+          level: "expert"
+          components:
+            - "业务需求文档(BRD)"
+            - "技术需求文档(TRD)"
+            - "系统需求说明书(SRS)"
+            - "权限矩阵模板"
+
+  # 角色3：C端产品经理
+  b2c_pm:
+    id: "b2c-product-manager"
+    name: "C端产品经理"
+    category: "product"
+    sub_category: "b2c"
+    version: "1.0.0"
+    description: "消费级产品经理，精通用户体验设计、增长策略、数据分析"
+    capabilities:
+      core_skills:
+        - skill: "用户体验设计"
+          level: "expert"
+          components:
+            - "用户旅程设计"
+            - "交互流程优化"
+            - "情感化设计"
+            - "用户反馈分析"
+        - skill: "增长策略"
+          level: "advanced"
+          components:
+            - "用户增长模型"
+            - "转化漏斗优化"
+            - "留存策略设计"
+            - "病毒传播机制"
+        - skill: "数据分析"
+          level: "advanced"
+          components:
+            - "用户行为分析"
+            - "A/B测试设计"
+            - "数据埋点规划"
+            - "指标体系设计"
+        - skill: "文档编写"
+          level: "expert"
+          components:
+            - "产品需求文档(PRD)"
+            - "用户体验报告"
+            - "竞品分析报告"
+            - "市场调研报告"
+
+  # 角色4：数据产品经理
+  data_pm:
+    id: "data-product-manager"
+    name: "数据产品经理"
+    category: "product"
+    sub_category: "data"
+    version: "1.0.0"
+    description: "数据产品经理，精通数据产品设计、BI仪表盘、数据治理"
+    capabilities:
+      core_skills:
+        - skill: "数据产品设计"
+          level: "expert"
+          components:
+            - "BI仪表盘设计"
+            - "报表系统设计"
+            - "数据可视化"
+            - "指标定义"
+        - skill: "数据治理"
+          level: "advanced"
+          components:
+            - "数据质量监控"
+            - "数据血缘追溯"
+            - "元数据管理"
+            - "数据安全策略"
+        - skill: "分析场景设计"
+          level: "expert"
+          components:
+            - "分析维度设计"
+            - "数据筛选条件"
+            - "图表类型选择"
+            - "交互式分析"
+        - skill: "文档编写"
+          level: "advanced"
+          components:
+            - "数据需求文档"
+            - "指标定义文档"
+            - "数据字典"
+            - "分析报告模板"
+
+  # 角色5：移动端产品经理
+  mobile_pm:
+    id: "mobile-product-manager"
+    name: "移动端产品经理"
+    category: "product"
+    sub_category: "mobile"
+    version: "1.0.0"
+    description: "移动端产品经理，精通APP产品设计、移动端特性、推送策略"
+    capabilities:
+      core_skills:
+        - skill: "移动端产品设计"
+          level: "expert"
+          components:
+            - "APP界面设计"
+            - "手势交互设计"
+            - "导航架构设计"
+            - "响应式适配"
+        - skill: "移动端特性"
+          level: "expert"
+          components:
+            - "推送通知策略"
+            - "离线数据同步"
+            - "定位服务集成"
+            - "相机/相册调用"
+        - skill: "APP运营"
+          level: "advanced"
+          components:
+            - "版本更新策略"
+            - "热更新机制"
+            - "APP埋点方案"
+            - "启动页/引导页"
+        - skill: "文档编写"
+          level: "advanced"
+          components:
+            - "APP需求文档"
+            - "交互设计文档"
+            - "版本更新说明"
+
+# ============================================
+# 第二部分：各角色应加载的skill
+# ============================================
+skills_to_load:
+  # 通用产品经理skill加载
+  general_pm:
+    core_skills:
+      - path: "skill/requirement-analyzer.md"
+        priority: "P0"
+        description: "需求分析，生成结构化PRD框架"
+      - path: "skill/user-story-generator.md"
+        priority: "P0"
+        description: "用户故事生成，INVEST标准"
+      - path: "skill/acceptance-criteria-writer.md"
+        priority: "P0"
+        description: "验收标准编写，Gherkin格式"
+    reference_docs:
+      - path: "references/prd-template.md"
+        priority: "P0"
+        description: "PRD文档模板"
+      - path: "references/brd-template.md"
+        priority: "P1"
+        description: "BRD文档模板"
+      - path: "references/document-templates.md"
+        priority: "P1"
+        description: "文档模板库"
+      - path: "references/high-quality-standard.md"
+        priority: "P1"
+        description: "高质量文档标准"
+
+  # B端产品经理skill加载（额外包含企业级特有skill）
+  b2b_pm:
+    core_skills:
+      - path: "skill/requirement-analyzer.md"
+        priority: "P0"
+        description: "需求分析，生成结构化PRD框架"
+      - path: "skill/user-story-generator.md"
+        priority: "P0"
+        description: "用户故事生成，INVEST标准"
+      - path: "skill/acceptance-criteria-writer.md"
+        priority: "P0"
+        description: "验收标准编写，Gherkin格式"
+    reference_docs:
+      - path: "references/brd-template.md"
+        priority: "P0"
+        description: "业务需求文档模板（B端重点）"
+      - path: "references/trd-template.md"
+        priority: "P0"
+        description: "技术需求文档模板（B端重点）"
+      - path: "references/srs-template.md"
+        priority: "P0"
+        description: "系统需求说明书模板（B端重点）"
+      - path: "references/permission-matrix-template.md"
+        priority: "P0"
+        description: "权限矩阵模板（B端特有）"
+      - path: "references/automation-template.md"
+        priority: "P0"
+        description: "自动化场景模板（B端特有）"
+      - path: "references/prd-template.md"
+        priority: "P1"
+        description: "PRD文档模板"
+
+  # C端产品经理skill加载（额外包含用户体验和增长相关）
+  b2c_pm:
+    core_skills:
+      - path: "skill/requirement-analyzer.md"
+        priority: "P0"
+        description: "需求分析，生成结构化PRD框架"
+      - path: "skill/user-story-generator.md"
+        priority: "P0"
+        description: "用户故事生成，INVEST标准"
+      - path: "skill/user-manual-writer.md"
+        priority: "P0"
+        description: "用户手册生成（C端重点）"
+    reference_docs:
+      - path: "references/prd-template.md"
+        priority: "P0"
+        description: "PRD文档模板（C端重点）"
+      - path: "references/document-templates.md"
+        priority: "P0"
+        description: "文档模板库"
+      - path: "references/high-quality-standard.md"
+        priority: "P1"
+        description: "高质量文档标准"
+
+  # 数据产品经理skill加载
+  data_pm:
+    core_skills:
+      - path: "skill/requirement-analyzer.md"
+        priority: "P0"
+        description: "需求分析"
+    reference_docs:
+      - path: "references/view-dashboard-template.md"
+        priority: "P0"
+        description: "视图与仪表盘模板（数据产品特有）"
+      - path: "references/automation-template.md"
+        priority: "P0"
+        description: "自动化场景模板"
+      - path: "references/prd-template.md"
+        priority: "P1"
+        description: "PRD文档模板"
+
+  # 移动端产品经理skill加载
+  mobile_pm:
+    core_skills:
+      - path: "skill/requirement-analyzer.md"
+        priority: "P0"
+        description: "需求分析"
+      - path: "skill/user-story-generator.md"
+        priority: "P0"
+        description: "用户故事生成"
+      - path: "skill/user-manual-writer.md"
+        priority: "P0"
+        description: "用户手册生成（APP使用说明）"
+    reference_docs:
+      - path: "references/prd-template.md"
+        priority: "P0"
+        description: "PRD文档模板"
+      - path: "references/document-templates.md"
+        priority: "P1"
+        description: "文档模板库"
+
+# ============================================
+# 第三部分：明确排除的skill（跨角色互斥）
+# ============================================
+skills_to_exclude:
+  # B端产品经理不需要C端特有skill
+  b2b_pm:
+    - pattern: "skill/user-manual-writer.md"
+      reason: "B端产品通常由培训/实施人员编写手册，而非产品经理"
+
+  # C端产品经理不需要B端特有skill
+  b2c_pm:
+    - pattern: "references/permission-matrix-template.md"
+      reason: "C端产品通常是单用户角色，不需要复杂的权限矩阵"
+    - pattern: "references/trd-template.md"
+      reason: "C端产品侧重PRD，TRD通常由技术团队编写"
+    - pattern: "references/srs-template.md"
+      reason: "C端产品侧重PRD，SRS通常用于企业级项目"
+
+  # 数据产品经理不需要纯用户故事类skill
+  data_pm:
+    - pattern: "skill/user-manual-writer.md"
+      reason: "数据产品通常不需要面向终端用户的用户手册"
+    - pattern: "skill/acceptance-criteria-writer.md"
+      reason: "数据产品的验收侧重数据准确性，而非功能验收"
+
+  # 移动端产品经理不需要B端企业级skill
+  mobile_pm:
+    - pattern: "references/permission-matrix-template.md"
+      reason: "移动端APP权限通常是固定的，不需要复杂的权限矩阵"
+    - pattern: "references/srs-template.md"
+      reason: "移动端项目通常用PRD而非SRS"
+    - pattern: "skill/acceptance-criteria-writer.md"
+      priority: "P1"  # 降低优先级而非完全排除
+      reason: "移动端验收侧重用户体验而非Gherkin格式"
+
+# ============================================
+# 第四部分：角色加载触发条件
+# ============================================
+load_triggers:
+  general_pm:
+    keywords:
+      - "产品经理"
+      - "PM"
+      - "产品规划"
+      - "需求管理"
+      - "产品需求"
+    scenarios:
+      - "需要编写PRD"
+      - "需要整理需求"
+      - "需要进行产品规划"
+
+  b2b_pm:
+    keywords:
+      - "B端"
+      - "企业级"
+      - "SaaS"
+      - "后台系统"
+      - "管理系统"
+      - "权限系统"
+      - "多租户"
+      - "审批流程"
+    scenarios:
+      - "企业级产品需求"
+      - "后台管理系统需求"
+      - "需要设计权限体系"
+      - "需要设计审批流程"
+      - "多角色协作系统"
+
+  b2c_pm:
+    keywords:
+      - "C端"
+      - "消费级"
+      - "用户增长"
+      - "用户体验"
+      - "APP"
+      - "小程序"
+      - "转化率"
+      - "留存"
+    scenarios:
+      - "消费级产品需求"
+      - "需要设计用户旅程"
+      - "需要用户增长策略"
+      - "用户体验优化"
+
+  data_pm:
+    keywords:
+      - "数据产品"
+      - "BI"
+      - "仪表盘"
+      - "报表"
+      - "数据分析"
+      - "数据可视化"
+      - "指标"
+      - "埋点"
+    scenarios:
+      - "设计数据仪表盘"
+      - "设计报表系统"
+      - "数据埋点规划"
+      - "指标体系设计"
+
+  mobile_pm:
+    keywords:
+      - "移动端"
+      - "APP"
+      - "iOS"
+      - "Android"
+      - "推送"
+      - "手势"
+      - "离线"
+    scenarios:
+      - "APP产品设计"
+      - "移动端交互设计"
+      - "推送策略设计"
+
+# ============================================
+# 第五部分：产品角色工作流程
+# ============================================
+workflow:
+  general_pm:
+    typical_flow:
+      - step: 1
+        name: "需求收集"
+        skill: "requirement-analyzer"
+        description: "收集并分析用户需求"
+      - step: 2
+        name: "需求分析"
+        skill: "requirement-analyzer"
+        description: "生成结构化PRD框架"
+      - step: 3
+        name: "用户故事编写"
+        skill: "user-story-generator"
+        description: "将需求转化为用户故事"
+      - step: 4
+        name: "验收标准编写"
+        skill: "acceptance-criteria-writer"
+        description: "编写可测试的验收标准"
+      - step: 5
+        name: "需求评审"
+        description: "与研发团队评审需求"
+      - step: 6
+        name: "需求变更管理"
+        description: "处理需求变更请求"
+
+  b2b_pm:
+    typical_flow:
+      - step: 1
+        name: "业务调研"
+        description: "深入了解客户业务场景"
+      - step: 2
+        name: "业务流程分析"
+        reference: "references/brd-template.md"
+        description: "梳理业务流程和角色关系"
+      - step: 3
+        name: "权限体系设计"
+        reference: "references/permission-matrix-template.md"
+        description: "设计多角色权限矩阵"
+      - step: 4
+        name: "系统需求编写"
+        reference: "references/srs-template.md"
+        description: "编写系统需求说明书"
+      - step: 5
+        name: "自动化场景设计"
+        reference: "references/automation-template.md"
+        description: "设计业务自动化规则"
+      - step: 6
+        name: "需求评审"
+        description: "与研发团队评审需求"
+
+  b2c_pm:
+    typical_flow:
+      - step: 1
+        name: "用户调研"
+        description: "进行用户访谈和行为分析"
+      - step: 2
+        name: "需求分析"
+        skill: "requirement-analyzer"
+        description: "生成PRD框架"
+      - step: 3
+        name: "用户旅程设计"
+        description: "设计用户使用旅程"
+      - step: 4
+        name: "用户故事编写"
+        skill: "user-story-generator"
+        description: "编写用户故事"
+      - step: 5
+        name: "验收标准编写"
+        skill: "acceptance-criteria-writer"
+        description: "编写验收标准"
+      - step: 6
+        name: "用户手册编写"
+        skill: "user-manual-writer"
+        description: "编写用户使用手册"
+
+  data_pm:
+    typical_flow:
+      - step: 1
+        name: "数据需求收集"
+        description: "收集数据分析需求"
+      - step: 2
+        name: "指标定义"
+        description: "定义业务指标和数据维度"
+      - step: 3
+        name: "仪表盘设计"
+        reference: "references/view-dashboard-template.md"
+        description: "设计数据仪表盘布局"
+      - step: 4
+        name: "图表设计"
+        description: "选择合适的图表类型"
+      - step: 5
+        name: "数据埋点规划"
+        description: "规划数据采集埋点"
+      - step: 6
+        name: "需求评审"
+        description: "与研发团队评审需求"
+
+  mobile_pm:
+    typical_flow:
+      - step: 1
+        name: "需求收集"
+        skill: "requirement-analyzer"
+        description: "收集APP需求"
+      - step: 2
+        name: "界面设计规划"
+        description: "规划APP界面结构"
+      - step: 3
+        name: "交互流程设计"
+        description: "设计手势和导航交互"
+      - step: 4
+        name: "用户故事编写"
+        skill: "user-story-generator"
+        description: "编写用户故事"
+      - step: 5
+        name: "推送策略设计"
+        description: "设计推送通知策略"
+      - step: 6
+        name: "用户手册编写"
+        skill: "user-manual-writer"
+        description: "编写APP使用说明"
+
+# ============================================
+# 第六部分：与其他角色的协作
+# ============================================
+collaboration:
+  upstream:
+    - role: "项目经理"
+      input: "项目目标、时间计划"
+    - role: "市场/运营"
+      input: "用户反馈、市场调研数据"
+    - role: "客户/业务方"
+      input: "业务需求、期望目标"
+
+  downstream:
+    - role: "研发工程师"
+      output: "PRD、用户故事、验收标准"
+    - role: "设计师"
+      output: "产品设计稿、交互说明"
+    - role: "测试工程师"
+      output: "验收标准、测试用例输入"
+    - role: "运维工程师"
+      output: "部署需求、性能要求"
+
+  parallel:
+    - role: "架构师"
+      collaboration: "技术可行性讨论"
+    - role: "数据工程师"
+      collaboration: "数据产品设计协作"
+
+# ============================================
+# 第七部分：命名规范
+# ============================================
+naming_conventions:
+  documents:
+    - rule: "PRD命名格式"
+      format: "[产品名]-PRD-v[版本号]-[日期]"
+      examples: ["CRM系统-PRD-v1.0-20260415"]
+    - rule: "用户故事ID格式"
+      format: "US-[模块]-[序号]"
+      examples: ["US-USER-001", "US-ORDER-015"]
+    - rule: "验收标准ID格式"
+      format: "AC-[用户故事ID]-[场景序号]"
+      examples: ["AC-US-USER-001-01"]
+
+  priorities:
+    - level: "P0"
+      description: "核心功能，必须有"
+      color: "红色"
+    - level: "P1"
+      description: "重要功能，应该有"
+      color: "橙色"
+    - level: "P2"
+      description: "优化功能，可以有"
+      color: "绿色"
+
+# ============================================
+# 第八部分：注意事项
+# ============================================
+notes:
+  common:
+    - "产品需求文档需要与研发团队评审确认"
+    - "验收标准必须具体、可测试、可测量"
+    - "用户故事应符合INVEST原则"
+    - "需求变更需要评估影响范围"
+
+  b2b_specific:
+    - "B端产品需要深入了解业务场景"
+    - "权限体系设计是B端产品的核心"
+    - "审批流程需要考虑多角色协作"
+    - "数据权限需要细化到字段级别"
+
+  b2c_specific:
+    - "C端产品侧重用户体验"
+    - "用户旅程设计是核心"
+    - "需要考虑增长和留存策略"
+    - "用户手册面向非技术用户"
+
+  data_specific:
+    - "数据产品需要明确指标定义"
+    - "仪表盘设计要考虑分析场景"
+    - "埋点规划要与研发协作"
+    - "数据安全是重要考虑因素"
+
+  mobile_specific:
+    - "移动端要考虑性能和流量"
+    - "离线场景需要特别设计"
+    - "推送策略要避免打扰用户"
+    - "交互设计要符合移动端习惯"
