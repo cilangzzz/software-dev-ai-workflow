@@ -272,6 +272,9 @@ class MarkdownToConfluenceConverter:
         # Process strikethrough
         text = self._process_strikethrough(text)
 
+        # Escape remaining XML characters that aren't part of generated tags
+        text = self._escape_remaining_xml(text)
+
         return text
 
     def _process_inline_code(self, text: str) -> str:
@@ -284,7 +287,12 @@ class MarkdownToConfluenceConverter:
             Text with inline code converted to Confluence format
         """
         pattern = r'`([^`]+)`'
-        return re.sub(pattern, r'<code>\1</code>', text)
+
+        def replace_code(match):
+            content = self._escape_xml(match.group(1))
+            return f'<code>{content}</code>'
+
+        return re.sub(pattern, replace_code, text)
 
     def _process_images(self, text: str) -> str:
         """Process image syntax.
@@ -352,8 +360,10 @@ class MarkdownToConfluenceConverter:
 <ac:plain-text-link-body><![CDATA[{self._escape_xml(link_text)}]]></ac:plain-text-link-body>
 </ac:link>'''
 
-            # External link
-            return f'<a href="{self._escape_xml(url)}">{self._process_inline(link_text)}</a>'
+            # External link - process nested formatting in link text
+            # Note: _escape_remaining_xml will be called by _process_inline at the end
+            processed_text = self._process_inline(link_text)
+            return f'<a href="{self._escape_xml(url)}">{processed_text}</a>'
 
         return re.sub(pattern, replace_link, text)
 
@@ -367,12 +377,18 @@ class MarkdownToConfluenceConverter:
             Text with bold/italic converted to Confluence format
         """
         # Bold with ** or __
-        text = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', text)
-        text = re.sub(r'__([^_]+)__', r'<strong>\1</strong>', text)
+        def replace_bold(match):
+            content = self._escape_xml(match.group(1))
+            return f'<strong>{content}</strong>'
+        text = re.sub(r'\*\*([^*]+)\*\*', replace_bold, text)
+        text = re.sub(r'__([^_]+)__', replace_bold, text)
 
         # Italic with * or _
-        text = re.sub(r'\*([^*]+)\*', r'<em>\1</em>', text)
-        text = re.sub(r'_([^_]+)_', r'<em>\1</em>', text)
+        def replace_italic(match):
+            content = self._escape_xml(match.group(1))
+            return f'<em>{content}</em>'
+        text = re.sub(r'\*([^*]+)\*', replace_italic, text)
+        text = re.sub(r'_([^_]+)_', replace_italic, text)
 
         return text
 
@@ -386,7 +402,10 @@ class MarkdownToConfluenceConverter:
             Text with strikethrough converted to Confluence format
         """
         # Strikethrough with ~~
-        text = re.sub(r'~~([^~]+)~~', r'<s>\1</s>', text)
+        def replace_strikethrough(match):
+            content = self._escape_xml(match.group(1))
+            return f'<s>{content}</s>'
+        text = re.sub(r'~~([^~]+)~~', replace_strikethrough, text)
         return text
 
     def _process_list_item(self, list_type: str, content: str, line: str) -> str:
@@ -554,7 +573,7 @@ class MarkdownToConfluenceConverter:
         return '\n'.join(result)
 
     def _escape_xml(self, text: str) -> str:
-        """Escape XML special characters.
+        """Escape XML special characters, avoiding double-escaping.
 
         Args:
             text: Text to escape
@@ -565,6 +584,16 @@ class MarkdownToConfluenceConverter:
         if not text:
             return ''
 
+        # First, protect existing entities by replacing them temporarily
+        # This avoids double-escaping (e.g., &amp; -> &amp;amp;)
+        entity_pattern = r'&(amp|lt|gt|quot|apos|#\d+|#x[0a-fA-F]+);'
+
+        def protect_entity(match):
+            return f'\x00ENT{match.group(1)}\x00'
+
+        text = re.sub(entity_pattern, protect_entity, text)
+
+        # Now escape all remaining special characters
         replacements = {
             '&': '&amp;',
             '<': '&lt;',
@@ -573,11 +602,58 @@ class MarkdownToConfluenceConverter:
             "'": '&apos;',
         }
 
-        result = text
         for char, entity in replacements.items():
-            result = result.replace(char, entity)
+            text = text.replace(char, entity)
 
-        return result
+        # Restore protected entities
+        def restore_entity(match):
+            return f'&{match.group(1)};'
+
+        text = re.sub(r'\x00ENT([^\x00]+)\x00', restore_entity, text)
+
+        return text
+
+    def _escape_remaining_xml(self, text: str) -> str:
+        """Escape XML characters that aren't part of generated tags.
+
+        This method escapes <, >, and & that appear in plain text but are NOT
+        part of the XML tags we've already generated during conversion.
+
+        Args:
+            text: Text with some XML tags already present
+
+        Returns:
+            Text with remaining special characters escaped
+        """
+        if not text:
+            return ''
+
+        # Tags we generate - don't escape inside these
+        # Pattern matches: opening tags, closing tags, self-closing tags, CDATA
+        tag_pattern = r'<(/?(?:code|strong|em|s|a|ac:[a-z-]+|ri:[a-z-]+)[^>]*>|!\[CDATA\[.*?\]\]>|hr />)'
+
+        result = []
+        last_end = 0
+
+        # Find all tag positions
+        for match in re.finditer(tag_pattern, text):
+            # Escape the text before this tag
+            if match.start() > last_end:
+                plain_text = text[last_end:match.start()]
+                plain_text = self._escape_xml(plain_text)
+                result.append(plain_text)
+
+            # Keep the tag unchanged
+            result.append(match.group(0))
+            last_end = match.end()
+
+        # Escape any remaining text after the last tag
+        if last_end < len(text):
+            plain_text = text[last_end:]
+            plain_text = self._escape_xml(plain_text)
+            result.append(plain_text)
+
+        return ''.join(result)
 
 
 def markdown_to_confluence(
