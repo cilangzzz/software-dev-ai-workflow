@@ -228,11 +228,14 @@ class MarkdownToConfluenceConverter:
         # Calculate lines consumed (opening, content, closing)
         consumed = i - start_index + 1
 
-        # Escape the code content
+        # Code content - do NOT escape XML inside CDATA (CDATA protects it)
+        # Only handle the special case of ]]> which would terminate CDATA early
         code_content = '\n'.join(code_lines)
-        code_content = self._escape_xml(code_content)
+        # Escape ]]> by splitting it across two CDATA sections if present
+        if ']]>' in code_content:
+            code_content = code_content.replace(']]>', ']]]]><![CDATA[>')
 
-        # Build Confluence code macro
+        # Build Confluence code macro - content goes directly in CDATA
         if language and language != 'none':
             result = f'''<ac:structured-macro ac:name="code">
 <ac:parameter ac:name="language">{language}</ac:parameter>
@@ -341,31 +344,49 @@ class MarkdownToConfluenceConverter:
         Returns:
             Text with links converted to Confluence format
         """
-        # Match [text](url)
-        pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+        # Match [text](url) - handle URLs with parentheses using balance counting
+        # Pattern explanation: we match the URL by counting open/close parentheses
+        result = text
+        i = 0
 
-        def replace_link(match):
-            link_text = match.group(1)
-            url = match.group(2)
+        while i < len(result):
+            # Find potential link start
+            if result[i] == '[':
+                # Find closing bracket
+                bracket_end = result.find(']', i)
+                if bracket_end != -1 and bracket_end + 1 < len(result) and result[bracket_end + 1] == '(':
+                    link_text = result[i + 1:bracket_end]
 
-            # Check if it's a Confluence internal link pattern
-            # Patterns like "spaceKey:Page Title" or "#anchor"
-            if ':' in url and not url.startswith('http'):
-                parts = url.split(':', 1)
-                space_key = parts[0]
-                page_title = parts[1] if len(parts) > 1 else ''
+                    # Find matching closing parenthesis (handle nested parens)
+                    start_paren = bracket_end + 2
+                    paren_depth = 1
+                    j = start_paren
+                    while j < len(result) and paren_depth > 0:
+                        if result[j] == '(':
+                            paren_depth += 1
+                        elif result[j] == ')':
+                            paren_depth -= 1
+                        j += 1
 
-                return f'''<ac:link>
-<ri:page ri:space-key="{space_key}" ri:content-title="{self._escape_xml(page_title)}" />
-<ac:plain-text-link-body><![CDATA[{self._escape_xml(link_text)}]]></ac:plain-text-link-body>
-</ac:link>'''
+                    if paren_depth == 0:
+                        url = result[start_paren:j - 1]
 
-            # External link - process nested formatting in link text
-            # Note: _escape_remaining_xml will be called by _process_inline at the end
-            processed_text = self._process_inline(link_text)
-            return f'<a href="{self._escape_xml(url)}">{processed_text}</a>'
+                        # Process the link
+                        if ':' in url and not url.startswith('http'):
+                            parts = url.split(':', 1)
+                            space_key = parts[0]
+                            page_title = parts[1] if len(parts) > 1 else ''
+                            replacement = f'<ac:link><ri:page ri:space-key="{space_key}" ri:content-title="{self._escape_xml(page_title)}" /><ac:plain-text-link-body><![CDATA[{self._escape_xml(link_text)}]]></ac:plain-text-link-body></ac:link>'
+                        else:
+                            processed_text = self._process_inline(link_text)
+                            replacement = f'<a href="{self._escape_xml(url)}">{processed_text}</a>'
 
-        return re.sub(pattern, replace_link, text)
+                        result = result[:i] + replacement + result[j:]
+                        i = i + len(replacement)
+                        continue
+            i += 1
+
+        return result
 
     def _process_bold_italic(self, text: str) -> str:
         """Process bold and italic text.
@@ -376,6 +397,12 @@ class MarkdownToConfluenceConverter:
         Returns:
             Text with bold/italic converted to Confluence format
         """
+        # Handle bold+italic with *** first (before single * matches)
+        def replace_bold_italic(match):
+            content = self._escape_xml(match.group(1))
+            return f'<strong><em>{content}</em></strong>'
+        text = re.sub(r'\*\*\*([^*]+)\*\*\*', replace_bold_italic, text)
+
         # Bold with ** or __
         def replace_bold(match):
             content = self._escape_xml(match.group(1))
@@ -554,16 +581,36 @@ class MarkdownToConfluenceConverter:
         lines = text.split('\n')
         result = []
 
+        # Track if we're inside a CDATA section
+        in_cdata = False
+
         for line in lines:
             stripped = line.strip()
+
+            # Track CDATA state - check for opening and closing
+            if '<![CDATA[' in stripped:
+                in_cdata = True
+            if ']]>' in stripped:
+                in_cdata = False
 
             # Skip empty lines
             if not stripped:
                 result.append('')
                 continue
 
+            # Skip lines inside CDATA sections - they should not be wrapped
+            if in_cdata:
+                result.append(line)
+                continue
+
             # Skip lines that are already wrapped in tags or are closing tags
+            # Also skip CDATA markers and macro boundaries
             if re.match(r'^<[a-z0-9:]+[^>]*>', stripped) or stripped.startswith('</'):
+                result.append(line)
+                continue
+
+            # Skip lines that contain CDATA markers but aren't fully inside CDATA
+            if '<![CDATA[' in stripped or ']]>' in stripped:
                 result.append(line)
                 continue
 
