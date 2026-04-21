@@ -1,0 +1,521 @@
+skill:
+  id: "api-export"
+  name: "接口文档导出"
+  version: "1.0.0"
+  category: "implement"
+  description: "从后端接口代码中提取接口信息，生成 OpenAPI 3.x、Apifox、Postman、Markdown、Swagger UI HTML、Word 等多种格式的 API 文档，支持全量导出和增量更新。"
+  priority: "P1"
+  created_at: "2026-04-21"
+  updated_at: "2026-04-21"
+
+# ============================================
+# 第一部分：触发条件
+# ============================================
+trigger:
+  commands:
+    - "/api-export"
+
+  keywords:
+    - "导出接口文档"
+    - "生成api文档"
+    - "openapi导出"
+    - "apifox导出"
+    - "swagger导出"
+    - "postman导出"
+    - "接口文档生成"
+    - "api文档导出"
+
+  events:
+    - name: "api_doc_export"
+      condition: "需要将后端接口代码转换为标准化API文档格式时触发"
+
+# ============================================
+# 第二部分：输入参数
+# ============================================
+input:
+  parameters:
+    - name: "source_path"
+      type: "string"
+      required: true
+      description: "后端项目源码路径，包含Controller/接口定义的根目录"
+      examples: ["/path/to/project/src/main/java", "./src"]
+
+    - name: "output_path"
+      type: "string"
+      required: true
+      description: "输出目录路径，生成的文档文件将存放于此"
+      examples: ["/path/to/output", "./api-docs"]
+
+    - name: "project_name"
+      type: "string"
+      required: false
+      default: ""
+      description: "项目名称，用于文档标题和文件命名。留空则自动从项目配置中提取"
+      examples: ["法制", "用户管理系统"]
+
+    - name: "tech_stack"
+      type: "string"
+      required: false
+      default: "auto"
+      description: "后端技术栈类型"
+      enum: ["auto", "java-springboot", "java-springmvc", "python-fastapi", "python-flask", "go-gin", "go-kratos", "node-express", "node-nestjs", "csharp-aspnet"]
+
+    - name: "formats"
+      type: "array"
+      required: false
+      default: ["openapi", "apifox", "postman", "markdown", "html", "docx"]
+      description: "需要导出的文档格式列表"
+      enum: ["openapi", "apifox", "postman", "markdown", "html", "docx"]
+
+    - name: "api_prefix"
+      type: "string"
+      required: false
+      default: ""
+      description: "接口路径公共前缀，如 /admin-api、/api/v1"
+      examples: ["/admin-api", "/api/v1"]
+
+    - name: "base_url"
+      type: "string"
+      required: false
+      default: "http://localhost:8080"
+      description: "服务器基础URL"
+      examples: ["http://192.168.3.209:49090", "http://localhost:8080"]
+
+    - name: "include_patterns"
+      type: "array"
+      required: false
+      default: []
+      description: "包含的接口路径模式，支持通配符。空表示全部"
+      examples: [["/system/*", "/user/*"]]
+
+    - name: "exclude_patterns"
+      type: "array"
+      required: false
+      default: []
+      description: "排除的接口路径模式，支持通配符"
+      examples: [["/internal/*", "/debug/*"]]
+
+    - name: "auth_type"
+      type: "string"
+      required: false
+      default: "bearer"
+      description: "接口认证方式"
+      enum: ["none", "bearer", "basic", "apikey", "oauth2"]
+
+    - name: "lang_tabs"
+      type: "array"
+      required: false
+      default: ["shell", "http", "javascript", "java", "python"]
+      description: "Markdown/HTML文档中展示的代码示例语言"
+      examples: [["shell", "http", "javascript", "java", "python", "go"]]
+
+# ============================================
+# 第三部分：执行流程
+# ============================================
+workflow:
+  description: "从后端代码中扫描并提取接口定义，转换为标准化数据模型，再生成多种格式的文档输出"
+
+  phases:
+    - name: "代码扫描与解析"
+      description: "扫描源码目录，识别Controller/路由文件，解析接口定义"
+      duration: "2-5分钟"
+      steps:
+        - step: "识别技术栈"
+          action: "根据项目文件（pom.xml、package.json、go.mod等）自动检测技术栈类型"
+          condition: "tech_stack为auto时执行"
+        - step: "扫描Controller文件"
+          action: "按技术栈对应的模式扫描所有接口定义文件"
+          reference: "references/backend-rules.md"
+        - step: "解析接口注解/装饰器"
+          action: "提取路由映射、请求方法、参数定义、返回类型等信息"
+        - step: "解析请求/响应模型"
+          action: "递归解析DTO/VO/Entity类，提取字段名、类型、校验注解、默认值"
+        - step: "提取Swagger注释"
+          action: "解析@ApiOperation/@ApiResponse/@Schema等文档注释"
+          condition: "Java SpringBoot项目"
+
+    - name: "数据标准化"
+      description: "将解析结果转换为统一的中间数据模型"
+      duration: "1-2分钟"
+      steps:
+        - step: "构建接口列表"
+          action: "汇总所有接口定义，按模块/Tag分组"
+        - step: "构建Schema定义"
+          action: "将DTO/模型类转换为JSON Schema格式"
+        - step: "补全接口信息"
+          action: "根据代码上下文推断缺失的描述、示例值、响应码"
+        - step: "应用全局配置"
+          action: "合并公共参数（Authorization Header等）、前缀、服务器地址"
+
+    - name: "格式化输出"
+      description: "根据选择的格式列表，逐个生成文档文件"
+      duration: "1-3分钟"
+      steps:
+        - step: "生成OpenAPI JSON"
+          action: "将中间模型导出为OpenAPI 3.1.0规范的JSON文件"
+          condition: "formats包含openapi"
+          reference: "references/openapi-format.md"
+        - step: "生成Apifox JSON"
+          action: "将中间模型导出为Apifox项目格式，包含测试用例分类和标签"
+          condition: "formats包含apifox"
+          reference: "references/apifox-format.md"
+        - step: "生成Postman JSON"
+          action: "将中间模型导出为Postman Collection v2.1格式"
+          condition: "formats包含postman"
+          reference: "references/postman-format.md"
+        - step: "生成Markdown文档"
+          action: "从OpenAPI规范生成Markdown格式的接口文档"
+          condition: "formats包含markdown"
+          reference: "references/markdown-format.md"
+        - step: "生成Swagger UI HTML"
+          action: "将OpenAPI规范嵌入自包含的Swagger UI HTML文件"
+          condition: "formats包含html"
+          reference: "references/html-format.md"
+        - step: "生成Word文档"
+          action: "将接口文档转换为DOCX格式的Word文档"
+          condition: "formats包含docx"
+          reference: "references/docx-format.md"
+
+    - name: "质量检查"
+      description: "验证生成的文档完整性和格式正确性"
+      duration: "1分钟"
+      steps:
+        - step: "格式校验"
+          action: "对JSON文件执行Schema校验，确保格式合规"
+        - step: "完整性检查"
+          action: "检查接口覆盖率，确保所有已扫描接口均有文档"
+        - step: "输出报告"
+          action: "生成导出报告，列出文件清单和接口统计"
+
+# ============================================
+# 第四部分：支持的技术栈
+# ============================================
+tech_stacks:
+  - name: "Java SpringBoot"
+    identifier: "java-springboot"
+    features:
+      - "扫描@RestController / @Controller注解类"
+      - "解析@RequestMapping / @GetMapping / @PostMapping等路由注解"
+      - "解析@RequestBody / @RequestParam / @PathVariable参数注解"
+      - "解析@ApiOperation / @ApiResponse / @Schema Swagger注释"
+      - "解析JSR-303校验注解（@NotNull / @NotBlank / @Size等）"
+      - "递归解析DTO/VO/Entity的字段定义"
+    base_structure: |
+      src/main/java/
+      ├── **/controller/    # Controller层
+      ├── **/dto/           # 请求DTO
+      ├── **/vo/            # 响应VO
+      ├── **/entity/        # 实体类
+      └── **/enums/         # 枚举类
+
+  - name: "Java SpringMVC"
+    identifier: "java-springmvc"
+    features:
+      - "扫描@Controller注解类"
+      - "解析@RequestMapping路由映射"
+      - "解析@RequestBody参数"
+
+  - name: "Python FastAPI"
+    identifier: "python-fastapi"
+    features:
+      - "扫描APIRouter / FastAPI实例路由"
+      - "解析@app.get / @app.post等装饰器"
+      - "解析Pydantic BaseModel参数模型"
+      - "解析response_model返回类型"
+
+  - name: "Python Flask"
+    identifier: "python-flask"
+    features:
+      - "扫描@app.route装饰器"
+      - "解析Blueprint蓝图路由"
+
+  - name: "Go Gin"
+    identifier: "go-gin"
+    features:
+      - "扫描r.GET / r.POST等路由注册"
+      - "解析gin.Context参数绑定"
+      - "解析JSON binding tags"
+
+  - name: "Go Kratos"
+    identifier: "go-kratos"
+    features:
+      - "扫描.proto文件HTTP定义"
+      - "解析HTTP annotations"
+
+  - name: "Node.js Express"
+    identifier: "node-express"
+    features:
+      - "扫描app.get / app.post / router.use等路由"
+      - "解析JSDoc / Swagger注释"
+
+  - name: "Node.js NestJS"
+    identifier: "node-nestjs"
+    features:
+      - "扫描@Controller / @Get / @Post等装饰器"
+      - "解析@ApiTags / @ApiOperation等Swagger装饰器"
+      - "解析DTO class定义"
+
+  - name: "C# ASP.NET"
+    identifier: "csharp-aspnet"
+    features:
+      - "扫描[ApiController] / [Route] / [HttpGet]等属性"
+      - "解析模型类属性"
+
+# ============================================
+# 第五部分：输出产物
+# ============================================
+output:
+  base_path: "{output_path}"
+
+  artifacts:
+    - name: "OpenAPI规范文件"
+      files: ["{project_name}.openapi.json"]
+      description: "OpenAPI 3.1.0规范JSON文件，可直接导入任何支持OpenAPI的工具"
+
+    - name: "Apifox项目文件"
+      files: ["{project_name}.apifox.json"]
+      description: "Apifox原生项目导出格式，包含完整的接口定义、测试用例分类和标签定义，可直接导入Apifox"
+
+    - name: "Postman集合文件"
+      files: ["{project_name}.postman.json"]
+      description: "Postman Collection v2.1格式，可直接导入Postman客户端"
+
+    - name: "Markdown文档"
+      files: ["{project_name}.md"]
+      description: "人类可读的Markdown格式接口文档，适合放在Wiki或代码仓库中，支持多语言代码示例"
+
+    - name: "Swagger UI HTML文档"
+      files: ["{project_name}.html"]
+      description: "自包含的Swagger UI HTML文件，可直接在浏览器中打开查看交互式API文档"
+
+    - name: "Word文档"
+      files: ["{project_name}.docx"]
+      description: "Microsoft Word格式的接口文档，适合打印、分享和离线查看"
+
+# ============================================
+# 第六部分：关联文档引用
+# ============================================
+references:
+  primary:
+    - path: "references/openapi-format.md"
+      description: "OpenAPI 3.1.0格式规范和字段映射规则"
+      relationship: "reference"
+      sections:
+        - "顶层结构"
+        - "paths定义"
+        - "components/schemas定义"
+        - "参数和请求体定义"
+        - "响应定义"
+
+    - path: "references/apifox-format.md"
+      description: "Apifox项目导出格式规范和字段映射规则"
+      relationship: "reference"
+      sections:
+        - "顶层结构"
+        - "apiCollection结构"
+        - "测试用例分类和标签"
+        - "公共参数定义"
+        - "模块变量定义"
+
+    - path: "references/postman-format.md"
+      description: "Postman Collection v2.1格式规范"
+      relationship: "reference"
+
+    - path: "references/markdown-format.md"
+      description: "Markdown文档生成规则（widdershins风格）"
+      relationship: "reference"
+
+    - path: "references/html-format.md"
+      description: "Swagger UI HTML自包含文档生成规则"
+      relationship: "reference"
+
+    - path: "references/docx-format.md"
+      description: "Word文档生成规则"
+      relationship: "reference"
+
+    - path: "references/backend-rules.md"
+      description: "各技术栈的代码扫描和解析规则"
+      relationship: "reference"
+
+  collaboration:
+    - skill: "api-designer"
+      relationship: "upstream"
+      condition: "当使用API设计器先行设计接口时，以设计结果作为输入"
+      description: "可接收api-designer产出的接口设计文档作为输入源"
+      path: "../api-designer/"
+
+    - skill: "code-review"
+      relationship: "downstream"
+      condition: "导出的接口文档可供代码审查时对照接口实现是否符合设计"
+      description: "生成的OpenAPI文档可用于接口实现一致性审查"
+      path: "../../审查管理/code-review/"
+
+    - skill: "confluence-publish"
+      relationship: "downstream"
+      condition: "生成的Markdown或HTML文档可发布到Confluence"
+      description: "Markdown格式的接口文档可直接发布到Confluence知识库"
+      path: "../../文档管理/confluence/"
+
+    - skill: "readme-generator"
+      relationship: "parallel"
+      condition: "项目README中需要包含接口文档链接时并行执行"
+      description: "可在生成README时引用导出的接口文档"
+      path: "../../文档管理/readme-generator/"
+
+# ============================================
+# 第七部分：质量标准
+# ============================================
+quality_standards:
+  - standard: "接口覆盖率"
+    requirement: "扫描到的Controller接口100%包含在导出文档中"
+    check: "对比扫描到的接口数量和文档中的接口数量"
+
+  - standard: "OpenAPI合规性"
+    requirement: "生成的OpenAPI JSON符合OpenAPI 3.1.0规范"
+    check: "使用swagger-parser或openapi-generator validate命令校验"
+
+  - standard: "Apifox导入兼容性"
+    requirement: "生成的Apifox JSON可成功导入Apifox客户端且接口信息完整"
+    check: "实际导入Apifox验证"
+
+  - standard: "Postman导入兼容性"
+    requirement: "生成的Postman JSON可成功导入Postman客户端且请求可发送"
+    check: "实际导入Postman验证"
+
+  - standard: "参数类型准确率"
+    requirement: "字段类型映射准确率 >= 95%"
+    check: "抽样对比源码类型定义和文档中的type字段"
+
+  - standard: "描述完整性"
+    requirement: "有Swagger注释的接口，描述信息100%保留"
+    check: "对比源码注解和文档中的description字段"
+
+  - standard: "文件格式正确"
+    requirement: "所有生成文件可被对应工具正常解析"
+    check: "JSON文件执行parse校验，HTML文件在浏览器打开，DOCX文件在Word打开"
+
+# ============================================
+# 第八部分：使用示例
+# ============================================
+examples:
+  - name: "Java SpringBoot项目全量导出"
+    input: |
+      source_path: "E:/projects/legal-system/src/main/java"
+      output_path: "E:/output/api-docs"
+      project_name: "法制"
+      tech_stack: "java-springboot"
+      formats: ["openapi", "apifox", "postman", "markdown", "html", "docx"]
+      api_prefix: "/admin-api"
+      base_url: "http://192.168.3.209:49090"
+      auth_type: "bearer"
+    output_summary: |
+      在 E:/output/api-docs 目录下生成6个文件：
+      - 法制.openapi.json    (OpenAPI 3.1.0规范，~4KB)
+      - 法制.apifox.json     (Apifox项目文件，含测试用例分类，~40KB)
+      - 法制.postman.json    (Postman Collection v2.1，~20KB)
+      - 法制.md             (Markdown接口文档，~2KB)
+      - 法制.html           (Swagger UI HTML，自包含，~1.7MB)
+      - 法制.docx           (Word文档，~10KB)
+      导出报告：共扫描12个Controller，提取58个接口，覆盖率100%
+
+  - name: "Python FastAPI项目仅导出OpenAPI和Markdown"
+    input: |
+      source_path: "./app"
+      output_path: "./docs/api"
+      project_name: "user-service"
+      tech_stack: "python-fastapi"
+      formats: ["openapi", "markdown"]
+      base_url: "http://localhost:8000"
+    output_summary: |
+      在 ./docs/api 目录下生成2个文件：
+      - user-service.openapi.json  (OpenAPI 3.1.0规范)
+      - user-service.md            (Markdown接口文档)
+      导出报告：共扫描3个Router，提取15个接口
+
+  - name: "Go Gin项目指定模块导出"
+    input: |
+      source_path: "./internal"
+      output_path: "./api-docs"
+      project_name: "order-system"
+      tech_stack: "go-gin"
+      formats: ["openapi", "apifox", "html"]
+      include_patterns: ["/order/*", "/product/*"]
+      api_prefix: "/api/v1"
+    output_summary: |
+      在 ./api-docs 目录下生成3个文件（仅包含/order/*和/product/*路径的接口）
+      - order-system.openapi.json
+      - order-system.apifox.json
+      - order-system.html
+
+# ============================================
+# 第九部分：依赖工具
+# ============================================
+tools:
+  - name: "Read / Glob / Grep"
+    usage: "扫描源码目录，读取Controller和模型文件"
+
+  - name: "Bash"
+    usage: "运行格式校验命令，生成DOCX文件（通过pandoc或docx库）"
+
+  - name: "Write"
+    usage: "输出生成的文档文件"
+
+# ============================================
+# 第十部分：质量检查清单
+# ============================================
+checklist:
+  before_execute:
+    - item: "源码路径存在且包含可解析的代码文件"
+      check: "使用Glob验证source_path下存在对应技术栈的代码文件"
+    - item: "输出目录可用"
+      check: "验证output_path存在或可创建"
+    - item: "技术栈已识别或已指定"
+      check: "tech_stack不为空"
+
+  during_execute:
+    - item: "每个Controller文件均被解析"
+      check: "逐个读取并提取接口定义，记录解析状态"
+    - item: "模型类递归解析深度受控"
+      check: "设置最大递归深度避免循环引用导致的栈溢出"
+    - item: "接口信息不丢失"
+      check: "中间数据模型包含所有从代码中提取的原始信息"
+
+  after_execute:
+    - item: "所有指定格式文件均已生成"
+      check: "逐一检查输出文件是否存在"
+    - item: "JSON文件格式正确"
+      check: "使用JSON.parse或等效工具校验JSON语法"
+    - item: "接口数量一致"
+      check: "各格式文档中的接口数量相同"
+    - item: "生成导出报告"
+      check: "输出统计信息：接口数量、文件列表、覆盖率"
+
+# ============================================
+# 注意事项
+# ============================================
+notes:
+  - "对于Java项目，优先解析Swagger/SpringDoc注释获取描述信息；若无注释则从方法名和参数名推断"
+  - "Apifox格式最为复杂，包含测试用例分类(projectTestCaseCategories)、标签(projectTestCaseTags)、模块变量(moduleSettings)等扩展信息"
+  - "JSON Schema中的type映射需遵循语言类型到JSON Schema类型的转换规则（如Java Long→integer, String→string, List→array）"
+  - "循环引用的模型类需使用$ref引用components/schemas中的定义，避免无限递归"
+  - "生成HTML时可将OpenAPI spec直接嵌入Swagger UI bundle，实现自包含的离线文档"
+  - "Markdown格式建议使用widdershins风格，包含YAML front matter用于配置语言tabs和主题"
+  - "导出前应检查是否存在已有的接口文档（如Swagger注解），作为补充信息的来源"
+
+# ============================================
+# 快速参考
+# ============================================
+quick_reference:
+  common_commands:
+    - command: "/api-export"
+      description: "启动接口文档导出流程"
+
+  common_features:
+    - feature: "自动技术栈检测"
+      description: "通过项目配置文件自动识别后端框架"
+    - feature: "多格式同时导出"
+      description: "一次执行生成所有选定格式的文档"
+    - feature: "增量更新"
+      description: "对比已有文档，仅更新变化的接口"
+    - feature: "接口过滤"
+      description: "通过include/exclude模式选择性导出接口"
