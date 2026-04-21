@@ -39,11 +39,18 @@
 
 ```
 software-dev-ai-workflow/
-├── 0.0-通用skill/                    # 通用技能（画图、文档、项目管理等）
-│   ├── 画图/                         # 图表绘制Skill
-│   ├── 文档管理/                     # 文档生成与管理Skill
-│   ├── 产品/                         # 通用产品Skill
-│   └── 项目管理/                     # 通用项目管理Skill
+├── 0.0-通用skill/                    # 通用技能（按工具/平台分类）
+│   ├── Atlassian/                    # Jira / Confluence / Bitbucket 工具
+│   ├── Draw.io/                      # 图表绘制工具（drawio + 代码生成图表）
+│   ├── Remotion/                     # 视频动画生成工具
+│   ├── Stitch设计/                   # Stitch UI 设计工具集（5个子skill）
+│   ├── Word文档/                     # Word 文档操作工具
+│   ├── README生成/                   # README 自动生成工具
+│   ├── Skill编写/                    # Claude Code Skill 编写工具
+│   ├── 前端组件/                     # React / shadcn-ui 前端组件
+│   ├── 接口导出/                     # API 接口文档导出工具
+│   ├── 禅道/                         # 禅道项目管理平台
+│   └── 项目管理/                     # 项目管理模板与规范
 ├── 1.0-软件开发流程角色agent模型/      # 角色Agent模型定义
 │   ├── 产品/                         # 产品角色Agent
 │   ├── 研发/                         # 研发角色Agent
@@ -217,6 +224,13 @@ Gate 5: 发布就绪 → 部署方案、回滚预案
 MIT License
 
 ## 更新日志
+
+### v1.3.0 (2026-04)
+- 重构 `0.0-通用skill/` 目录，统一按工具/平台分类
+- stitch-skills 从深层嵌套中拆散，按功能归入对应目录（Stitch设计、前端组件、Remotion）
+- 合并 Atlassian 相关 skill（atlassian-skills + confluence-expert）
+- 合并 Draw.io 相关 skill（drawio + codegen-diagram）
+- 全部顶级目录统一为中文命名
 
 ### v1.2.0 (2025-04)
 - 新增示例输出章节，展示 MES 系统实际产出
