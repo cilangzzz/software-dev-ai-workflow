@@ -1,0 +1,61 @@
+{
+  "owner": "ai-assistant",
+  "slug": "notion-next-format",
+  "displayName": "NotionNext博客格式专家",
+  "latest": {
+    "version": "1.0.0",
+    "publishedAt": 1745366400000,
+    "commit": "initial"
+  },
+  "history": [],
+  "description": "专门用于创建、编辑和验证NotionNext博客系统内容的专业工具，支持文章(Post)、页面(Page)、菜单(Menu)、公告(Notice)等多种内容类型的格式规范",
+  "keywords": [
+    "notionnext",
+    "blog",
+    "notion",
+    "文章",
+    "菜单",
+    "格式",
+    "发布"
+  ],
+  "supported_types": [
+    "Post",
+    "Page",
+    "Menu",
+    "SubMenu",
+    "Notice",
+    "Config"
+  ],
+  "categories": [
+    "知行合一",
+    "技术分享",
+    "心情随笔"
+  ],
+  "tags": [
+    "推荐",
+    "文字",
+    "思考",
+    "新闻",
+    "工具",
+    "开发",
+    "建站",
+    "金钱",
+    "健康"
+  ],
+  "collaboration": {
+    "upstream": [
+      {
+        "skill": "notion",
+        "usage": "调用Notion API执行数据库操作"
+      }
+    ]
+  },
+  "files": {
+    "main": "SKILL.md",
+    "references": [
+      "references/property-types.md",
+      "references/block-types.md",
+      "references/config-options.md"
+    ]
+  }
+}
