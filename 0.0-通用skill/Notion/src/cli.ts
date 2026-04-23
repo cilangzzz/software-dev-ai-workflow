@@ -3,12 +3,17 @@
 import { Command } from "commander";
 import * as dotenv from "dotenv";
 import { NotionSkill } from "./index";
-import * as fs from "fs";
 import * as path from "path";
 
-// Load env from common locations
-dotenv.config({ path: path.join(process.env.HOME || "", ".openclaw", ".env") });
-dotenv.config({ path: path.join(process.env.HOME || "", ".env") });
+const homeDir = process.env.HOME || process.env.USERPROFILE || "";
+[
+  path.join(process.cwd(), ".env"),
+  path.join(process.cwd(), ".openclaw.env"),
+  path.join(__dirname, "..", ".env"),
+  path.join(__dirname, "..", ".openclaw.env"),
+  path.join(homeDir, ".openclaw", ".env"),
+  path.join(homeDir, ".env"),
+].forEach((envPath) => dotenv.config({ path: envPath }));
 dotenv.config();
 
 const program = new Command();
@@ -22,7 +27,7 @@ const getToken = () => {
   const token = process.env.NOTION_TOKEN;
   if (!token) {
     console.error("Error: NOTION_TOKEN environment variable required");
-    console.error("Add to ~/.openclaw/.env: NOTION_TOKEN=secret_xxxxxxxxxx");
+    console.error("Set NOTION_TOKEN in the current shell, .env, .openclaw.env, or ~/.openclaw/.env");
     process.exit(1);
   }
   return token;
@@ -30,7 +35,6 @@ const getToken = () => {
 
 const formatOutput = (data: any) => JSON.stringify(data, null, 2);
 
-// Query database
 program
   .command("query-database <database-id>")
   .description("Query entries from a Notion database")
@@ -41,15 +45,14 @@ program
       const skill = new NotionSkill({ token: getToken() });
       const filter = options.filter ? JSON.parse(options.filter) : undefined;
       const results = await skill.queryDatabase(databaseId, filter);
-      
-      // Simplified output
+
       const simplified = results.map((page: any) => ({
         id: page.id,
         url: page.url,
         created: page.created_time,
         properties: page.properties,
       }));
-      
+
       console.log(formatOutput(simplified));
     } catch (err: any) {
       console.error("Error:", err.message);
@@ -57,7 +60,6 @@ program
     }
   });
 
-// Add database entry
 program
   .command("add-entry <database-id>")
   .description("Add a new entry to a database")
@@ -66,18 +68,18 @@ program
   .action(async (databaseId, options) => {
     try {
       const skill = new NotionSkill({ token: getToken() });
-      
+
       let properties: any = {};
-      
+
       if (options.title) {
         properties["Name"] = { title: [{ text: { content: options.title } }] };
       }
-      
+
       if (options.properties) {
         const extraProps = JSON.parse(options.properties);
         properties = { ...properties, ...extraProps };
       }
-      
+
       const result = await skill.addEntry(databaseId, properties);
       console.log(formatOutput({
         id: result.id,
@@ -90,7 +92,6 @@ program
     }
   });
 
-// Get page
 program
   .command("get-page <page-id>")
   .description("Get page content and properties")
@@ -105,7 +106,6 @@ program
     }
   });
 
-// Update page
 program
   .command("update-page <page-id>")
   .description("Update page properties")
@@ -126,7 +126,6 @@ program
     }
   });
 
-// Append blocks
 program
   .command("append-blocks <page-id>")
   .description("Append content blocks to a page")
@@ -135,7 +134,7 @@ program
     try {
       const skill = new NotionSkill({ token: getToken() });
       const blocks = JSON.parse(options.blocks);
-      const result = await skill.appendBlocks(pageId, blocks);
+      await skill.appendBlocks(pageId, blocks);
       console.log(formatOutput({ success: true, appended: blocks.length }));
     } catch (err: any) {
       console.error("Error:", err.message);
@@ -143,7 +142,6 @@ program
     }
   });
 
-// Search
 program
   .command("search <query>")
   .description("Search across your Notion workspace")
@@ -151,14 +149,14 @@ program
     try {
       const skill = new NotionSkill({ token: getToken() });
       const results = await skill.search(query);
-      
+
       const simplified = results.results.map((item: any) => ({
         id: item.id,
         title: item.title?.[0]?.text?.content || "Untitled",
         url: item.url,
         type: item.object,
       }));
-      
+
       console.log(formatOutput(simplified));
     } catch (err: any) {
       console.error("Error:", err.message);
@@ -166,7 +164,6 @@ program
     }
   });
 
-// Get database schema
 program
   .command("get-database <database-id>")
   .description("Get database schema/properties")
@@ -186,7 +183,6 @@ program
     }
   });
 
-// Quick test connection
 program
   .command("test")
   .description("Test Notion connection and list accessible pages")
@@ -194,24 +190,24 @@ program
     try {
       const skill = new NotionSkill({ token: getToken() });
       const results = await skill.search("");
-      
-      console.log("✅ Connected to Notion!");
+
+      console.log("Connected to Notion!");
       console.log(`Found ${results.results.length} accessible pages/databases:\n`);
-      
+
       results.results.slice(0, 10).forEach((item: any, i: number) => {
         const title = item.title?.[0]?.text?.content || "Untitled";
-        const type = item.object === "database" ? "📊 Database" : "📄 Page";
+        const type = item.object === "database" ? "Database" : "Page";
         const id = item.id.replace(/-/g, "");
         console.log(`${i + 1}. ${type}: ${title}`);
         console.log(`   ID: ${id}`);
         console.log(`   URL: ${item.url}\n`);
       });
-      
+
       if (results.results.length > 10) {
         console.log(`... and ${results.results.length - 10} more`);
       }
     } catch (err: any) {
-      console.error("❌ Connection failed:", err.message);
+      console.error("Connection failed:", err.message);
       process.exit(1);
     }
   });

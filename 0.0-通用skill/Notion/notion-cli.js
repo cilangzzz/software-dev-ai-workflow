@@ -7,26 +7,67 @@
  */
 
 const { Client } = require("@notionhq/client");
+const fs = require("fs");
+const path = require("path");
 
-// Get token from environment
+const loadEnvFile = (filePath) => {
+  if (!filePath || !fs.existsSync(filePath)) return;
+
+  const content = fs.readFileSync(filePath, "utf8");
+  for (const rawLine of content.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) continue;
+
+    const eqIndex = line.indexOf("=");
+    if (eqIndex === -1) continue;
+
+    const key = line.slice(0, eqIndex).trim();
+    let value = line.slice(eqIndex + 1).trim();
+    if (!key || process.env[key] !== undefined) continue;
+
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    process.env[key] = value;
+  }
+};
+
+const envCandidates = [
+  path.join(process.cwd(), ".env"),
+  path.join(process.cwd(), ".openclaw.env"),
+  path.join(__dirname, ".env"),
+  path.join(__dirname, ".openclaw.env"),
+];
+
+const homeDir = process.env.HOME || process.env.USERPROFILE;
+if (homeDir) {
+  envCandidates.push(path.join(homeDir, ".openclaw", ".env"));
+  envCandidates.push(path.join(homeDir, ".env"));
+}
+
+for (const envPath of envCandidates) {
+  loadEnvFile(envPath);
+}
+
 const getToken = () => {
   const token = process.env.NOTION_TOKEN;
   if (!token) {
-    console.error("❌ Error: NOTION_TOKEN not set");
-    console.error("Add to ~/.openclaw/.env: NOTION_TOKEN=secret_xxxxxxxxxx");
+    console.error("Error: NOTION_TOKEN not set");
+    console.error("Set NOTION_TOKEN in the current shell, .env, .openclaw.env, or ~/.openclaw/.env");
     process.exit(1);
   }
   return token;
 };
 
-// Clean ID (remove hyphens)
 const cleanId = (id) => id.replace(/-/g, "");
 
-// Smart ID resolution - handles both Notion ID (#3) and direct UUID
 const resolvePageId = async (notion, dbId, idOrRef) => {
-  // If it starts with #, it's a Notion ID reference
-  if (idOrRef.startsWith('#')) {
-    const targetId = parseInt(idOrRef.replace(/^#/, ''), 10);
+  if (idOrRef.startsWith("#")) {
+    const targetId = parseInt(idOrRef.replace(/^#/, ""), 10);
     if (isNaN(targetId)) {
       throw new Error(`Invalid Notion ID: ${idOrRef}`);
     }
@@ -36,7 +77,7 @@ const resolvePageId = async (notion, dbId, idOrRef) => {
       page_size: 100,
     });
 
-    const entry = response.results.find(page => {
+    const entry = response.results.find((page) => {
       const idProp = page.properties.ID;
       return idProp?.unique_id?.number === targetId;
     });
@@ -48,28 +89,23 @@ const resolvePageId = async (notion, dbId, idOrRef) => {
     return entry.id;
   }
 
-  // Otherwise, treat as direct UUID
   return cleanId(idOrRef);
 };
 
-// Initialize client
 const getClient = () => new Client({ auth: getToken() });
-
-// Format output
 const out = (data) => console.log(JSON.stringify(data, null, 2));
 
-// Commands
 const commands = {
   async test() {
     const notion = getClient();
     const results = await notion.search({ page_size: 20 });
 
-    console.log("✅ Connected to Notion!");
+    console.log("Connected to Notion!");
     console.log(`Found ${results.results.length} accessible pages/databases:\n`);
 
     results.results.forEach((item, i) => {
       const title = item.title?.[0]?.text?.content || "Untitled";
-      const type = item.object === "database" ? "📊" : "📄";
+      const type = item.object === "database" ? "Database" : "Page";
       const id = item.id.replace(/-/g, "").slice(0, 8) + "...";
       console.log(`${i + 1}. ${type} ${title} (${id})`);
     });
@@ -79,14 +115,12 @@ const commands = {
     const notion = getClient();
     const cleanDbId = cleanId(dbId);
 
-    // Parse args
     let filter = undefined;
     const filterIdx = args.indexOf("--filter");
     if (filterIdx !== -1 && args[filterIdx + 1]) {
       filter = JSON.parse(args[filterIdx + 1]);
     }
 
-    // Numbered output option
     const numberedIdx = args.indexOf("--numbered");
     const showNumbers = numberedIdx !== -1;
 
@@ -103,7 +137,6 @@ const commands = {
         created: page.created_time,
         properties: Object.fromEntries(
           Object.entries(page.properties).map(([k, v]) => {
-            // Simplify property values
             let val = v;
             if (v.title) val = v.title.map((t) => t.text.content).join("");
             else if (v.rich_text) val = v.rich_text.map((t) => t.text.content).join("");
@@ -127,21 +160,6 @@ const commands = {
       return entry;
     });
 
-    // If numbered, also save mapping for reference
-    if (showNumbers && simplified.length > 0) {
-      const mapping = {};
-      simplified.forEach(entry => {
-        mapping[`#${entry.entry_number}`] = entry.id;
-      });
-
-      // Save to temp file for potential ID lookup
-      const fs = require('fs');
-      const os = require('os');
-      const path = require('path');
-      const mappingPath = path.join(os.tmpdir(), 'notion-entry-mapping.json');
-      fs.writeFileSync(mappingPath, JSON.stringify(mapping, null, 2));
-    }
-
     out(simplified);
   },
 
@@ -153,7 +171,7 @@ const commands = {
 
     const titleIdx = args.indexOf("--title");
     if (titleIdx !== -1 && args[titleIdx + 1]) {
-      const titleKey = "Name"; // Default, could be Title
+      const titleKey = "Name";
       properties[titleKey] = { title: [{ text: { content: args[titleIdx + 1] } }] };
     }
 
@@ -174,11 +192,10 @@ const commands = {
   async "get-page"(pageId, dbId) {
     const notion = getClient();
 
-    // Smart ID resolution - supports #3 (Notion ID) or direct UUID
     let cleanPageId;
-    if (pageId.startsWith('#')) {
+    if (pageId.startsWith("#")) {
       if (!dbId) {
-        console.error("❌ Database ID required when using Notion ID reference (#3)");
+        console.error("Database ID required when using Notion ID reference (#3)");
         console.error("Usage: get-page '#3' DATABASE_ID");
         process.exit(1);
       }
@@ -192,42 +209,45 @@ const commands = {
       notion.blocks.children.list({ block_id: cleanPageId, page_size: 100 }),
     ]);
 
-    // Format blocks for readability
-    const formattedBlocks = blocks.results.map(block => {
+    const formattedBlocks = blocks.results.map((block) => {
       const type = block.type;
       let content = "";
 
       switch (type) {
         case "paragraph":
-          content = block.paragraph.rich_text.map(t => t.text.content).join("");
+          content = block.paragraph.rich_text.map((t) => t.text.content).join("");
           break;
         case "heading_1":
-          content = "# " + block.heading_1.rich_text.map(t => t.text.content).join("");
+          content = "# " + block.heading_1.rich_text.map((t) => t.text.content).join("");
           break;
         case "heading_2":
-          content = "## " + block.heading_2.rich_text.map(t => t.text.content).join("");
+          content = "## " + block.heading_2.rich_text.map((t) => t.text.content).join("");
           break;
         case "heading_3":
-          content = "### " + block.heading_3.rich_text.map(t => t.text.content).join("");
+          content = "### " + block.heading_3.rich_text.map((t) => t.text.content).join("");
           break;
         case "bulleted_list_item":
-          content = "• " + block.bulleted_list_item.rich_text.map(t => t.text.content).join("");
+          content = "- " + block.bulleted_list_item.rich_text.map((t) => t.text.content).join("");
           break;
         case "numbered_list_item":
-          content = "1. " + block.numbered_list_item.rich_text.map(t => t.text.content).join("");
+          content = "1. " + block.numbered_list_item.rich_text.map((t) => t.text.content).join("");
           break;
         case "code":
-          content = "```" + block.code.language + "\n" +
-                    block.code.rich_text.map(t => t.text.content).join("") +
-                    "\n```";
+          content =
+            "```" +
+            block.code.language +
+            "\n" +
+            block.code.rich_text.map((t) => t.text.content).join("") +
+            "\n```";
           break;
         case "quote":
-          content = "> " + block.quote.rich_text.map(t => t.text.content).join("");
+          content = "> " + block.quote.rich_text.map((t) => t.text.content).join("");
           break;
-        case "to_do":
+        case "to_do": {
           const checked = block.to_do.checked ? "[x]" : "[ ]";
-          content = checked + " " + block.to_do.rich_text.map(t => t.text.content).join("");
+          content = checked + " " + block.to_do.rich_text.map((t) => t.text.content).join("");
           break;
+        }
         default:
           content = `[${type}]`;
       }
@@ -241,10 +261,10 @@ const commands = {
         url: page.url,
         created: page.created_time,
         last_edited: page.last_edited_time,
-        properties: page.properties
+        properties: page.properties,
       },
       body: formattedBlocks,
-      block_count: blocks.results.length
+      block_count: blocks.results.length,
     });
   },
 
@@ -254,7 +274,7 @@ const commands = {
 
     const propsIdx = args.indexOf("--properties");
     if (propsIdx === -1 || !args[propsIdx + 1]) {
-      console.error("❌ Error: --properties required");
+      console.error("Error: --properties required");
       process.exit(1);
     }
 
@@ -267,15 +287,13 @@ const commands = {
   async "append-body"(pageId, ...args) {
     const notion = getClient();
 
-    // Check if database ID is provided (for Notion ID lookup)
     const dbIdx = args.indexOf("--database");
     const dbId = dbIdx !== -1 ? args[dbIdx + 1] : null;
 
-    // Smart ID resolution - supports #3 (Notion ID) or direct UUID
     let cleanPageId;
-    if (pageId.startsWith('#')) {
+    if (pageId.startsWith("#")) {
       if (!dbId) {
-        console.error("❌ Database ID required when using Notion ID reference (#3)");
+        console.error("Database ID required when using Notion ID reference (#3)");
         console.error("Usage: append-body '#3' --database DB_ID --text 'content'");
         process.exit(1);
       }
@@ -284,7 +302,6 @@ const commands = {
       cleanPageId = cleanId(pageId);
     }
 
-    // Parse arguments
     const typeIdx = args.indexOf("--type");
     const textIdx = args.indexOf("--text");
     const blocksIdx = args.indexOf("--blocks");
@@ -292,12 +309,10 @@ const commands = {
     let blocks = [];
 
     if (blocksIdx !== -1 && args[blocksIdx + 1]) {
-      // Full JSON blocks mode (advanced)
       blocks = JSON.parse(args[blocksIdx + 1]);
     } else if (textIdx !== -1 && args[textIdx + 1]) {
-      // Simple text mode with optional type
       const text = args[textIdx + 1];
-      const type = (typeIdx !== -1 && args[typeIdx + 1]) ? args[typeIdx + 1] : "paragraph";
+      const type = typeIdx !== -1 && args[typeIdx + 1] ? args[typeIdx + 1] : "paragraph";
 
       const richText = [{ type: "text", text: { content: text } }];
 
@@ -329,11 +344,12 @@ const commands = {
         case "quote":
           blocks.push({ object: "block", type: "quote", quote: { rich_text: richText } });
           break;
-        case "code":
+        case "code": {
           const langIdx = args.indexOf("--lang");
-          const language = (langIdx !== -1 && args[langIdx + 1]) ? args[langIdx + 1] : "plain text";
+          const language = langIdx !== -1 && args[langIdx + 1] ? args[langIdx + 1] : "plain text";
           blocks.push({ object: "block", type: "code", code: { rich_text: richText, language } });
           break;
+        }
         case "divider":
           blocks.push({ object: "block", type: "divider", divider: {} });
           break;
@@ -341,7 +357,7 @@ const commands = {
           blocks.push({ object: "block", type: "paragraph", paragraph: { rich_text: richText } });
       }
     } else {
-      console.error("❌ Error: --text or --blocks required");
+      console.error("Error: --text or --blocks required");
       console.error("Examples:");
       console.error('  node notion-cli.js append-body PAGE_ID --text "Hello world"');
       console.error('  node notion-cli.js append-body PAGE_ID --text "My Heading" --type h2');
@@ -350,7 +366,7 @@ const commands = {
       process.exit(1);
     }
 
-    const result = await notion.blocks.children.append({
+    await notion.blocks.children.append({
       block_id: cleanPageId,
       children: blocks,
     });
@@ -360,7 +376,7 @@ const commands = {
       reference: pageId,
       resolved_id: cleanPageId,
       appended_blocks: blocks.length,
-      types: blocks.map(b => b.type)
+      types: blocks.map((b) => b.type),
     });
   },
 
@@ -398,7 +414,7 @@ const commands = {
     const targetNumber = parseInt(numberStr.replace(/^#/, ""), 10);
 
     if (isNaN(targetNumber) || targetNumber < 1) {
-      console.error("❌ Invalid entry number. Use: entry-by-number DB_ID #3");
+      console.error("Invalid entry number. Use: entry-by-number DB_ID #3");
       process.exit(1);
     }
 
@@ -408,7 +424,7 @@ const commands = {
     });
 
     if (targetNumber > response.results.length) {
-      console.error(`❌ Only ${response.results.length} entries found. #${targetNumber} doesn't exist.`);
+      console.error(`Only ${response.results.length} entries found. #${targetNumber} doesn't exist.`);
       process.exit(1);
     }
 
@@ -428,25 +444,24 @@ const commands = {
     const targetId = parseInt(notionId.replace(/^#/, ""), 10);
 
     if (isNaN(targetId)) {
-      console.error("❌ Invalid ID. Use: find-by-notion-id DB_ID #3");
+      console.error("Invalid ID. Use: find-by-notion-id DB_ID #3");
       process.exit(1);
     }
 
-    // Query all entries and find by Notion auto-ID
     const response = await notion.databases.query({
       database_id: cleanDbId,
       page_size: 100,
     });
 
-    const entry = response.results.find(page => {
+    const entry = response.results.find((page) => {
       const idProp = page.properties.ID;
       return idProp?.unique_id?.number === targetId;
     });
 
     if (!entry) {
-      console.error(`❌ No entry with Notion ID #${targetId} found`);
+      console.error(`No entry with Notion ID #${targetId} found`);
       console.log("\nAvailable entries:");
-      response.results.forEach(p => {
+      response.results.forEach((p) => {
         const idNum = p.properties.ID?.unique_id?.number;
         const name = p.properties.Name?.title?.[0]?.text?.content;
         console.log(`  Notion #${idNum}: ${name}`);
@@ -464,7 +479,6 @@ const commands = {
   },
 };
 
-// Help
 const showHelp = () => {
   console.log(`
 Notion CLI for OpenClaw
@@ -476,7 +490,7 @@ Commands:
 
   query-database <id>       Query database entries
     [--filter '<json>']     Filter results
-    [--numbered]            Show entry numbers (ID#1, ID#2...)
+    [--numbered]            Show entry numbers in output only
 
   add-entry <id>            Add entry to database
     --title "Name"
@@ -490,52 +504,21 @@ Commands:
   append-body <id>          Add content to page body
     --database <id>         Required when using #3 notation
     --text "content"        Text content to add
-    --type <type>           Block type: paragraph, h1, h2, h3, bullet, numbered, 
-                            todo, quote, code, divider (default: paragraph)
-    --lang <language>       Code language (for --type code)
-    --blocks '<json>'       Raw JSON blocks array (advanced)
+    --type <type>           paragraph, h1, h2, h3, bullet, numbered, todo, quote, code, divider
+    --lang <language>       Code language for --type code
+    --blocks '<json>'       Raw JSON blocks array
 
   entry-by-number <db> <#>  Get entry by list position number
-
-  find-by-notion-id <db> <#>  Get entry by Notion auto-ID field
-
+  find-by-notion-id <db> <#>
+                            Get entry by Notion auto-ID field
   get-database <id>         Get database schema
-
   search <query>            Search workspace
 
 Environment:
-  NOTION_TOKEN    Required. Set in ~/.openclaw/.env
-
-Examples:
-  # List entries with ID numbers
-  node notion-cli.js query-database abc123... --numbered
-
-  # Reference entry by number
-  node notion-cli.js entry-by-number abc123... #3
-
-  # Add content to a specific entry
-  node notion-cli.js append-body page123... --text "Research notes" --type h2
-
-  # Filter and find
-  node notion-cli.js query-database abc123... --filter '{"property":"Status","select":{"equals":"Idea"}}'
-
-Quick Reference - Two Ways to Reference Entries:
-
-  # METHOD 1: Notion ID (what you see in the ID column)
-  node notion-cli.js get-page '#3' DB_ID
-  node notion-cli.js append-body '#3' --database DB_ID --text "content"
-
-  # METHOD 2: Direct UUID (for power users, scripts, external tools)
-  node notion-cli.js get-page 2fb3e4ac...
-  node notion-cli.js append-body 2fb3e4ac... --text "content"
-
-Database/Page ID Format:
-  From URL: https://www.notion.so/workspace/ABC123...
-  Use: ABC123... (32 characters, no hyphens)
+  NOTION_TOKEN    Required. Load from shell, .env, .openclaw.env, or ~/.openclaw/.env
 `);
 };
 
-// Main
 const main = async () => {
   const [cmd, ...args] = process.argv.slice(2);
 
@@ -546,7 +529,7 @@ const main = async () => {
 
   const handler = commands[cmd];
   if (!handler) {
-    console.error(`❌ Unknown command: ${cmd}`);
+    console.error(`Unknown command: ${cmd}`);
     showHelp();
     process.exit(1);
   }
@@ -554,9 +537,9 @@ const main = async () => {
   try {
     await handler(...args);
   } catch (err) {
-    console.error("❌ Error:", err.message);
+    console.error("Error:", err.message);
     if (err.code === "object_not_found") {
-      console.error("💡 Make sure the page/database is shared with your integration (Share → Add connections)");
+      console.error("Make sure the page or database is shared with your integration");
     }
     process.exit(1);
   }

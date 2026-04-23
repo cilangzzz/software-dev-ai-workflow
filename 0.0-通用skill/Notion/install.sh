@@ -1,28 +1,27 @@
 #!/bin/bash
 # Install script for Notion Skill
 
-echo "📝 Installing Notion Skill for OpenClaw..."
+echo "Installing Notion Skill..."
 
 cd "$(dirname "$0")"
 
-# Check if package.json exists (full version) or use standalone
-if [ -f "package.json" ]; then
+# Prefer the checked-in standalone CLI when dependencies already exist.
+if [ -d "node_modules" ]; then
+    echo "Dependencies already present - skipping npm install/build."
+    echo "Standalone CLI ready."
+elif [ -f "package.json" ]; then
     echo "Installing dependencies..."
     npm install
-    npm run build
-    echo "✅ Full version installed!"
+    echo "Standalone CLI ready."
 else
-    # Use standalone version
-    mv package-standalone.json package.json
-    echo "Installing standalone dependencies..."
-    npm install
-    echo "✅ Standalone version installed!"
+    echo "package.json not found"
+    exit 1
 fi
 
 echo ""
 echo "Next steps:"
-echo "1. Add to ~/.openclaw/.env: NOTION_TOKEN=secret_xxxxxxxxxx"
-echo "2. Share your Notion pages with the integration (Share → Add connections)"
+echo "1. Set NOTION_TOKEN in .env, .openclaw.env, or ~/.openclaw/.env"
+echo "2. Share your Notion pages with the integration"
 echo "3. Test: node notion-cli.js test"
 echo ""
-echo "See SKILL.md for full documentation."
+echo "See SKILL.md for usage details."
