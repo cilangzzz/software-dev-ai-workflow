@@ -1,0 +1,156 @@
+# ============================================
+# Agent角色配置模板
+# 这是一个泛型模板，用户可以根据具体需求进行细化
+# ============================================
+
+role:
+  # 基本信息部分
+  id: "{role_id}"                  # 角色ID，如 java-developer, vue-developer, dba
+  name: "{角色中文名称}"            # 如 Java后端工程师, Vue前端工程师
+  category: "{大类}"               # backend/frontend/data/ops/test/product/design
+  tech_stack: "{技术栈标识}"        # 如 java/vue/qt/python/dba
+  version: "1.0.0"
+  description: "{角色描述}"         # 描述角色的专业领域和核心能力
+  created_at: "{YYYY-MM-DD}"
+
+# ============================================
+# 第一部分：角色能力定义
+# 用户根据实际需要定义核心技能
+# ============================================
+capabilities:
+  # 核心技能列表
+  # 每个技能包含：技能名称、能力等级、具体能力项
+  core_skills:
+    - skill: "{技能名称1}"
+      level: "{expert/advanced/intermediate}"  # 能力等级
+      components:
+        - "{具体能力项1}"
+        - "{具体能力项2}"
+        - "{具体能力项3}"
+
+    - skill: "{技能名称2}"
+      level: "{level}"
+      components:
+        - "{具体能力项}"
+
+  # 技术栈详情
+  # 根据角色类型定义相关技术栈
+  tech_stack:
+    language: "{编程语言}"          # 如 Java 17+, Python 3.10+, TypeScript
+    framework: "{框架版本}"         # 如 Spring Boot 3.x, Vue 3.x, React 18.x
+    orm: "{ORM框架}"               # 如 MyBatis Plus, SQLAlchemy, Gorm
+    database: "{数据库}"           # 如 MySQL, PostgreSQL, MongoDB
+    build: "{构建工具}"            # 如 Maven, npm, pip, Go modules
+    other: "{其他工具}"            # 如 Redis, Docker, Git
+
+# ============================================
+# 第二部分：应加载的skill
+# 定义该角色需要使用哪些skill
+# ============================================
+skills_to_load:
+  # 技术特定skill
+  # 根据角色的技术栈定义需要加载的skill
+  tech_specific:
+    - path: "{skill路径}"           # 如 backend/java/scaffold.yaml
+      priority: "{P0/P1/P2}"        # 优先级
+      description: "{skill描述}"
+
+  # 公共skill
+  # 所有研发角色通用的skill
+  common:
+    - path: "common/code-review.md"
+      description: "代码审查"
+    - path: "common/requirement-review.md"
+      description: "需求评审"
+    - path: "common/adr.md"
+      description: "架构决策记录"
+
+# ============================================
+# 第三部分：明确排除的skill
+# 定义该角色不需要的skill
+# ============================================
+skills_to_exclude:
+  # 按类别排除
+  category:
+    - pattern: "{排除模式}"         # 如 frontend/*, backend/python/*
+      reason: "{排除原因}"
+
+# ============================================
+# 第四部分：项目结构模板
+# 定义该角色使用的标准项目结构
+# ============================================
+project_structure:
+  standard:
+    description: "标准项目结构"
+    structure: |
+      {project_name}/
+      ├── src/
+      ├── config/
+      ├── docs/
+      └── README.md
+
+# ============================================
+# 第五部分：命名规范
+# 定义该角色的命名约定
+# ============================================
+naming_conventions:
+  # 类命名规范
+  classes:
+    - rule: "{类命名规则}"
+      examples: ["{示例1}", "{示例2}"]
+
+  # 文件命名规范
+  files:
+    - rule: "{文件命名规则}"
+      examples: ["{示例}"]
+
+  # 方法命名规范
+  methods:
+    - rule: "{方法命名规则}"
+      examples: ["{示例}"]
+
+  # 变量命名规范
+  variables:
+    - rule: "{变量命名规则}"
+      examples: ["{示例}"]
+
+# ============================================
+# 第六部分：代码风格规范
+# 定义该角色的代码风格约定
+# ============================================
+code_style:
+  # 注解/装饰器规范
+  annotations:
+    - rule: "{注解规则}"
+      example: |
+        {代码示例}
+
+  # 特定规范
+  specific:
+    - rule: "{特定规则}"
+      example: |
+        {示例代码}
+
+# ============================================
+# 第七部分：工作流定义
+# 定义该角色的典型工作流程
+# ============================================
+workflow:
+  typical_flow:
+    - step: 1
+      name: "{步骤名称}"
+      skill: "{对应skill}"
+      description: "{步骤描述}"
+
+    - step: 2
+      name: "{步骤名称}"
+      skill: "{对应skill}"
+
+# ============================================
+# 第八部分：注意事项
+# 定义该角色的重要注意事项
+# ============================================
+notes:
+  - "{注意事项1}"
+  - "{注意事项2}"
+  - "{注意事项3}"
