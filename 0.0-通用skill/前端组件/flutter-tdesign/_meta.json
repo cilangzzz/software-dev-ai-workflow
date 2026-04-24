@@ -1,0 +1,39 @@
+{
+  "owner": "ai-assistant",
+  "slug": "flutter-tdesign",
+  "displayName": "TDesign Flutter 组件库",
+  "latest": {
+    "version": "0.2.7",
+    "publishedAt": "2024-01-01"
+  },
+  "description": "基于腾讯 TDesign 设计体系的 Flutter UI 组件库技能",
+  "keywords": ["flutter", "tdesign", "ui", "component", "腾讯设计", "主题定制"],
+  "components_count": 50,
+  "icons_count": 2113,
+  "files": {
+    "main": "SKILL.md",
+    "references": [
+      "references/components/index.md",
+      "references/components/basic.md",
+      "references/components/form.md",
+      "references/components/navigation.md",
+      "references/components/feedback.md",
+      "references/components/display.md",
+      "references/components/operation.md",
+      "references/components/other.md",
+      "references/theme-guide.md",
+      "references/icons-reference.md",
+      "references/api-reference.md",
+      "references/rules/flutter-tdesign.md"
+    ]
+  },
+  "categories": [
+    {"name": "基础组件", "count": 6, "file": "components/basic.md"},
+    {"name": "表单组件", "count": 14, "file": "components/form.md"},
+    {"name": "导航组件", "count": 7, "file": "components/navigation.md"},
+    {"name": "反馈组件", "count": 8, "file": "components/feedback.md"},
+    {"name": "展示组件", "count": 10, "file": "components/display.md"},
+    {"name": "操作组件", "count": 6, "file": "components/operation.md"},
+    {"name": "其他组件", "count": 10, "file": "components/other.md"}
+  ]
+}
