@@ -546,6 +546,148 @@ node notion-cli.js append-body PAGE_ID \
 - **摘要长度**: 建议控制在100-200字符
 - **正文Block**: 支持多种类型，按需选择
 
+## 网络连接问题与代理配置
+
+### 常见错误
+
+调用 Notion API 时可能遇到以下网络错误：
+
+| 错误信息 | 原因 | 解决方案 |
+|---------|------|---------|
+| `ECONNRESET` | TCP连接被中断 | 使用代理或等待重试 |
+| `ETIMEDOUT` | 连接超时 | 检查网络或使用代理 |
+| `SSL/TLS handshake failed` | SSL握手失败 | 配置正确的代理 |
+| `schannel: failed to receive handshake` | Windows代理SSL问题 | 使用global-agent |
+
+### 错误原因分析
+
+1. **网络不稳定**: 国内直连Notion API可能不稳定
+2. **代理问题**: 
+   - 代理软件过载或重启
+   - SSL/TLS握手失败
+   - 代理与Notion的HTTPS连接被拦截
+3. **Notion API限制**:
+   - 频率限制: 3 requests/second
+   - 短时间大量请求可能被阻断
+   - Cloudflare安全规则触发
+4. **Node.js限制**:
+   - node-fetch默认无重试机制
+   - 连接中断直接抛异常
+
+### 方案一：使用 global-agent 代理
+
+**安装依赖**:
+```bash
+cd NotionNext-Format
+npm install global-agent @notionhq/client
+```
+
+**代理脚本示例**:
+```javascript
+// 设置全局代理
+process.env.GLOBAL_AGENT_HTTP_PROXY = 'http://127.0.0.1:7897';
+const { createGlobalProxyAgent } = require('global-agent');
+createGlobalProxyAgent();
+
+const { Client } = require('@notionhq/client');
+const notion = new Client({ auth: 'ntn_xxx...' });
+
+// 现在可以正常调用API
+async function test() {
+  const result = await notion.search({ query: '', page_size: 10 });
+  console.log(result.results.length);
+}
+test();
+```
+
+**一键执行**:
+```bash
+cd NotionNext-Format
+node -e "
+process.env.GLOBAL_AGENT_HTTP_PROXY='http://127.0.0.1:7897';
+require('global-agent').createGlobalProxyAgent();
+const {Client}=require('@notionhq/client');
+const n=new Client({auth:'ntn_xxx'});
+n.search({query:'',page_size:5}).then(r=>console.log('连接成功:',r.results.length,'条')).catch(e=>console.log('错误:',e.message));
+"
+```
+
+### 方案二：curl 测试代理连接
+
+**测试代理是否能连通Notion**:
+```bash
+curl -x http://127.0.0.1:7897 -I https://api.notion.com/v1/search \
+  -H "Authorization: Bearer ntn_xxx" \
+  -H "Notion-Version: 2022-06-28"
+```
+
+**通过代理查询数据库**:
+```bash
+TOKEN="ntn_xxx"; DB="数据库ID";
+curl -x http://127.0.0.1:7897 -X POST "https://api.notion.com/v1/databases/$DB/query" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Notion-Version: 2022-06-28" \
+  -H "Content-Type: application/json" \
+  --data '{"page_size":10}'
+```
+
+### 方案三：请求频率控制
+
+**批量添加内容时添加间隔**:
+```javascript
+async function addBlocksBatch(blocks) {
+  const batchSize = 10;  // Notion API限制每次最多添加块数
+  
+  for (let i = 0; i < blocks.length; i += batchSize) {
+    const batch = blocks.slice(i, i + batchSize);
+    
+    try {
+      await notion.blocks.children.append({
+        block_id: PAGE_ID,
+        children: batch
+      });
+      console.log(`✅ 第 ${i+1}-${i+batch.length} 个块添加成功`);
+    } catch (e) {
+      console.log(`❌ 错误: ${e.message}`);
+    }
+    
+    // 等待避免频率限制
+    await new Promise(r => setTimeout(r, 300));
+  }
+}
+```
+
+### 方案四：环境变量配置代理
+
+**Windows CMD**:
+```cmd
+set HTTPS_PROXY=http://127.0.0.1:7897
+set NOTION_TOKEN=ntn_xxx
+node notion-cli.js test
+```
+
+**Windows PowerShell**:
+```powershell
+$env:HTTPS_PROXY="http://127.0.0.1:7897"
+$env:NOTION_TOKEN="ntn_xxx"
+node notion-cli.js test
+```
+
+**Linux/Mac**:
+```bash
+export HTTPS_PROXY=http://127.0.0.1:7897
+export NOTION_TOKEN=ntn_xxx
+node notion-cli.js test
+```
+
+### 排错流程
+
+1. **测试代理连通性**: `curl -x http://127.0.0.1:7897 https://api.notion.com`
+2. **测试Notion API**: 使用curl带Authorization头测试
+3. **检查代理软件**: 确认代理软件正常运行
+4. **等待重试**: 遇到ECONNRESET等待1-2分钟再试
+5. **使用global-agent**: 最稳定的代理方案
+
 ## 相关文档
 
 - [NotionNext官方文档](https://docs.tangly1024.com)
