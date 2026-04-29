@@ -1,6 +1,6 @@
 ---
 name: notion-next-format
-description: NotionNext博客格式专家 - 用于创建、编辑和验证NotionNext博客系统内容。支持文章(Post)、页面(Page)、菜单(Menu)、公告(Notice)等多种内容类型的格式规范。触发场景：(1) 创建NotionNext博客文章 (2) 配置导航菜单 (3) 设置网站配置 (4) 格式化已有内容 (5) 批量导入文章
+description: NotionNext博客格式专家 - 用于创建、编辑、修改和验证NotionNext博客系统内容。支持文章(Post)的创建、查询、更新、删除；页面(Page)、菜单(Menu)、公告(Notice)等多种内容类型的格式规范。Agent bypass模式下自动执行无需确认。触发场景：(1) 创建NotionNext博客文章 (2) 查询/搜索已有文章 (3) 修改/更新文章属性或内容 (4) 配置导航菜单 (5) 设置网站配置 (6) 格式化已有内容 (7) 批量导入文章
 ---
 
 # NotionNext 博客格式专家
@@ -12,12 +12,16 @@ description: NotionNext博客格式专家 - 用于创建、编辑和验证Notion
 | 用户表述 / 关键词 | 执行 |
 | --- | --- |
 | 创建博客文章、写文章、发布文章 | 创建Post流程 |
+| 查询文章、搜索文章、查找文章 | 查询/搜索流程 |
+| 修改文章、更新文章、编辑文章 | 修改Post流程 |
+| 追加内容、添加内容、补充内容 | append-body流程 |
 | 创建菜单、添加导航、配置菜单 | 创建Menu流程 |
 | 创建页面、添加单页、关于页面 | 创建Page流程 |
 | 发布公告、添加公告 | 创建Notice流程 |
 | 网站配置、CONFIG设置 | 配置Config流程 |
 | 格式化文章、修正格式、验证格式 | 格式验证流程 |
 | 批量导入、导入文章 | 批量创建流程 |
+| 自动处理、直接执行、不要问我 | Bypass模式执行 |
 
 ## Step 1：NotionNext数据库结构
 
@@ -532,6 +536,255 @@ node notion-cli.js add-entry DATABASE_ID \
 # 添加正文
 node notion-cli.js append-body PAGE_ID \
   --text "内容" --type paragraph
+```
+
+## Step 8：文章修改与编辑能力
+
+### 8.1 更新文章属性
+
+使用 `update-page` 命令修改已有文章的属性：
+
+```bash
+# 更新文章状态为草稿
+node notion-cli.js update-page PAGE_ID --properties '{"status":{"select":{"name":"Draft"}}}'
+
+# 更新分类和标签
+node notion-cli.js update-page PAGE_ID --properties '{"category":{"select":{"name":"技术分享"}},"tags":{"multi_select":[{"name":"开发"},{"name":"推荐"}]}}'
+
+# 更新摘要
+node notion-cli.js update-page PAGE_ID --properties '{"summary":{"rich_text":[{"text":{"content":"新的摘要内容"}}]}}'
+```
+
+### 8.2 查询已有文章
+
+使用 `query-database` 命令检索数据库中的文章：
+
+```bash
+# 查询所有文章
+node notion-cli.js query-database DATABASE_ID
+
+# 查询特定状态的文章
+node notion-cli.js query-database DATABASE_ID --filter '{"property":"status","select":{"equals":"Published"}}'
+
+# 查询特定分类的文章
+node notion-cli.js query-database DATABASE_ID --filter '{"property":"category","select":{"equals":"技术分享"}}'
+
+# 查询包含特定标签的文章
+node notion-cli.js query-database DATABASE_ID --filter '{"property":"tags","multi_select":{"contains":"推荐"}}'
+```
+
+### 8.3 获取文章详情
+
+使用 `get-page` 命令获取文章完整内容和属性：
+
+```bash
+# 通过页面ID获取
+node notion-cli.js get-page PAGE_ID
+
+# 通过Notion ID获取（需要数据库ID）
+node notion-cli.js get-page '#3' DATABASE_ID
+```
+
+### 8.4 添加正文内容
+
+使用 `append-body` 命令向已有文章追加内容：
+
+```bash
+# 添加段落
+node notion-cli.js append-body PAGE_ID --text "新的段落内容"
+
+# 添加标题
+node notion-cli.js append-body PAGE_ID --text "新章节" --type h2
+
+# 添加列表
+node notion-cli.js append-body PAGE_ID --text "列表项" --type bullet
+
+# 添加代码块
+node notion-cli.js append-body PAGE_ID --text "console.log('hello')" --type code --lang javascript
+
+# 批量添加多个Block
+node notion-cli.js append-body PAGE_ID --blocks '[{"type":"heading_2","heading_2":{"rich_text":[{"text":{"content":"标题"}}]}},{"type":"paragraph","paragraph":{"rich_text":[{"text":{"content":"段落"}}]}}]'
+```
+
+### 8.5 搜索文章
+
+使用 `search` 命令在Notion工作区搜索：
+
+```bash
+# 搜索标题包含关键词的文章
+node notion-cli.js search "关键词"
+
+# 搜索特定数据库
+node notion-cli.js search "技术"
+```
+
+## Step 9：Agent工作模式与Bypass
+
+### 9.1 Agent Bypass模式说明
+
+在Agent bypass模式下，Agent可以直接执行操作而无需用户确认：
+
+**触发条件**：
+- 用户明确表示"自动处理"、"直接执行"、"不要问我"
+- 已有明确的操作指令和历史记录
+- bypass权限已配置
+
+**Bypass模式下的行为**：
+- 直接调用Notion API推送内容
+- 自动检索已有文章进行更新
+- 批量操作不需要逐条确认
+
+### 9.2 常见Agent操作模式
+
+| 用户表述 | 执行模式 | 操作 |
+|---------|---------|------|
+| "创建文章"、"写文章" | 正常/创建 | 创建Post流程 |
+| "修改文章"、"更新文章" | 正常/修改 | 查询→更新流程 |
+| "自动处理"、"直接执行" | Bypass | 无确认直接执行 |
+| "批量推送" | Bypass | 批量创建流程 |
+
+### 9.3 检索已有文章流程
+
+在修改文章前，Agent会自动：
+
+```yaml
+workflow:
+  phases:
+    - name: "文章检索"
+      steps:
+        - step: "搜索目标文章"
+          action: "使用search或query-database检索"
+        - step: "获取文章详情"
+          action: "使用get-page获取当前内容"
+        - step: "对比修改内容"
+          action: "确认需要更新的字段"
+    
+    - name: "执行修改"
+      steps:
+        - step: "更新属性"
+          action: "使用update-page修改属性"
+        - step: "追加内容"
+          action: "使用append-body添加正文"
+```
+
+## Step 10：Token配置与400错误排查
+
+### 10.1 Token格式说明
+
+Notion Integration Token格式：
+
+```
+ntn_xxxxxxxxxxxxxxxxxxxxxxxx (新格式，OpenAPI token)
+secret_xxxxxxxxxxxxxxxxxxxxx (旧格式，Internal Integration token)
+```
+
+**获取方式**：
+1. 访问 notion.so/my-integrations
+2. 创建新Integration或复制已有Integration的token
+3. 确保Integration已与目标数据库/页面共享
+
+### 10.2 400错误原因分析
+
+| 错误代码 | 原因 | 解决方案 |
+|---------|------|---------|
+| `400 Bad Request` | Token格式错误 | 检查token是否完整复制 |
+| `400 Bad Request` | JSON格式错误 | 检查properties JSON语法 |
+| `400 Bad Request` | 属性名错误 | 使用数据库实际属性名(title而非Name) |
+| `unauthorized` | Token无效/未共享 | 确保Integration已共享到数据库 |
+| `validation_error` | 属性类型不匹配 | 检查select/rich_text等类型 |
+| `object_not_found` | ID不存在/未共享 | 确认ID正确且已共享 |
+
+### 10.3 Token配置位置
+
+Token可配置在以下位置（按优先级排序）：
+
+```yaml
+env_locations:
+  1. 环境变量:
+     - HTTPS_PROXY=http://127.0.0.1:7897
+     - NOTION_TOKEN=ntn_xxx
+  
+  2. 当前目录.env:
+     - ./0.0-通用skill/Notion/.env
+  
+  3. NotionNext-Format目录.env:
+     - ./0.0-通用skill/NotionNext-Format/.env
+  
+  4. 用户目录.env:
+     - ~/.claude/.env
+     - ~/.openclaw/.env
+```
+
+### 10.4 .env文件格式
+
+```bash
+# .env文件示例
+NOTION_TOKEN=ntn_306888051713xxxxxxxxxxxxxxxxxxx
+HTTPS_PROXY=http://127.0.0.1:7897
+HTTP_PROXY=http://127.0.0.1:7897
+```
+
+**注意**：
+- Token不要加引号
+- 代理地址根据实际代理软件配置
+- Windows常用代理端口：7897(Clash)、1080(SSR)
+
+### 10.5 连接测试
+
+```bash
+# 测试Token是否有效
+cd 0.0-通用skill/Notion
+HTTPS_PROXY=http://127.0.0.1:7897 node notion-cli.js test
+
+# 预期输出
+Connected to Notion!
+Found X accessible pages/databases:
+```
+
+### 10.6 属性名对照表
+
+| 数据库显示名 | API属性名 | 类型 |
+|-------------|----------|------|
+| 标题 | `title` | title |
+| Name | `title` | title |
+| 状态 | `status` | select |
+| 类型 | `type` | select |
+| 分类 | `category` | select |
+| 标签 | `tags` | multi_select |
+| 摘要 | `summary` | rich_text |
+| slug | `slug` | rich_text |
+
+**常见错误**：使用 `Name` 而非 `title` 导致400错误
+
+## Step 11：完整操作示例
+
+### 11.1 创建完整文章
+
+```bash
+# 1. 创建文章
+node notion-cli.js add-entry DATABASE_ID --properties '{"title":{"title":[{"text":{"content":"文章标题"}}]},"status":{"select":{"name":"Published"}},"type":{"select":{"name":"Post"}},"slug":{"rich_text":[{"text":{"content":"article-slug"}}]},"category":{"select":{"name":"技术分享"}},"tags":{"multi_select":[{"name":"开发"}]},"summary":{"rich_text":[{"text":{"content":"摘要内容"}}]},"date":{"date":{"start":"2026-04-29"}}}'
+
+# 2. 返回的PAGE_ID用于添加正文
+# 假设返回: {"id":"xxx-xxx-xxx"}
+
+# 3. 添加正文内容
+node notion-cli.js append-body "xxx-xxx-xxx" --blocks '[{"type":"heading_2","heading_2":{"rich_text":[{"text":{"content":"章节标题"}}]}},{"type":"paragraph","paragraph":{"rich_text":[{"text":{"content":"正文内容"}}]}}]'
+```
+
+### 11.2 修改已有文章
+
+```bash
+# 1. 搜索文章
+node notion-cli.js search "文章标题"
+
+# 2. 获取详情确认PAGE_ID
+node notion-cli.js get-page PAGE_ID
+
+# 3. 更新属性
+node notion-cli.js update-page PAGE_ID --properties '{"status":{"select":{"name":"Draft"}}}'
+
+# 4. 追加内容
+node notion-cli.js append-body PAGE_ID --text "新增内容" --type paragraph
 ```
 
 ## 注意事项
