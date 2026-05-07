@@ -1,5 +1,5 @@
 ---
-name: agent-authoring
+name: author-agent
 description: Agent编写专家 - 用于创建、编辑和验证研发Agent角色配置的专业工具。支持后端Java/Python/Go、前端Vue/React/Qt、DBA等多种研发类型，按需加载规则，生成role-config.yaml和skill.yaml格式文件。触发场景：(1) 创建新Agent角色配置 (2) 修改现有Agent配置 (3) 创建技术Skill (4) 配置Agent协作关系 (5) 验证Agent配置格式
 ---
 

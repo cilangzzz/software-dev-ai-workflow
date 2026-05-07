@@ -1,5 +1,5 @@
 ---
-name: skill-authoring
+name: author-skill
 description: Skill编写专家 - 用于创建、编辑和验证Claude Code Skill的专业工具。支持多种研发类型按需加载规则、YAML+MD混合格式、输入输出规范定义。触发场景：(1) 用户需要创建新Skill (2) 需要修改现有Skill (3) 需要验证Skill格式 (4) 需要设计Skill协作关系 (5) 需要配置按需加载规则
 ---
 
