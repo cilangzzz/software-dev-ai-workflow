@@ -1,0 +1,81 @@
+{
+  "owner": "接口管理",
+  "slug": "api-export",
+  "displayName": "接口文档导出",
+  "version": {
+    "version": "1.0.0",
+    "publishedAt": "2026-04-21",
+    "commit": ""
+  },
+  "history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-04-21",
+      "changes": "初始版本，支持从后端代码生成 OpenAPI、Apifox、Postman、Markdown、HTML、DOCX 六种格式"
+    }
+  ],
+  "description": "从后端接口代码中提取接口信息，生成 OpenAPI 3.x、Apifox、Postman、Markdown、Swagger UI HTML、Word 等多种格式的 API 文档",
+  "keywords": [
+    "api-export",
+    "openapi",
+    "apifox",
+    "postman",
+    "swagger",
+    "接口文档",
+    "api文档导出"
+  ],
+  "supported_types": [
+    "java-springboot",
+    "java-springmvc",
+    "python-fastapi",
+    "python-flask",
+    "go-gin",
+    "go-kratos",
+    "node-express",
+    "node-nestjs",
+    "csharp-aspnet"
+  ],
+  "templates": [],
+  "files": [
+    {
+      "name": "SKILL.yaml",
+      "type": "skill",
+      "description": "主技能定义文件"
+    },
+    {
+      "name": "references/openapi-format.md",
+      "type": "reference",
+      "description": "OpenAPI 3.1.0格式规范和字段映射"
+    },
+    {
+      "name": "references/apifox-format.md",
+      "type": "reference",
+      "description": "Apifox项目导出格式规范"
+    },
+    {
+      "name": "references/postman-format.md",
+      "type": "reference",
+      "description": "Postman Collection v2.1格式规范"
+    },
+    {
+      "name": "references/markdown-format.md",
+      "type": "reference",
+      "description": "Markdown文档生成规则"
+    },
+    {
+      "name": "references/html-format.md",
+      "type": "reference",
+      "description": "Swagger UI HTML生成规则"
+    },
+    {
+      "name": "references/docx-format.md",
+      "type": "reference",
+      "description": "Word文档生成规则"
+    },
+    {
+      "name": "references/backend-rules.md",
+      "type": "reference",
+      "description": "各技术栈的代码扫描和解析规则"
+    }
+  ]
+}

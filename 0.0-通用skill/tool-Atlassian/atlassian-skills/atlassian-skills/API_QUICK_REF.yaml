@@ -1,0 +1,92 @@
+# Atlassian Skills Quick Reference - Minimal API Signatures
+# For detailed docs, see SKILL.md and REFERENCE.md
+
+confluence:
+  pages:
+    confluence_get_page:
+      params: [page_id: str, title: str|null, space_key: str|null, credentials: obj|null]
+      returns: "{id, title, space_key, status, version, content, url}"
+      example: "confluence_get_page(page_id='123456')"
+
+    confluence_create_page:
+      params: [space_key: str, title: str, content: str, parent_id: str|null, credentials: obj|null]
+      returns: "{id, title, space_key, status, version, url}"
+      example: "confluence_create_page(space_key='DEV', title='New Page', content='<p>Content</p>')"
+
+    confluence_update_page:
+      params: [page_id: str, title: str|null, content: str|null, credentials: obj|null]
+      returns: "{id, title, space_key, status, version, url}"
+      example: "confluence_update_page(page_id='123456', content='<p>New content</p>')"
+
+    confluence_delete_page:
+      params: [page_id: str, credentials: obj|null]
+      returns: "{success: bool}"
+
+  search:
+    confluence_search:
+      params: [query: str, limit: int|null, credentials: obj|null]
+      returns: "{results: [{id, title, space_key, url}], total}"
+      example: "confluence_search(query='space = DEV AND text ~ API', limit=25)"
+
+  comments:
+    confluence_add_comment:
+      params: [page_id: str, content: str, credentials: obj|null]
+      example: "confluence_add_comment(page_id='123456', content='Great doc!')"
+
+  labels:
+    confluence_add_label:
+      params: [page_id: str, name: str, credentials: obj|null]
+    confluence_remove_label:
+      params: [page_id: str, name: str, credentials: obj|null]
+
+  spaces:
+    confluence_get_spaces:
+      params: [limit: int|null, space_type: str|null, credentials: obj|null]
+    confluence_get_space_content:
+      params: [space_key: str, content_type: str|null, depth: str|null, credentials: obj|null]
+
+jira:
+  issues:
+    jira_get_issue:
+      params: [issue_key: str, credentials: obj|null]
+      returns: "{key, summary, status, priority, assignee, description}"
+
+    jira_create_issue:
+      params: [project_key: str, summary: str, issue_type: str, description: str|null, priority: str|null, assignee: str|null, labels: list|null, custom_fields: dict|null, credentials: obj|null]
+      example: "jira_create_issue(project_key='PROJ', summary='Bug', issue_type='Bug')"
+
+    jira_update_issue:
+      params: [issue_key: str, summary: str|null, priority: str|null, assignee: str|null, custom_fields: dict|null, credentials: obj|null]
+
+    jira_add_comment:
+      params: [issue_key: str, comment: str, credentials: obj|null]
+
+  search:
+    jira_search:
+      params: [jql: str, fields: str|null, limit: int|null, credentials: obj|null]
+      returns: "{issues: [{key, summary, status}], total}"
+      example: "jira_search(jql='project = PROJ AND status = In Progress')"
+
+  workflow:
+    jira_get_transitions:
+      params: [issue_key: str, credentials: obj|null]
+    jira_transition_issue:
+      params: [issue_key: str, transition_id: str, comment: str|null, credentials: obj|null]
+
+credentials:
+  AtlassianCredentials:
+    fields:
+      jira: [jira_url, jira_username, jira_api_token, jira_pat_token]
+      confluence: [confluence_url, confluence_username, confluence_api_token, confluence_pat_token]
+      bitbucket: [bitbucket_url, bitbucket_pat_token]
+    example: |
+      credentials = AtlassianCredentials(
+          jira_url="https://company.atlassian.net",
+          jira_username="user@company.com",
+          jira_api_token="token"
+      )
+    note: "PAT_TOKEN for Data Center; USERNAME + API_TOKEN for Cloud"
+
+error_handling:
+  check: "if not data.get('success', True): handle error"
+  types: [ConfigurationError, AuthenticationError, ValidationError, NotFoundError, APIError]
