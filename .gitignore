@@ -42,3 +42,4 @@ ignore_direcetory/
 test/
 # Code coverage directory
 .claude/
+.claude/settings.json
