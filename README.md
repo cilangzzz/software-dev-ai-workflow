@@ -141,6 +141,7 @@ software-dev-ai-workflow/
 | [Miniai-Notepad](https://github.com/cilangzzz/Miniai-Notepad) | 前端应用 | 零手写代码，Vue3 + TypeScript，AI自动生成 |
 | [yudao-aisk-mes](https://github.com/cilangzzz/yudao-aisk-mes) | 企业系统 | 汽车装配MES，Spring Boot + Vue3 |
 | [Crosshair Pro](https://github.com/cilangzzz/Crosshair) | 桌面应用 | FPS准心工具，WPF + .NET 8 |
+| [Session Manager](https://github.com/cilangzzz/session-manger) | 浏览器扩展 | 会话管理工具，AI辅助开发 |
 
 ---
 
