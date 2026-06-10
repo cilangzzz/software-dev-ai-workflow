@@ -2,13 +2,17 @@
 
 # 软件开发工作流 AI.SKILL
 
-> 让 AI 成为软件开发流程中的智能伙伴，从需求到运维的全流程赋能
+**让 AI 成为软件开发流程中的智能伙伴，从需求到运维的全流程赋能**
 
+[![GitHub stars](https://img.shields.io/github/stars/cilangzzz/software-dev-ai-workflow?style=social)](https://github.com/cilangzzz/software-dev-ai-workflow)
+[![GitHub forks](https://img.shields.io/github/forks/cilangzzz/software-dev-ai-workflow?style=social)](https://github.com/cilangzzz/software-dev-ai-workflow/fork)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://claude.ai/code)
 [![AgentSkills](https://img.shields.io/badge/AgentSkills-Standard-green)](https://agentskills.io)
 
 </div>
+
+---
 
 ## 这是什么
 
@@ -37,51 +41,129 @@
 
 > **核心理念**：人类定义目标和决策，AI 负责执行和产出。
 
+---
+
+## 适用人群
+
+| 角色 | 使用场景 |
+|------|----------|
+| **产品经理** | 快速生成PRD、用户故事、验收标准，降低文档编写成本 |
+| **架构师** | 自动输出技术选型报告、架构设计文档、ADR决策记录 |
+| **开发工程师** | 基于设计方案生成代码框架、API实现、数据模型 |
+| **测试工程师** | 自动生成测试用例、测试报告、验收测试脚本 |
+| **运维工程师** | 生成部署文档、运维手册、监控配置方案 |
+| **项目经理** | 获取完整项目文档体系、进度跟踪模板 |
+| **创业者/独立开发者** | 从想法到可运行代码的快速验证 |
+| **技术团队Leader** | 建立标准化的研发流程和文档规范 |
+
+---
+
+## 能做什么
+
+### 📝 产品阶段
+- PRD产品需求文档
+- 用户故事（User Story）
+- 验收标准（Gherkin格式）
+- 业务流程图
+
+### 🏗️ 设计阶段
+- 技术选型报告
+- 架构设计文档
+- ADR架构决策记录
+- 数据库设计
+- API接口设计
+
+### 💻 开发阶段
+- 项目代码框架
+- 数据模型实现
+- 业务逻辑代码
+- 单元测试代码
+
+### 🧪 测试阶段
+- 功能测试用例
+- 性能测试方案
+- 安全测试清单
+
+### 🚀 运维阶段
+- 部署手册
+- 运维手册
+- 故障处理指南
+- 监控告警配置
+
+---
+
 ## 目录结构
 
 ```
 software-dev-ai-workflow/
-├── 0.0-通用skill/                     # 通用技能工具集（Jira、Draw.io、Word等）
-├── 1.0-软件开发流程角色agent模型/       # 角色Agent定义（产品、研发、测试、运维等）
-├── 2.0-软件开发流程/                   # 瀑布/敏捷双流程、产出物清单
-├── 3.0-用例/                          # 实际用例示例
-├── 4.0-系统模型/                       # 系统产出模型（ERP、MES、SaaS）
-├── 5.0-基础开发系统模板/               # 基础开发框架模板
-├── 6.0-基础开发项目管理模板/           # 项目管理模板
-└── output/                            # 输出目录
+├── 0.0-通用skill/                    # 通用技能工具集
+│   ├── author-build-project-docs/    # 项目文档生成
+│   └── manage-项目管理/              # 项目管理工具
+├── 1.0-软件开发流程角色agent模型/      # 角色Agent定义
+├── 2.0-用例/                         # 用例示例库 ⭐
+│   ├── agent用例/                    # Agent使用示例
+│   ├── 工作流/                       # 端到端工作流示例
+│   ├── 开发流程样例/                  # 瀑布/敏捷流程
+│   ├── 系统模型样例/                  # ERP、MES、VCP
+│   └── 项目管理样例/                  # 项目管理模板
+├── 3.0-基础开发系统模板/              # 基础开发框架
+└── output/                           # 输出目录
 ```
 
-## 开发流程
-
-```
-需求分析 → 方案制定 → 架构设计 → 模型设计 → 代码开发 → 测试验证 → 部署上线
-  产品Agent    研发Agent    研发Agent    研发Agent   测试Agent   运维Agent
-  PRD/故事     技术选型     ADR/架构     数据模型    测试报告    运维手册
-```
-
-每阶段由专属 Agent 驱动，Gate 检查点确保质量。
+---
 
 ## 快速开始
 
-1. 选择角色 Agent → [`1.0-软件开发流程角色agent模型/`](1.0-软件开发流程角色agent模型/)
-2. 选择开发流程 → [`2.0-软件开发流程/`](2.0-软件开发流程/)（瀑布/敏捷）
-3. 参考系统模型 → [`4.0-系统模型/`](4.0-系统模型/)
-4. 产出物输出至 → [`output/`](output/)
+### 使用步骤
+
+```
+1. 选择角色Agent → 从 1.0-软件开发流程角色agent模型/ 选择
+2. 查看用例示例 → 进入 2.0-用例/ 查看详细示例
+3. 输入需求描述 → 告诉AI你想做什么
+4. 获取产出 → AI自动生成文档或代码
+```
+
+### 用例导航
+
+| 想做什么 | 去哪里看 |
+|----------|----------|
+| 学习如何使用Agent | [2.0-用例/agent用例/](2.0-用例/agent用例/) |
+| 了解开发流程 | [2.0-用例/开发流程样例/](2.0-用例/开发流程样例/) |
+| 参考系统模型 | [2.0-用例/系统模型样例/](2.0-用例/系统模型样例/) |
+| 端到端工作流示例 | [2.0-用例/工作流/](2.0-用例/工作流/) |
+
+---
 
 ## 示例项目
 
-| 项目 | 类型 | 说明 | 链接 |
-|------|------|------|------|
-| **MiniAI记事本** | 前端全栈 | 零手写代码，Vue 3 + TypeScript，整合新闻/笔记/记账 | [GitHub](https://github.com/cilangzzz/Miniai-Notepad) |
-| **Crosshair Pro** | 桌面应用 | FPS准心覆盖工具，WPF + .NET 8，MVVM架构，5种准心样式+自定义图片 | [GitHub](https://github.com/cilangzzz/Crosshair) |
-| **MES制造执行系统** | 企业后端 | 汽车整车装配MES，覆盖工单→成品全流程 | [GitHub](https://github.com/cilangzzz/yudao-aisk-mes) |
+| 项目 | 类型 | 说明 |
+|------|------|------|
+| [Miniai-Notepad](https://github.com/cilangzzz/Miniai-Notepad) | 前端应用 | 零手写代码，Vue3 + TypeScript，AI自动生成 |
+| [yudao-aisk-mes](https://github.com/cilangzzz/yudao-aisk-mes) | 企业系统 | 汽车装配MES，Spring Boot + Vue3 |
+| [Crosshair Pro](https://github.com/cilangzzz/Crosshair) | 桌面应用 | FPS准心工具，WPF + .NET 8 |
 
-以上项目的产品方案、研发方案、代码、测试文档均由 AI 自动生成。
+---
 
-## 贡献
+## 贡献指南
 
-欢迎贡献新的 Skill 或改进现有 Skill：Fork → 创建分支 → 提交 PR
+欢迎贡献新的 Skill 或改进现有 Skill：
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 提交 Pull Request
 
 ## 许可证
 
 [MIT License](LICENSE)
+
+---
+
+<div align="center">
+
+**如果这个项目对你有帮助，请给一个 ⭐️ 支持一下！**
+
+Made with ❤️ by [cilangzzz](https://github.com/cilangzzz)
+
+</div>

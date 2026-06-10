@@ -1,6 +1,6 @@
-[submodule "5.0-基础开发系统模板/backend"]
-	path = 5.0-基础开发系统模板/backend
+[submodule "3.0-基础开发系统模板/backend"]
+	path = 3.0-基础开发系统模板/backend
 	url = https://github.com/cilangzzz/yudao-skill-pro
-[submodule "5.0-基础开发系统模板/frontend"]
-	path = 5.0-基础开发系统模板/frontend
+[submodule "3.0-基础开发系统模板/frontend"]
+	path = 3.0-基础开发系统模板/frontend
 	url = https://github.com/cilangzzz/yudao-skills-ui-admin-vben
