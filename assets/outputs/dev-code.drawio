@@ -1,0 +1,156 @@
+<mxGraphModel dx="900" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="700" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- Code Header -->
+    <mxCell id="codeHeader" value="💻 代码实现 - UserService.java" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#263238;strokeColor=#37474f;fontColor=#80cbc4;fontSize=14;fontFamily=Courier New;" vertex="1" parent="1">
+      <mxGeometry x="20" y="20" width="420" height="380" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="codeContent" value="package com.example.service;&#xa;&#xa;import org.springframework.stereotype.Service;&#xa;import org.springframework.beans.factory.annotation.Autowired;&#xa;&#xa;@Service&#xa;public class UserService {&#xa;    &#xa;    @Autowired&#xa;    private UserRepository userRepo;&#xa;    &#xa;    @Autowired&#xa;    private MemberService memberService;&#xa;&#xa;    /**&#xa;     * 用户注册&#xa;     * @param req 注册请求&#xa;     * @return 用户信息&#xa;     */&#xa;    public User register(RegisterRequest req) {&#xa;        // 验证用户是否存在&#xa;        if (userRepo.existsByPhone(req.getPhone())) {&#xa;            throw new BusinessException(&quot;手机号已注册&quot;);&#xa;        }&#xa;        &#xa;        // 创建用户&#xa;        User user = new User();&#xa;        user.setPhone(req.getPhone());&#xa;        user.setPassword(encode(req.getPassword()));&#xa;        user.setMemberLevel(MemberLevel.NORMAL);&#xa;        &#xa;        user = userRepo.save(user);&#xa;        &#xa;        // 发送欢迎消息&#xa;        messageService.sendWelcome(user.getId());&#xa;        &#xa;        return user;&#xa;    }&#xa;}" style="text;strokeColor=none;fillColor=#263238;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Courier New;fontColor=#a7dbd8;html=1;" vertex="1" parent="codeHeader">
+      <mxGeometry y="35" width="420" height="345" as="geometry"/>
+    </mxCell>
+
+    <!-- API Design Header -->
+    <mxCell id="apiHeader" value="🔌 API接口设计" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#1565c0;strokeColor=#0d47a1;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="460" y="20" width="380" height="380" as="geometry"/>
+    </mxCell>
+
+    <!-- API Table -->
+    <mxCell id="apiTable" value="" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fontSize=9;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="apiHeader">
+      <mxGeometry y="40" width="370" height="335" as="geometry">
+        <mxRectangle x="5" y="0" width="370" height="335" as="alternateBounds"/>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="apiRowH" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#e3f2fd;strokeColor=#1565c0;fontStyle=1;" vertex="1" parent="apiTable">
+      <mxGeometry width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="apiH1" value="方法" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e3f2fd;strokeColor=#1565c0;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="apiRowH">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="apiH2" value="路径" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e3f2fd;strokeColor=#1565c0;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="apiRowH">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="apiH3" value="说明" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e3f2fd;strokeColor=#1565c0;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="apiRowH">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- User APIs -->
+    <mxCell id="apiRow1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#e8f5e9;strokeColor=#4caf50;" vertex="1" parent="apiTable">
+      <mxGeometry y="25" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api1a" value="POST" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="apiRow1">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api1b" value="/api/users/register" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=center;fontSize=9;fontFamily=Courier New;" vertex="1" parent="apiRow1">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api1c" value="用户注册" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="apiRow1">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="apiRow2" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="apiTable">
+      <mxGeometry y="50" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api2a" value="POST" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="apiRow2">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api2b" value="/api/users/login" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontFamily=Courier New;" vertex="1" parent="apiRow2">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api2c" value="用户登录" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="apiRow2">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="apiRow3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="apiTable">
+      <mxGeometry y="75" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api3a" value="GET" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="apiRow3">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api3b" value="/api/users/{id}" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontFamily=Courier New;" vertex="1" parent="apiRow3">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api3c" value="获取用户信息" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="apiRow3">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- Order APIs -->
+    <mxCell id="apiRow4" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#fff3e0;strokeColor=#ff9800;" vertex="1" parent="apiTable">
+      <mxGeometry y="100" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api4a" value="POST" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#fff3e0;strokeColor=#ff9800;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="apiRow4">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api4b" value="/api/orders" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#fff3e0;strokeColor=#ff9800;overflow=hidden;align=center;fontSize=9;fontFamily=Courier New;" vertex="1" parent="apiRow4">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api4c" value="创建订单" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#fff3e0;strokeColor=#ff9800;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="apiRow4">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="apiRow5" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="apiTable">
+      <mxGeometry y="125" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api5a" value="GET" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="apiRow5">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api5b" value="/api/orders" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontFamily=Courier New;" vertex="1" parent="apiRow5">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api5c" value="订单列表" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="apiRow5">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="apiRow6" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="apiTable">
+      <mxGeometry y="150" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api6a" value="PUT" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="apiRow6">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api6b" value="/api/orders/{id}/cancel" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontFamily=Courier New;" vertex="1" parent="apiRow6">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api6c" value="取消订单" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="apiRow6">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- Member APIs -->
+    <mxCell id="apiRow7" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#f3e5f5;strokeColor=#9c27b0;" vertex="1" parent="apiTable">
+      <mxGeometry y="175" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api7a" value="GET" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#f3e5f5;strokeColor=#9c27b0;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="apiRow7">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api7b" value="/api/members/level" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#f3e5f5;strokeColor=#9c27b0;overflow=hidden;align=center;fontSize=9;fontFamily=Courier New;" vertex="1" parent="apiRow7">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api7c" value="获取会员等级" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#f3e5f5;strokeColor=#9c27b0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="apiRow7">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="apiRow8" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="apiTable">
+      <mxGeometry y="200" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api8a" value="POST" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="apiRow8">
+      <mxGeometry width="50" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api8b" value="/api/members/upgrade" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontFamily=Courier New;" vertex="1" parent="apiRow8">
+      <mxGeometry x="50" width="150" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="api8c" value="会员升级" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="apiRow8">
+      <mxGeometry x="200" width="170" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- Response Format -->
+    <mxCell id="responseTitle" value="响应格式" style="text;html=1;strokeColor=none;fillColor=#e3f2fd;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#1565c0;" vertex="1" parent="apiHeader">
+      <mxGeometry y="310" width="380" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="responseContent" value="{&quot;code&quot;: 200, &quot;msg&quot;: &quot;success&quot;, &quot;data&quot;: {...}}" style="text;html=1;strokeColor=none;fillColor=#263238;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Courier New;fontColor=#80cbc4;" vertex="1" parent="apiHeader">
+      <mxGeometry y="330" width="380" height="50" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

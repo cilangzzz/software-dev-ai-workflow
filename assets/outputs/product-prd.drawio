@@ -1,0 +1,130 @@
+<mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="600" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- PRD Document Header -->
+    <mxCell id="prdHeader" value="📄 产品需求文档 (PRD)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#1a1a2e;strokeColor=#16213e;fontColor=#ffffff;fontSize=16;" vertex="1" parent="1">
+      <mxGeometry x="20" y="20" width="360" height="560" as="geometry"/>
+    </mxCell>
+
+    <!-- Document Info -->
+    <mxCell id="docInfo" value="产品名称：电商会员系统&#xa;文档版本：v1.0&#xa;产品经理：AI Agent&#xa;状态：已确认" style="text;strokeColor=none;fillColor=#f5f5f5;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=10;" vertex="1" parent="prdHeader">
+      <mxGeometry y="40" width="360" height="50" as="geometry"/>
+    </mxCell>
+
+    <!-- Section 1 -->
+    <mxCell id="section1" value="1. 产品概述" style="text;strokeColor=none;fillColor=#dae8fc;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=11;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="prdHeader">
+      <mxGeometry y="90" width="360" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="section1Content" value="重构会员等级体系，建立多维度升级条件，&#xa;配套差异化权益和生日特权。&#xa;&#xa;目标：提升用户粘性和复购率" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;" vertex="1" parent="prdHeader">
+      <mxGeometry y="115" width="360" height="55" as="geometry"/>
+    </mxCell>
+
+    <!-- Section 2 -->
+    <mxCell id="section2" value="2. 会员等级规则" style="text;strokeColor=none;fillColor=#dae8fc;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=11;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="prdHeader">
+      <mxGeometry y="170" width="360" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- Table -->
+    <mxCell id="tableHeader" value="" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fontSize=9;fillColor=#e6e6e6;strokeColor=#666666;" vertex="1" parent="prdHeader">
+      <mxGeometry y="195" width="340" height="90" as="geometry">
+        <mxRectangle x="10" y="0" width="340" height="90" as="alternateBounds"/>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="rowH" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#e6e6e6;strokeColor=#666666;fontStyle=1;" vertex="1" parent="tableHeader">
+      <mxGeometry width="340" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="cellH1" value="等级" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e6e6e6;strokeColor=#666666;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="rowH">
+      <mxGeometry width="80" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="cellH2" value="升级条件" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e6e6e6;strokeColor=#666666;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="rowH">
+      <mxGeometry x="80" width="150" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="cellH3" value="折扣" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e6e6e6;strokeColor=#666666;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="rowH">
+      <mxGeometry x="230" width="110" height="22" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="row1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#666666;" vertex="1" parent="tableHeader">
+      <mxGeometry y="22" width="340" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell11" value="普通会员" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row1">
+      <mxGeometry width="80" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell12" value="注册用户" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row1">
+      <mxGeometry x="80" width="150" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell13" value="无" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row1">
+      <mxGeometry x="230" width="110" height="17" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="row2" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#666666;" vertex="1" parent="tableHeader">
+      <mxGeometry y="39" width="340" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell21" value="铜牌会员" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row2">
+      <mxGeometry width="80" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell22" value="累计消费≥500元" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row2">
+      <mxGeometry x="80" width="150" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell23" value="95折" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row2">
+      <mxGeometry x="230" width="110" height="17" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="row3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#666666;" vertex="1" parent="tableHeader">
+      <mxGeometry y="56" width="340" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell31" value="银牌会员" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row3">
+      <mxGeometry width="80" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell32" value="消费≥2000或邀请≥5人" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row3">
+      <mxGeometry x="80" width="150" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell33" value="9折" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row3">
+      <mxGeometry x="230" width="110" height="17" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="row4" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#666666;" vertex="1" parent="tableHeader">
+      <mxGeometry y="73" width="340" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell41" value="金牌会员" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row4">
+      <mxGeometry width="80" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell42" value="消费≥5000或邀请≥20人" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row4">
+      <mxGeometry x="80" width="150" height="17" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell43" value="85折" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#666666;overflow=hidden;align=center;fontSize=8;" vertex="1" parent="row4">
+      <mxGeometry x="230" width="110" height="17" as="geometry"/>
+    </mxCell>
+
+    <!-- Section 3 -->
+    <mxCell id="section3" value="3. 功能需求 (P0)" style="text;strokeColor=none;fillColor=#dae8fc;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=11;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="prdHeader">
+      <mxGeometry y="295" width="360" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="section3Content" value="✓ 等级计算逻辑（消费累计 + 邀请统计）&#xa;✓ 等级升降自动处理&#xa;✓ 折扣自动计算应用&#xa;✓ 生日优惠券自动发放" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;" vertex="1" parent="prdHeader">
+      <mxGeometry y="320" width="360" height="60" as="geometry"/>
+    </mxCell>
+
+    <!-- Section 4 -->
+    <mxCell id="section4" value="4. 非功能需求" style="text;strokeColor=none;fillColor=#dae8fc;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=11;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="prdHeader">
+      <mxGeometry y="380" width="360" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="section4Content" value="• 页面加载 ≤ 2秒&#xa;• 接口响应 ≤ 500ms&#xa;• 支持 iOS/Android/Web" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;" vertex="1" parent="prdHeader">
+      <mxGeometry y="405" width="360" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- Section 5 -->
+    <mxCell id="section5" value="5. 待澄清问题" style="text;strokeColor=none;fillColor=#fff2cc;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=11;fontStyle=1;fontColor=#d6b656;" vertex="1" parent="prdHeader">
+      <mxGeometry y="450" width="360" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="section5Content" value="? 生日优惠券具体金额/类型？&#xa;? 会员等级是否有有效期？&#xa;? 邀请好友需完成首单才算有效？" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;" vertex="1" parent="prdHeader">
+      <mxGeometry y="475" width="360" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- Footer -->
+    <mxCell id="footer" value="由 AI Agent 自动生成 | requirement-analyzer" style="text;strokeColor=none;fillColor=#f5f5f5;align=center;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=8;fontStyle=2;fontColor=#666666;" vertex="1" parent="prdHeader">
+      <mxGeometry y="520" width="360" height="40" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

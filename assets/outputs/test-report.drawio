@@ -1,0 +1,271 @@
+<mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="600" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- Test Case Header -->
+    <mxCell id="testHeader" value="🧪 测试用例 - 用户登录功能" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#c62828;strokeColor=#b71c1c;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="20" y="20" width="370" height="560" as="geometry"/>
+    </mxCell>
+
+    <!-- Test Table -->
+    <mxCell id="testTable" value="" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fontSize=9;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="testHeader">
+      <mxGeometry y="40" width="360" height="515" as="geometry">
+        <mxRectangle x="5" y="0" width="360" height="515" as="alternateBounds"/>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Header Row -->
+    <mxCell id="testRowH" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#ffebee;strokeColor=#c62828;fontStyle=1;" vertex="1" parent="testTable">
+      <mxGeometry width="360" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="testH1" value="ID" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#ffebee;strokeColor=#c62828;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="testRowH">
+      <mxGeometry width="60" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="testH2" value="测试步骤" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#ffebee;strokeColor=#c62828;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="testRowH">
+      <mxGeometry x="60" width="160" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="testH3" value="预期结果" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#ffebee;strokeColor=#c62828;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="testRowH">
+      <mxGeometry x="220" width="140" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- TC-001 P0 -->
+    <mxCell id="testRow1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#e8f5e9;strokeColor=#4caf50;" vertex="1" parent="testTable">
+      <mxGeometry y="25" width="360" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test1a" value="TC-001&#xa;P0" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="testRow1">
+      <mxGeometry width="60" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test1b" value="1.输入手机号13800138000&#xa;2.输入密码Test@123&#xa;3.点击登录按钮" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=left;spacingLeft=5;spacingTop=5;fontSize=8;" vertex="1" parent="testRow1">
+      <mxGeometry x="60" width="160" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test1c" value="✅ 登录成功&#xa;跳转首页&#xa;显示用户信息" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=left;spacingLeft=5;spacingTop=5;fontSize=8;" vertex="1" parent="testRow1">
+      <mxGeometry x="220" width="140" height="50" as="geometry"/>
+    </mxCell>
+
+    <!-- TC-002 P0 -->
+    <mxCell id="testRow2" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#e8f5e9;strokeColor=#4caf50;" vertex="1" parent="testTable">
+      <mxGeometry y="75" width="360" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test2a" value="TC-002&#xa;P0" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="testRow2">
+      <mxGeometry width="60" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test2b" value="1.点击验证码登录&#xa;2.输入手机号&#xa;3.获取验证码并登录" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=left;spacingLeft=5;spacingTop=5;fontSize=8;" vertex="1" parent="testRow2">
+      <mxGeometry x="60" width="160" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test2c" value="✅ 验证码发送成功&#xa;登录成功" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;align=left;spacingLeft=5;spacingTop=5;fontSize=8;" vertex="1" parent="testRow2">
+      <mxGeometry x="220" width="140" height="50" as="geometry"/>
+    </mxCell>
+
+    <!-- TC-003 P0 -->
+    <mxCell id="testRow3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#fff3e0;strokeColor=#ff9800;" vertex="1" parent="testTable">
+      <mxGeometry y="125" width="360" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test3a" value="TC-003&#xa;P0" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#fff3e0;strokeColor=#ff9800;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="testRow3">
+      <mxGeometry width="60" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test3b" value="1.输入正确手机号&#xa;2.输入错误密码&#xa;3.点击登录" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#fff3e0;strokeColor=#ff9800;overflow=hidden;align=left;spacingLeft=5;spacingTop=5;fontSize=8;" vertex="1" parent="testRow3">
+      <mxGeometry x="60" width="160" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test3c" value="⚠️ 显示&quot;手机号或&#xa;密码错误&quot;" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#fff3e0;strokeColor=#ff9800;overflow=hidden;align=left;spacingLeft=5;spacingTop=5;fontSize=8;" vertex="1" parent="testRow3">
+      <mxGeometry x="220" width="140" height="50" as="geometry"/>
+    </mxCell>
+
+    <!-- TC-004 P0 -->
+    <mxCell id="testRow4" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#ffebee;strokeColor=#f44336;" vertex="1" parent="testTable">
+      <mxGeometry y="175" width="360" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test4a" value="TC-004&#xa;P0" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#ffebee;strokeColor=#f44336;overflow=hidden;align=center;fontSize=9;fontStyle=1;" vertex="1" parent="testRow4">
+      <mxGeometry width="60" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test4b" value="前置:连续失败4次&#xa;1.再次输入错误密码&#xa;2.等待30分钟后重试" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#ffebee;strokeColor=#f44336;overflow=hidden;align=left;spacingLeft=5;spacingTop=5;fontSize=8;" vertex="1" parent="testRow4">
+      <mxGeometry x="60" width="160" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="test4c" value="🔒 显示&quot;账户已&#xa;锁定30分钟&quot;&#xa;30分钟后可登录" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#ffebee;strokeColor=#f44336;overflow=hidden;align=left;spacingLeft=5;spacingTop=5;fontSize=8;" vertex="1" parent="testRow4">
+      <mxGeometry x="220" width="140" height="50" as="geometry"/>
+    </mxCell>
+
+    <!-- TC-005 P1 -->
+    <mxCell id="testRow5" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="testTable">
+      <mxGeometry y="225" width="360" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test5a" value="TC-005&#xa;P1" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="testRow5">
+      <mxGeometry width="60" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test5b" value="输入手机号:12345" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=left;spacingLeft=5;fontSize=8;" vertex="1" parent="testRow5">
+      <mxGeometry x="60" width="160" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test5c" value="显示&quot;请输入正确的&#xa;手机号格式&quot;" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=left;spacingLeft=5;fontSize=8;" vertex="1" parent="testRow5">
+      <mxGeometry x="220" width="140" height="40" as="geometry"/>
+    </mxCell>
+
+    <!-- TC-006 P1 -->
+    <mxCell id="testRow6" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="testTable">
+      <mxGeometry y="265" width="360" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test6a" value="TC-006&#xa;P1" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="testRow6">
+      <mxGeometry width="60" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test6b" value="验证码等待6分钟后输入" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=left;spacingLeft=5;fontSize=8;" vertex="1" parent="testRow6">
+      <mxGeometry x="60" width="160" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test6c" value="显示&quot;验证码已过期&quot;" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=left;spacingLeft=5;fontSize=8;" vertex="1" parent="testRow6">
+      <mxGeometry x="220" width="140" height="40" as="geometry"/>
+    </mxCell>
+
+    <!-- TC-007 P2 -->
+    <mxCell id="testRow7" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="testTable">
+      <mxGeometry y="305" width="360" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test7a" value="TC-007&#xa;P2" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="testRow7">
+      <mxGeometry width="60" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test7b" value="测试登录响应时间" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=left;spacingLeft=5;fontSize=8;" vertex="1" parent="testRow7">
+      <mxGeometry x="60" width="160" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test7c" value="响应时间 &lt; 2秒" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=left;spacingLeft=5;fontSize=8;" vertex="1" parent="testRow7">
+      <mxGeometry x="220" width="140" height="40" as="geometry"/>
+    </mxCell>
+
+    <!-- TC-008 P2 -->
+    <mxCell id="testRow8" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="testTable">
+      <mxGeometry y="345" width="360" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test8a" value="TC-008&#xa;P2" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="testRow8">
+      <mxGeometry width="60" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test8b" value="输入: admin'--" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=left;spacingLeft=5;fontSize=8;fontFamily=Courier New;" vertex="1" parent="testRow8">
+      <mxGeometry x="60" width="160" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="test8c" value="SQL注入防护生效" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=left;spacingLeft=5;fontSize=8;" vertex="1" parent="testRow8">
+      <mxGeometry x="220" width="140" height="40" as="geometry"/>
+    </mxCell>
+
+    <!-- Coverage Report -->
+    <mxCell id="coverageTitle" value="📊 测试覆盖率报告" style="text;html=1;strokeColor=none;fillColor=#e3f2fd;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#1565c0;" vertex="1" parent="testHeader">
+      <mxGeometry y="420" width="360" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="coverageContent" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="testHeader">
+      <mxGeometry y="445" width="360" height="115" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="coverageBar" value="功能覆盖率: 95%" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4caf50;strokeColor=#388e3c;fontColor=#ffffff;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="testHeader">
+      <mxGeometry y="450" width="342" height="25" as="geometry">
+        <mxRectangle x="9" y="0" width="342" height="25" as="alternateBounds"/>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="coverageStats" value="| 场景类型 | 用例数 | 覆盖率 |&#xa;| 正常流程 | 5 | 100% |&#xa;| 异常流程 | 8 | 100% |&#xa;| 边界条件 | 3 | 90% |&#xa;| 安全测试 | 2 | 80% |&#xa;&#xa;总用例: 18个 | P0=6, P1=8, P2=4" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="testHeader">
+      <mxGeometry y="480" width="360" height="80" as="geometry"/>
+    </mxCell>
+
+    <!-- Test Report -->
+    <mxCell id="reportHeader" value="📈 测试执行报告" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#1565c0;strokeColor=#0d47a1;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="410" y="20" width="370" height="560" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="reportSummary" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="reportHeader">
+      <mxGeometry y="35" width="370" height="525" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="reportTitle" value="测试执行摘要" style="text;html=1;strokeColor=none;fillColor=#e3f2fd;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#1565c0;" vertex="1" parent="reportHeader">
+      <mxGeometry y="40" width="370" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="reportStats" value="✅ 通过: 16/18 (88.9%)&#xa;⚠️ 阻塞: 1/18 (TC-006 验证码过期)&#xa;❌ 失败: 1/18 (TC-008 SQL注入需修复)&#xa;&#xa;执行时间: 2024-01-15 10:00-12:00&#xa;执行人员: AI Test Agent" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="reportHeader">
+      <mxGeometry y="65" width="370" height="85" as="geometry"/>
+    </mxCell>
+
+    <!-- Bug Report -->
+    <mxCell id="bugTitle" value="🐛 缺陷报告" style="text;html=1;strokeColor=none;fillColor=#ffebee;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#c62828;" vertex="1" parent="reportHeader">
+      <mxGeometry y="150" width="370" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="bug1Header" value="BUG-001: SQL注入防护未生效" style="text;html=1;strokeColor=none;fillColor=#fff3e0;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#e65100;" vertex="1" parent="reportHeader">
+      <mxGeometry y="175" width="370" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="bug1Content" value="严重级别: 高 | 状态: 待修复&#xa;发现时间: 2024-01-15 11:30&#xa;测试用例: TC-008&#xa;描述: 输入 admin'-- 后系统返回SQL错误&#xa;建议: 使用PreparedStatement替代字符串拼接" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="reportHeader">
+      <mxGeometry y="195" width="370" height="70" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="bug2Header" value="BUG-002: 验证码过期提示不明确" style="text;html=1;strokeColor=none;fillColor=#fff3e0;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#e65100;" vertex="1" parent="reportHeader">
+      <mxGeometry y="265" width="370" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="bug2Content" value="严重级别: 低 | 状态: 待确认&#xa;发现时间: 2024-01-15 11:45&#xa;测试用例: TC-006&#xa;描述: 验证码过期后提示语不够友好&#xa;建议: 提示&quot;验证码已过期，请重新获取&quot;" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="reportHeader">
+      <mxGeometry y="285" width="370" height="70" as="geometry"/>
+    </mxCell>
+
+    <!-- Performance Report -->
+    <mxCell id="perfTitle" value="⚡ 性能测试结果" style="text;html=1;strokeColor=none;fillColor=#e8f5e9;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#2e7d32;" vertex="1" parent="reportHeader">
+      <mxGeometry y="355" width="370" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="perfTable" value="" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fontSize=9;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="reportHeader">
+      <mxGeometry y="380" width="360" height="90" as="geometry">
+        <mxRectangle x="5" y="0" width="360" height="90" as="alternateBounds"/>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="perfRowH" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#e8f5e9;strokeColor=#4caf50;fontStyle=1;" vertex="1" parent="perfTable">
+      <mxGeometry width="360" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perfH1" value="指标" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="perfRowH">
+      <mxGeometry width="120" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perfH2" value="实际值" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="perfRowH">
+      <mxGeometry x="120" width="120" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perfH3" value="状态" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e8f5e9;strokeColor=#4caf50;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="perfRowH">
+      <mxGeometry x="240" width="120" height="22" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="perfRow1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="perfTable">
+      <mxGeometry y="22" width="360" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf1a" value="登录响应时间" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="perfRow1">
+      <mxGeometry width="120" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf1b" value="1.8秒" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="perfRow1">
+      <mxGeometry x="120" width="120" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf1c" value="✅ 通过 (≤2s)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontColor=#4caf50;" vertex="1" parent="perfRow1">
+      <mxGeometry x="240" width="120" height="22" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="perfRow2" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="perfTable">
+      <mxGeometry y="44" width="360" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf2a" value="并发登录" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="perfRow2">
+      <mxGeometry width="120" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf2b" value="100用户/秒" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="perfRow2">
+      <mxGeometry x="120" width="120" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf2c" value="✅ 通过" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontColor=#4caf50;" vertex="1" parent="perfRow2">
+      <mxGeometry x="240" width="120" height="22" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="perfRow3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="perfTable">
+      <mxGeometry y="66" width="360" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf3a" value="错误率" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="perfRow3">
+      <mxGeometry width="120" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf3b" value="0.05%" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="perfRow3">
+      <mxGeometry x="120" width="120" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="perf3c" value="✅ 通过 (&lt;0.1%)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;fontColor=#4caf50;" vertex="1" parent="perfRow3">
+      <mxGeometry x="240" width="120" height="22" as="geometry"/>
+    </mxCell>
+
+    <!-- Recommendation -->
+    <mxCell id="recTitle" value="📌 测试建议" style="text;html=1;strokeColor=none;fillColor=#fff3e0;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#e65100;" vertex="1" parent="reportHeader">
+      <mxGeometry y="475" width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="recContent" value="1. 修复 SQL 注入漏洞后重新执行 TC-008&#xa;2. 优化验证码过期提示文案&#xa;3. 增加边界值测试用例覆盖率&#xa;&#xa;由 test-case-generator + test-executor 自动生成" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="reportHeader">
+      <mxGeometry y="500" width="370" height="60" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

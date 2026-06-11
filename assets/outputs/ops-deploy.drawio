@@ -1,0 +1,105 @@
+<mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="600" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- Deploy Plan Header -->
+    <mxCell id="deployHeader" value="🚀 部署分析报告 - v2.3.0" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#4527a0;strokeColor=#311b92;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="20" y="20" width="370" height="560" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="deployContent" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="deployHeader">
+      <mxGeometry y="35" width="370" height="525" as="geometry"/>
+    </mxCell>
+
+    <!-- Version Info -->
+    <mxCell id="versionInfo" value="版本号: v2.3.0&#xa;目标环境: prod (生产环境)&#xa;计划部署时间: 2024-01-20 00:00" style="text;html=1;strokeColor=none;fillColor=#ede7f6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="deployHeader">
+      <mxGeometry y="40" width="370" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- Change Summary -->
+    <mxCell id="changeTitle" value="📦 变更摘要" style="text;html=1;strokeColor=none;fillColor=#e8eaf6;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#3f51b5;" vertex="1" parent="deployHeader">
+      <mxGeometry y="85" width="370" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="changeContent" value="| 类型 | 数量 | 详情 |&#xa;| 新功能 | 1 | 商品评价功能 |&#xa;| Bug修复 | 1 | 订单支付超时 |&#xa;| 依赖升级 | 2 | Redis, log4j |&#xa;| 破坏性变更 | 1 | 数据库Schema |" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="deployHeader">
+      <mxGeometry y="105" width="370" height="70" as="geometry"/>
+    </mxCell>
+
+    <!-- Risk Assessment -->
+    <mxCell id="riskTitle" value="⚠️ 风险评估" style="text;html=1;strokeColor=none;fillColor=#ffebee;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#c62828;" vertex="1" parent="deployHeader">
+      <mxGeometry y="175" width="370" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="riskContent" value="🔴 高风险: 数据库Schema变更&#xa;   缓解: 先执行DDL，保留回滚脚本&#xa;&#xa;🟠 中风险: Redis客户端升级&#xa;   缓解: 提前在staging验证&#xa;&#xa;🟢 低风险: log4j版本升级&#xa;   缓解: 已在staging验证兼容性" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="deployHeader">
+      <mxGeometry y="195" width="370" height="85" as="geometry"/>
+    </mxCell>
+
+    <!-- Timeline -->
+    <mxCell id="timelineTitle" value="⏱️ 部署时间线" style="text;html=1;strokeColor=none;fillColor=#e8f5e9;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#2e7d32;" vertex="1" parent="deployHeader">
+      <mxGeometry y="280" width="370" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="timelineContent" value="00:00 ───── 数据库变更 (执行DDL)&#xa;       │&#xa;01:00 ───── 服务灰度部署 (10%)&#xa;       │&#xa;01:30 ───── 扩大灰度 (50%)&#xa;       │&#xa;02:00 ───── 全量发布 (100%)&#xa;       │&#xa;02:30 ───── 部署完成" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;fontFamily=Courier New;" vertex="1" parent="deployHeader">
+      <mxGeometry y="300" width="370" height="105" as="geometry"/>
+    </mxCell>
+
+    <!-- Rollback -->
+    <mxCell id="rollbackTitle" value="🔄 回滚预案" style="text;html=1;strokeColor=none;fillColor=#fff3e0;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#e65100;" vertex="1" parent="deployHeader">
+      <mxGeometry y="405" width="370" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="rollbackContent" value="回滚条件:&#xa;• 错误率 &gt; 1% 持续5分钟&#xa;• 核心功能不可用&#xa;• 响应时间 &gt; 5秒&#xa;&#xa;回滚时间要求:&#xa;• 服务回滚 &lt; 5分钟&#xa;• 数据库回滚 &lt; 15分钟" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="deployHeader">
+      <mxGeometry y="425" width="370" height="90" as="geometry"/>
+    </mxCell>
+
+    <!-- Footer -->
+    <mxCell id="deployFooter" value="由 deploy-analyzer 自动生成" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontStyle=2;fontColor=#666666;" vertex="1" parent="deployHeader">
+      <mxGeometry y="520" width="370" height="40" as="geometry"/>
+    </mxCell>
+
+    <!-- CI/CD Config -->
+    <mxCell id="cicdHeader" value="⚙️ CI/CD 配置" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#00695c;strokeColor=#004d40;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="410" y="20" width="370" height="280" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="cicdContent" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#263238;strokeColor=#e0e0e0;" vertex="1" parent="cicdHeader">
+      <mxGeometry y="35" width="370" height="245" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="cicdCode" value="# .github/workflows/deploy.yml&#xa;name: Deploy to Production&#xa;&#xa;on:&#xa;  push:&#xa;    branches: [main]&#xa;&#xa;jobs:&#xa;  deploy:&#xa;    runs-on: ubuntu-latest&#xa;    steps:&#xa;      - uses: actions/checkout@v3&#xa;      &#xa;      - name: Build&#xa;        run: mvn package -DskipTests&#xa;      &#xa;      - name: Deploy to K8s&#xa;        run: |&#xa;          kubectl set image deployment/app \\&#xa;            app=registry/app:v2.3.0&#xa;      &#xa;      - name: Health Check&#xa;        run: |&#xa;          curl -f http://app:8080/health" style="text;html=1;strokeColor=none;fillColor=#263238;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=8;fontFamily=Courier New;fontColor=#a7dbd8;" vertex="1" parent="cicdHeader">
+      <mxGeometry y="40" width="360" height="235" as="geometry"/>
+    </mxCell>
+
+    <!-- Monitoring Config -->
+    <mxCell id="monitorHeader" value="📊 监控告警配置" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#c62828;strokeColor=#b71c1c;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="410" y="320" width="370" height="260" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="monitorContent" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="monitorHeader">
+      <mxGeometry y="35" width="370" height="225" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="alert1Title" value="Alert: HighErrorRate" style="text;html=1;strokeColor=none;fillColor=#ffebee;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=9;fontStyle=1;fontColor=#c62828;" vertex="1" parent="monitorHeader">
+      <mxGeometry y="40" width="370" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="alert1Content" value="expr: rate(http_errors[5m]) > 0.01&#xa;for: 5m&#xa;severity: critical" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=3;whiteSpace=wrap;rounded=0;fontSize=8;fontFamily=Courier New;" vertex="1" parent="monitorHeader">
+      <mxGeometry y="58" width="370" height="35" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="alert2Title" value="Alert: HighLatency" style="text;html=1;strokeColor=none;fillColor=#fff3e0;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=9;fontStyle=1;fontColor=#e65100;" vertex="1" parent="monitorHeader">
+      <mxGeometry y="95" width="370" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="alert2Content" value="expr: histogram_quantile(0.99, &#xa;       rate(api_duration_bucket[5m])) > 2&#xa;for: 5m&#xa;severity: warning" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=3;whiteSpace=wrap;rounded=0;fontSize=8;fontFamily=Courier New;" vertex="1" parent="monitorHeader">
+      <mxGeometry y="113" width="370" height="45" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="alert3Title" value="Alert: ServiceDown" style="text;html=1;strokeColor=none;fillColor=#ffebee;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=9;fontStyle=1;fontColor=#c62828;" vertex="1" parent="monitorHeader">
+      <mxGeometry y="160" width="370" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="alert3Content" value="expr: up{job=&quot;app&quot;} == 0&#xa;for: 1m&#xa;severity: critical" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=3;whiteSpace=wrap;rounded=0;fontSize=8;fontFamily=Courier New;" vertex="1" parent="monitorHeader">
+      <mxGeometry y="178" width="370" height="35" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="monitorFooter" value="由 ci-pipeline-assistant 自动生成" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontStyle=2;fontColor=#666666;" vertex="1" parent="monitorHeader">
+      <mxGeometry y="225" width="370" height="35" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

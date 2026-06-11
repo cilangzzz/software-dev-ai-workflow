@@ -1,0 +1,216 @@
+<mxGraphModel dx="900" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="800" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- Architecture Diagram Header -->
+    <mxCell id="archHeader" value="🏗️ 系统架构图 - 电商平台" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#1565c0;strokeColor=#0d47a1;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="20" y="20" width="420" height="440" as="geometry"/>
+    </mxCell>
+
+    <!-- Architecture Content -->
+    <mxCell id="archContent" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="archHeader">
+      <mxGeometry y="35" width="420" height="405" as="geometry"/>
+    </mxCell>
+
+    <!-- Client Layer -->
+    <mxCell id="clientLayer" value="客户端层" style="text;html=1;strokeColor=none;fillColor=#e3f2fd;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#1565c0;" vertex="1" parent="archHeader">
+      <mxGeometry y="45" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="webClient" value="Web&#xa;Vue 3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1976d2;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="30" y="70" width="70" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="h5Client" value="H5&#xa;Vue 3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1976d2;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="115" y="70" width="70" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="appClient" value="APP&#xa;Flutter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1976d2;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="200" y="70" width="70" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="adminClient" value="管理后台&#xa;Vue 3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1976d2;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="285" y="70" width="70" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- Gateway Layer -->
+    <mxCell id="gatewayLayer" value="网关层" style="text;html=1;strokeColor=none;fillColor=#fff3e0;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#e65100;" vertex="1" parent="archHeader">
+      <mxGeometry y="125" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="nginx" value="Nginx&#xa;负载均衡" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#f57c00;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="30" y="150" width="90" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="gateway" value="API Gateway&#xa;限流/熔断" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#f57c00;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="135" y="150" width="90" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="auth" value="Auth&#xa;JWT认证" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#f57c00;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="240" y="150" width="90" height="40" as="geometry"/>
+    </mxCell>
+
+    <!-- Service Layer -->
+    <mxCell id="serviceLayer" value="服务层 (Spring Boot 3)" style="text;html=1;strokeColor=none;fillColor=#e8f5e9;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#2e7d32;" vertex="1" parent="archHeader">
+      <mxGeometry y="200" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="userService" value="用户服务&#xa;user-service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#43a047;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="20" y="225" width="75" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="goodsService" value="商品服务&#xa;goods-service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#43a047;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="105" y="225" width="75" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="orderService" value="订单服务&#xa;order-service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#43a047;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="190" y="225" width="75" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="payService" value="支付服务&#xa;payment-service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#43a047;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="275" y="225" width="75" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="memberService" value="会员服务&#xa;member-service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#43a047;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="360" y="225" width="55" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- Data Layer -->
+    <mxCell id="dataLayer" value="数据层" style="text;html=1;strokeColor=none;fillColor=#fce4ec;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#c2185b;" vertex="1" parent="archHeader">
+      <mxGeometry y="280" width="420" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="mysql" value="MySQL 8.0&#xa;(主从)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f8bbd9;strokeColor=#d81b60;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="30" y="305" width="70" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="redis" value="Redis&#xa;(缓存)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f8bbd9;strokeColor=#d81b60;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="115" y="305" width="70" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="es" value="ES&#xa;(搜索)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f8bbd9;strokeColor=#d81b60;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="200" y="305" width="70" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="mq" value="RabbitMQ&#xa;(消息队列)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f8bbd9;strokeColor=#d81b60;fontSize=9;align=center;" vertex="1" parent="archHeader">
+      <mxGeometry x="285" y="305" width="70" height="55" as="geometry"/>
+    </mxCell>
+
+    <!-- Connections -->
+    <mxCell id="conn1" style="endArrow=classic;html=1;rounded=0;strokeColor=#1976d2;strokeWidth=1;" edge="1" parent="archHeader">
+      <mxGeometry width="50" height="50" as="geometry">
+        <mxPoint x="65" y="115" as="sourcePoint"/>
+        <mxPoint x="65" y="150" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="conn2" style="endArrow=classic;html=1;rounded=0;strokeColor=#f57c00;strokeWidth=1;" edge="1" parent="archHeader">
+      <mxGeometry width="50" height="50" as="geometry">
+        <mxPoint x="180" y="190" as="sourcePoint"/>
+        <mxPoint x="180" y="225" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Footer -->
+    <mxCell id="archFooter" value="由 architect Agent 自动生成" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontStyle=2;fontColor=#666666;" vertex="1" parent="archHeader">
+      <mxGeometry y="415" width="420" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- Tech Selection -->
+    <mxCell id="techHeader" value="📋 技术选型报告" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#00695c;strokeColor=#004d40;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="460" y="20" width="380" height="230" as="geometry"/>
+    </mxCell>
+
+    <!-- Tech Table -->
+    <mxCell id="techTable" value="" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fontSize=9;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="techHeader">
+      <mxGeometry y="40" width="370" height="185" as="geometry">
+        <mxRectangle x="5" y="0" width="370" height="185" as="alternateBounds"/>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="techRowH" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#e0f2f1;strokeColor=#00695c;fontStyle=1;" vertex="1" parent="techTable">
+      <mxGeometry width="370" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="techH1" value="层级" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e0f2f1;strokeColor=#00695c;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="techRowH">
+      <mxGeometry width="70" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="techH2" value="技术选择" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e0f2f1;strokeColor=#00695c;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="techRowH">
+      <mxGeometry x="70" width="120" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="techH3" value="选择理由" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=#e0f2f1;strokeColor=#00695c;overflow=hidden;fontStyle=1;align=center;fontSize=9;" vertex="1" parent="techRowH">
+      <mxGeometry x="190" width="180" height="25" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="techRow1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="techTable">
+      <mxGeometry y="25" width="370" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech1a" value="前端" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow1">
+      <mxGeometry width="70" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech1b" value="Vue 3 + Vite" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow1">
+      <mxGeometry x="70" width="120" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech1c" value="团队熟悉，生态完善，性能优秀" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow1">
+      <mxGeometry x="190" width="180" height="26" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="techRow2" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="techTable">
+      <mxGeometry y="51" width="370" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech2a" value="后端" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow2">
+      <mxGeometry width="70" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech2b" value="Spring Boot 3" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow2">
+      <mxGeometry x="70" width="120" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech2c" value="Java生态，团队熟悉，成熟稳定" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow2">
+      <mxGeometry x="190" width="180" height="26" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="techRow3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="techTable">
+      <mxGeometry y="77" width="370" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech3a" value="数据库" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow3">
+      <mxGeometry width="70" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech3b" value="MySQL 8.0" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow3">
+      <mxGeometry x="70" width="120" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech3c" value="关系型数据库，团队熟悉，成本低" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow3">
+      <mxGeometry x="190" width="180" height="26" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="techRow4" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="techTable">
+      <mxGeometry y="103" width="370" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech4a" value="缓存" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow4">
+      <mxGeometry width="70" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech4b" value="Redis" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow4">
+      <mxGeometry x="70" width="120" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech4c" value="高性能缓存，支持分布式Session" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow4">
+      <mxGeometry x="190" width="180" height="26" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="techRow5" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;strokeColor=#e0e0e0;" vertex="1" parent="techTable">
+      <mxGeometry y="129" width="370" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech5a" value="消息队列" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow5">
+      <mxGeometry width="70" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech5b" value="RabbitMQ" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow5">
+      <mxGeometry x="70" width="120" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="tech5c" value="轻量级，成本低，满足当前需求" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=#e0e0e0;overflow=hidden;align=center;fontSize=9;" vertex="1" parent="techRow5">
+      <mxGeometry x="190" width="180" height="26" as="geometry"/>
+    </mxCell>
+
+    <!-- ADR Document -->
+    <mxCell id="adrHeader" value="📝 ADR架构决策记录" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#5d4037;strokeColor=#3e2723;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="460" y="270" width="380" height="190" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="adrContent" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e0e0e0;" vertex="1" parent="adrHeader">
+      <mxGeometry y="35" width="380" height="155" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="adr1Title" value="ADR-001: 选择PostgreSQL作为主数据库" style="text;html=1;strokeColor=none;fillColor=#efebe9;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#5d4037;" vertex="1" parent="adrHeader">
+      <mxGeometry y="40" width="380" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="adr1Content" value="决策: 选择PostgreSQL&#xa;理由: JSONB性能优秀，内置全文搜索&#xa;影响: 商品属性存储更灵活，可暂时不引入ES" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="adrHeader">
+      <mxGeometry y="65" width="380" height="50" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="adr2Title" value="ADR-002: 采用单体优先策略" style="text;html=1;strokeColor=none;fillColor=#efebe9;align=left;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#5d4037;" vertex="1" parent="adrHeader">
+      <mxGeometry y="115" width="380" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="adr2Content" value="决策: 初期单体架构，预留微服务拆分接口&#xa;理由: 团队规模小，3个月上线MVP&#xa;风险: 需要预留拆分接口，避免后期重构成本" style="text;html=1;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;whiteSpace=wrap;rounded=0;fontSize=9;" vertex="1" parent="adrHeader">
+      <mxGeometry y="140" width="380" height="50" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

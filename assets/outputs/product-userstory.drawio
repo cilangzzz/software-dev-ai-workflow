@@ -1,0 +1,67 @@
+<mxGraphModel dx="600" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="600" pageHeight="600" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- User Story Header -->
+    <mxCell id="usHeader" value="📋 用户故事 (User Story)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#2d5a27;strokeColor=#1e3d1a;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="20" y="20" width="280" height="280" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="us1Title" value="US-001: 移动端订单查询" style="text;strokeColor=none;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=10;fontStyle=1;fontColor=#2d5a27;" vertex="1" parent="usHeader">
+      <mxGeometry y="40" width="280" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="us1Content" value="作为 外出用户&#xa;我想要 在手机上查看订单状态&#xa;以便于 随时了解订单进度" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;" vertex="1" parent="usHeader">
+      <mxGeometry y="65" width="280" height="55" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="us2Title" value="US-002: 微信支付修复" style="text;strokeColor=none;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=10;fontStyle=1;fontColor=#2d5a27;" vertex="1" parent="usHeader">
+      <mxGeometry y="120" width="280" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="us2Content" value="作为 支付用户&#xa;我想要 微信支付能正常工作&#xa;以便于 顺利完成订单支付" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;" vertex="1" parent="usHeader">
+      <mxGeometry y="145" width="280" height="55" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="us3Title" value="US-003: 取消订单入口" style="text;strokeColor=none;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=10;fontStyle=1;fontColor=#2d5a27;" vertex="1" parent="usHeader">
+      <mxGeometry y="200" width="280" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="us3Content" value="作为 购物用户&#xa;我想要 能够便捷地取消订单&#xa;以便于 处理不需要的商品" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;" vertex="1" parent="usHeader">
+      <mxGeometry y="225" width="280" height="55" as="geometry"/>
+    </mxCell>
+
+    <!-- Acceptance Criteria Header -->
+    <mxCell id="acHeader" value="✅ 验收标准 (Gherkin)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#6a1b9a;strokeColor=#4a148c;fontColor=#ffffff;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="320" y="20" width="280" height="280" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="ac1Title" value="AC-001: 订单列表显示" style="text;strokeColor=none;fillColor=#e1bee7;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=10;fontStyle=1;fontColor=#6a1b9a;" vertex="1" parent="acHeader">
+      <mxGeometry y="40" width="280" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="ac1Content" value="Given 用户已登录&#xa;When 用户访问订单列表页&#xa;Then 显示所有订单及状态" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;fontFamily=Courier New;" vertex="1" parent="acHeader">
+      <mxGeometry y="65" width="280" height="55" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="ac2Title" value="AC-002: 订单详情查看" style="text;strokeColor=none;fillColor=#e1bee7;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=10;fontStyle=1;fontColor=#6a1b9a;" vertex="1" parent="acHeader">
+      <mxGeometry y="120" width="280" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="ac2Content" value="Given 用户在订单列表页&#xa;When 点击某个订单&#xa;Then 显示订单详情和进度节点" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;fontFamily=Courier New;" vertex="1" parent="acHeader">
+      <mxGeometry y="145" width="280" height="55" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="ac3Title" value="AC-003: 取消订单" style="text;strokeColor=none;fillColor=#e1bee7;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=10;fontStyle=1;fontColor=#6a1b9a;" vertex="1" parent="acHeader">
+      <mxGeometry y="200" width="280" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="ac3Content" value="Given 订单未发货&#xa;When 用户点击取消订单&#xa;Then 订单状态变为已取消" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;fontSize=9;fontFamily=Courier New;" vertex="1" parent="acHeader">
+      <mxGeometry y="225" width="280" height="55" as="geometry"/>
+    </mxCell>
+
+    <!-- Priority Label -->
+    <mxCell id="priority" value="优先级: P0 (MVP必需)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1">
+      <mxGeometry x="20" y="310" width="150" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="generated" value="由 user-story-generator 生成" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="180" y="310" width="150" height="30" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>
