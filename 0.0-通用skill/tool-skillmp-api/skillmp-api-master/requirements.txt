@@ -1,0 +1,2 @@
+# SkillsMP API Skill 依賴套件
+requests>=2.28.0
