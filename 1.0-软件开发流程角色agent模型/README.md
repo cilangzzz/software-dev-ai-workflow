@@ -2,86 +2,88 @@
 
 ## 概述
 
-本目录包含完整的软件开发流程角色Agent模型定义，用于AI辅助软件开发全生命周期。每个Agent角色都有明确的职责、技能(Skill)和产出物定义。
+本目录包含完整的软件开发流程角色Agent模型定义，用于AI辅助软件开发全生命周期。采用 **Agent角色** 和 **Skill技能** 分离的结构设计：
+
+- **Agent角色**：定义"谁来做"，包含职责、权限、协作关系
+- **Skill技能**：定义"怎么做"，包含输入输出、工作流程、模板
+
+> 详细设计说明见：[目录结构设计说明.md](目录结构设计说明.md)
 
 ## 目录结构
 
 ```
 1.0-软件开发流程角色agent模型/
-├── 产出物映射表.md              # 阶段-部门产出物映射关系
-├── 产品/                        # 产品部Agent
-│   ├── 产出物清单.md            # 产品部产出物清单
-│   ├── role-config.yaml         # 角色配置
-│   ├── references/              # 参考模板
-│   │   ├── prd-template.md      # PRD模板
-│   │   ├── srs-template.md      # SRS模板
+├── 目录结构设计说明.md      # Agent/Skill分离结构设计文档
+├── 产出物映射表.md          # 阶段-部门产出物映射关系
+│
+├── 产品/                    # 产品部
+│   ├── agent/               # Agent角色定义
+│   │   ├── product-manager.agent.yaml
+│   │   ├── b2b-product-manager.agent.yaml
 │   │   └── ...
-│   └── skill/                   # 产品部技能
-│       ├── requirement-analyzer.md
-│       ├── user-story-generator.md
-│       ├── acceptance-criteria-writer.md
-│       ├── user-manual-writer.md
-│       └── 业务模块/             # 细分业务技能
-│           └── business-rule-analyzer.md
-├── 研发/                        # 研发部Agent
-│   ├── 产出物清单.md
-│   ├── skill-collaboration.yaml # Agent协作配置
-│   ├── tech-selector.yaml       # 技术选型配置
-│   ├── backend/                 # 后端开发技能
-│   │   └── java/
-│   │       ├── architect.md
-│   │       ├── implement.md
-│   │       └── scaffold.md
-│   ├── frontend/                # 前端开发技能
-│   ├── common/                  # 通用技能
-│   │   ├── 代码评审/
-│   │   ├── 架构设计/
-│   │   ├── 需求变更/
-│   │   └── 需求评审/
-│   └── skill/                   # 研发部技能
-│       ├── 模块设计/             # 细分业务技能
-│       │   ├── module-designer.md
-│       │   ├── api-designer.md
-│       │   └── state-machine-designer.md
-│       └── 数据模型/             # 细分业务技能
-│           └── data-model-designer.md
-├── 测试/                        # 测试部Agent
-│   ├── 产出物清单.md
-│   └── skill/
-│       ├── test-case-generator.md
-│       ├── test-executor.md
-│       └── bug-analyzer.md
-├── 运维/                        # 运维部Agent
-│   ├── 产出物清单.md
-│   └── skill/
-│       ├── ci-cd-pipeline.md
-│       └── deployment-analyzer.md
-├── 安全/                        # 安全部Agent
-│   ├── 产出物清单.md
-│   └── skill/
-│       ├── security-scan.md
-│       ├── security-code-review.md
-│       └── security-threat-model.md
-├── 数据/                        # 数据部Agent
-│   ├── 产出物清单.md
-│   └── skill/
-│       ├── data-lineage-trace.md
-│       └── data-quality-check.md
-└── 项目管理/                    # 项目管理Agent
-    └── skill/
-        └── ...
+│   ├── skill/               # Skill技能定义
+│   │   ├── requirement-analyzer.skill.yaml
+│   │   ├── user-story-generator.skill.yaml
+│   │   └── ...
+│   ├── references/          # 参考模板
+│   └── 产出物清单.md        # 产出物清单（含条件说明）
+│
+├── 研发/                    # 研发部
+│   ├── agent/               # Agent角色定义
+│   │   ├── architect.agent.yaml
+│   │   ├── backend-developer.agent.yaml
+│   │   └── ...
+│   ├── skill/               # Skill技能定义
+│   │   ├── architect/       # 架构设计技能组
+│   │   │   ├── system-architect.skill.yaml
+│   │   │   ├── adr-writer.skill.yaml
+│   │   │   └── tech-selector.skill.yaml
+│   │   ├── implement/       # 代码实现技能组
+│   │   ├── design/          # 详细设计技能组
+│   │   └── process/         # 流程管理技能组
+│   ├── tech-selector.yaml   # 技术选型配置
+│   ├── skill-collaboration.yaml
+│   └── 产出物清单.md
+│
+├── 测试/                    # 测试部
+│   ├── agent/
+│   ├── skill/
+│   └── 产出物清单.md
+│
+├── 运维/                    # 运维部
+├── 安全/                    # 安全部
+├── 数据/                    # 数据部
+└── 项目管理/                # 项目管理
 ```
 
 ## Agent角色总览
 
 | 部门 | Agent角色 | Skill数量 | 核心职责 | 负责阶段 |
 |------|----------|-----------|----------|----------|
-| 产品部 | requirement-analyzer, user-story-generator | 5 | 需求分析、用户故事、验收标准 | 需求阶段 |
-| 研发部 | architect, implement, code-review | 11 | 架构设计、代码实现、代码审查 | 设计阶段、开发阶段 |
-| 测试部 | test-case-generator, test-executor | 3 | 测试用例、测试执行、Bug分析 | 测试阶段 |
-| 运维部 | ci-cd-pipeline, deployment-analyzer | 2 | CI/CD配置、部署分析 | 部署阶段、运维阶段 |
-| 安全部 | security-scan, security-code-review | 3 | 安全扫描、代码安全审查 | 安全阶段 |
-| 数据部 | data-lineage, data-quality-check | 2 | 数据血缘追踪、数据质量检查 | 数据阶段 |
+| 产品部 | product-manager, b2b-product-manager, b2c-product-manager | 5 | 需求分析、用户故事、验收标准 | 需求阶段 |
+| 研发部 | architect, backend-developer, frontend-developer, tech-lead | 12 | 架构设计、代码实现、代码审查 | 设计阶段、开发阶段 |
+| 测试部 | test-engineer, qa-lead, automation-engineer | 3 | 测试用例、测试执行、Bug分析 | 测试阶段 |
+| 运维部 | devops-engineer, sre-engineer | 2 | CI/CD配置、部署分析 | 部署阶段、运维阶段 |
+| 安全部 | security-engineer | 3 | 安全扫描、代码安全审查 | 安全阶段 |
+| 数据部 | data-engineer | 2 | 数据血缘追踪、数据质量检查 | 数据阶段 |
+
+## 核心概念
+
+### Agent角色 vs Skill技能
+
+| 概念 | 定义 | 文件后缀 | 说明 |
+|------|------|----------|------|
+| **Agent角色** | 承担特定职责的智能实体 | `.agent.yaml` | 定义职责、权限、协作关系、可调用技能 |
+| **Skill技能** | 可被调用的具体能力 | `.skill.yaml` | 定义输入输出、工作流程、模板 |
+
+### 关系模型
+
+```
+Agent（架构师） ──调用──> Skill（系统架构设计）
+    │
+    ├── 可调用多个Skill
+    └── Skill可被多个Agent共享
+```
 
 ## Skill索引
 
@@ -149,6 +151,7 @@ AI将自动识别意图并调用 `requirement-analyzer` skill。
 
 ```
 /requirement-analyzer
+/architect
 ```
 
 ### 3. 工作流串联
@@ -166,6 +169,18 @@ AI将自动识别意图并调用 `requirement-analyzer` skill。
 - 产品部模板：`产品/references/`
 - PRD模板：`产品/references/prd-template.md`
 - SRS模板：`产品/references/srs-template.md`
+
+### 5. 条件化产出物
+
+产出物分为三类，根据项目情况按需产出：
+
+| 类型 | 说明 | 示例 |
+|------|------|------|
+| **必需产出物** | 所有项目必须产出 | 架构设计文档、ADR |
+| **条件产出物** | 特定场景必须产出 | 风险评估矩阵（大型项目） |
+| **可选产出物** | 按需产出 | 性能预测报告 |
+
+详细说明见各部门的 `产出物清单.md`。
 
 ## Agent协作配置
 
@@ -217,9 +232,11 @@ workflows:
 |------|----------|--------|
 | 2026-03-24 | 初始化Agent模型 | AI Agent |
 | 2026-06-10 | 新增细分业务Skill：module-designer, api-designer, state-machine-designer, data-model-designer, business-rule-analyzer | Claude Agent |
+| 2026-06-11 | 重构目录结构：分离Agent角色和Skill技能，增加条件化产出物 | Claude Agent |
 
 ## 相关文档
 
+- [目录结构设计说明](目录结构设计说明.md) - Agent/Skill分离结构详解
 - [产出物映射表](产出物映射表.md)
 - [产品部产出物清单](产品/产出物清单.md)
 - [研发部产出物清单](研发/产出物清单.md)

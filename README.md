@@ -126,13 +126,30 @@ software-dev-ai-workflow/
 
 ## 贡献指南
 
-欢迎贡献新的 Skill 或改进现有 Skill：
+欢迎贡献新的 Agent、Skill 或改进现有内容！
+
+### 贡献方式
+
+| 贡献类型 | 说明 | 目录 |
+|----------|------|------|
+| 新增角色 Agent | 添加新的软件开发角色定义 | `1.0-软件开发流程角色agent模型/` |
+| 新增通用 Skill | 添加工具集成或通用能力 | `0.0-通用skill/` |
+| 新增用例示例 | 添加使用示例或工作流 | `2.0-用例/` |
+| 改进文档 | 优化现有文档质量 | 对应目录 |
+
+### 提交流程
 
 1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
+2. 创建特性分支 (`git checkout -b feature/YourFeature`)
+3. 提交更改 (`git commit -m 'Add: 新增xxx功能'`)
+4. 推送到分支 (`git push origin feature/YourFeature`)
 5. 提交 Pull Request
+
+### 文档规范
+
+- Agent 定义文件使用 `SKILL.md` 格式
+- 目录命名使用中文，便于理解
+- 示例文件包含完整的输入输出说明
 
 ## 许可证
 
