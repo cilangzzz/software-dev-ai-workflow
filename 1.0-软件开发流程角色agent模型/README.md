@@ -60,7 +60,7 @@
 
 | 部门 | Agent角色 | Skill数量 | 核心职责 | 负责阶段 |
 |------|----------|-----------|----------|----------|
-| 产品部 | product-manager, b2b-product-manager, b2c-product-manager | 5 | 需求分析、用户故事、验收标准 | 需求阶段 |
+| 产品部 | product-manager, b2b-product-manager, b2c-product-manager, requirement-researcher | 6 | 需求采集、需求分析、用户故事、验收标准 | 需求阶段 |
 | 研发部 | architect, backend-developer, frontend-developer, tech-lead | 12 | 架构设计、代码实现、代码审查 | 设计阶段、开发阶段 |
 | 测试部 | test-engineer, qa-lead, automation-engineer | 3 | 测试用例、测试执行、Bug分析 | 测试阶段 |
 | 运维部 | devops-engineer, sre-engineer | 2 | CI/CD配置、部署分析 | 部署阶段、运维阶段 |
@@ -96,6 +96,8 @@ Agent（架构师） ──调用──> Skill（系统架构设计）
 | acceptance-criteria-writer | 编写Gherkin格式的验收标准 | `/acceptance-criteria-writer` |
 | user-manual-writer | 生成用户手册和快速入门指南 | `/user-manual-writer` |
 | business-rule-analyzer | 提取和分析业务规则 | `/business-rule-analyzer` |
+| requirement-researcher | 从Web搜索行业需求文档，提炼功能需求点 | `/requirement-researcher` |
+| competitive-analyzer | 采集竞品功能清单，生成对比矩阵 | `/competitive-analyzer` |
 
 ### 研发部Skill
 
@@ -159,7 +161,7 @@ AI将自动识别意图并调用 `requirement-analyzer` skill。
 多个Agent可以串联完成复杂任务：
 
 ```
-需求分析 → 用户故事生成 → 架构设计 → 模块设计 → API设计 → 测试用例生成
+需求采集 → 需求分析 → 用户故事生成 → 架构设计 → 模块设计 → API设计 → 测试用例生成
 ```
 
 ### 4. 产出物模板
@@ -233,6 +235,7 @@ workflows:
 | 2026-03-24 | 初始化Agent模型 | AI Agent |
 | 2026-06-10 | 新增细分业务Skill：module-designer, api-designer, state-machine-designer, data-model-designer, business-rule-analyzer | Claude Agent |
 | 2026-06-11 | 重构目录结构：分离Agent角色和Skill技能，增加条件化产出物 | Claude Agent |
+| 2026-06-15 | 新增需求研究员(requirement-researcher)角色和需求采集技能，支持从Web采集行业需求文档 | Claude Agent |
 
 ## 相关文档
 
