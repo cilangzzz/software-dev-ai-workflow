@@ -40,6 +40,9 @@ output/
 ignore_direcetory/
 # Test directory
 test/
-# Code coverage directory
-.claude/
+# Claude Code directory (except skills and workflows)
+.claude/*
+!.claude/skills/
+!.claude/workflows/
 .claude/settings.json
+.claude/settings.local.json
