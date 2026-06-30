@@ -1,0 +1,52 @@
+{
+  "name": "tool-web-fetch",
+  "version": "1.0.0",
+  "description": "本地搜索引擎与网页内容获取工具 - 绕过WebSearch域名限制",
+  "scripts": [
+    {
+      "name": "searxng_search.py",
+      "description": "SearXNG 搜索脚本 - 调用本地/公开 SearXNG 实例",
+      "usage": "python scripts/searxng_search.py \"<query>\" [instance]"
+    },
+    {
+      "name": "web_fetch.py",
+      "description": "网页抓取脚本 - 带反爬处理",
+      "usage": "python scripts/web_fetch.py \"<url>\" [--user-agent] [--cookies] [--json]"
+    }
+  ],
+  "dependencies": {
+    "python": "3.8+",
+    "requests": "pip install requests"
+  },
+  "optional_dependencies": {
+    "jq": "JSON 处理工具",
+    "docker": "SearXNG 自建部署"
+  },
+  "public_searxng_instances": [
+    "https://searx.be",
+    "https://search.bus-hit.me",
+    "https://searx.fmac.xyz",
+    "https://search.sapti.me",
+    "https://searxng.nicfab.eu"
+  ],
+  "search_shortcuts": {
+    "!gh": "GitHub",
+    "!github": "GitHub",
+    "!so": "Stack Overflow",
+    "!stackoverflow": "Stack Overflow",
+    "!g": "Google",
+    "!bing": "Bing",
+    "!ddg": "DuckDuckGo",
+    "!wp": "Wikipedia"
+  },
+  "trigger_keywords": [
+    "搜索",
+    "抓取",
+    "网页内容",
+    "GitHub",
+    "域名限制",
+    "WebSearch被禁止",
+    "本地搜索",
+    "SearXNG"
+  ]
+}
