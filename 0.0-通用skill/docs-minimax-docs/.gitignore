@@ -1,0 +1,4 @@
+# Environment variables - contains API keys, do NOT commit
+.env
+.env.local
+.env.*.local
