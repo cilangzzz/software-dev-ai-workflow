@@ -1,0 +1,25 @@
+{
+  "name": "example-env-development",
+  "summary": "示例：开发环境标注（environment=development）",
+  "host": "192.0.2.50",
+  "port": 22,
+  "user": "developer",
+  "key_file": "./keys/example_dev_id_ed25519",
+  "timeout": 15,
+  "strict_host_key_checking": false,
+  "auto_add_hostkey": true,
+  "use_controlmaster": true,
+  "control_persist": "5m",
+  "description": "开发环境配置示例 - 快速迭代使用",
+  "created_at": "2025-11-01T10:00:00+08:00",
+  "updated_at": "2025-11-01T10:00:00+08:00",
+  "environment": "development",
+  "tags": ["example", "development", "fast"],
+  "review_interval_days": 365,
+  "last_reviewed_at": "2025-11-01T10:00:00+08:00",
+  "owner": "（填：负责人）",
+  "contact": "user@example.invalid",
+  "notes": "开发环境通常允许更宽松的主机密钥检查，但生产环境建议启用严格检查。",
+  "config_version": "1.0"
+}
+

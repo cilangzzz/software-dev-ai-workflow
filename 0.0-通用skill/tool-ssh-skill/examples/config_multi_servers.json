@@ -1,0 +1,51 @@
+{
+  "summary": "示例：多服务器配置（servers 字典），用于批量执行/并发/集群操作。",
+  "description": "多环境服务器配置示例（请替换各 server 的 host/user/key_file）。",
+  "servers": {
+    "dev": {
+      "name": "dev-server",
+      "summary": "示例：dev-开发环境-密钥认证",
+      "description": "开发环境服务器 - 用于日常开发和测试",
+      "host": "192.0.2.61",
+      "port": 22,
+      "user": "dev",
+      "key_file": "../keys/example_dev_id_ed25519",
+      "timeout": 30,
+      "use_controlmaster": true,
+      "control_persist": "10m",
+      "environment": "development",
+      "tags": ["example", "dev"]
+    },
+    "staging": {
+      "name": "staging-server",
+      "summary": "示例：staging-预发布-密钥认证",
+      "description": "预发布环境服务器 - 上线前验证",
+      "host": "198.51.100.61",
+      "port": 22,
+      "user": "deploy",
+      "key_file": "../keys/example_staging_id_ed25519",
+      "timeout": 30,
+      "use_controlmaster": true,
+      "control_persist": "30m",
+      "environment": "staging",
+      "tags": ["example", "staging"]
+    },
+    "prod": {
+      "name": "prod-server",
+      "summary": "示例：prod-生产-密钥认证",
+      "description": "生产环境主服务器（示例域名）",
+      "host": "prod.example.invalid",
+      "port": 22,
+      "user": "deploy",
+      "key_file": "../keys/example_prod_id_ed25519",
+      "timeout": 60,
+      "use_controlmaster": true,
+      "control_persist": "1h",
+      "strict_host_key_checking": true,
+      "environment": "production",
+      "tags": ["example", "prod"]
+    }
+  },
+  "config_version": "1.0"
+}
+

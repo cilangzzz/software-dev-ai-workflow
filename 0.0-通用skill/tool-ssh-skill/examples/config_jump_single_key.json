@@ -1,0 +1,31 @@
+{
+  "name": "example-jump-single-key",
+  "summary": "示例：单跳板机-密钥认证（替换 host/user/key_file 与 jump_hosts）",
+  "description": "单跳板机场景示例（密钥认证 + ControlMaster）。",
+  "host": "192.0.2.20",
+  "port": 22,
+  "user": "appuser",
+  "key_file": "./keys/example_app_id_ed25519",
+  "timeout": 30,
+  "strict_host_key_checking": true,
+  "auto_add_hostkey": true,
+  "use_controlmaster": true,
+  "control_persist": "30m",
+  "jump_hosts": [
+    {
+      "name": "bastion-1",
+      "host": "198.51.100.20",
+      "port": 22,
+      "user": "jumpuser",
+      "key_file": "./keys/example_jump_id_ed25519",
+      "description": "示例跳板机（外网入口）"
+    }
+  ],
+  "environment": "production",
+  "tags": ["example", "jump", "single", "key"],
+  "owner": "（填：负责人）",
+  "team": "（填：团队）",
+  "notes": "请分别配置目标机与跳板机的密钥路径（key_file）。",
+  "config_version": "1.0"
+}
+

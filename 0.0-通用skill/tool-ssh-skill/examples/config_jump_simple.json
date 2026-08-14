@@ -1,0 +1,19 @@
+{
+  "name": "example-jump-simple",
+  "summary": "示例：简化跳板机写法（jump_hosts 仅写 host 字符串）",
+  "description": "jump_hosts 仅写主机名，用户名/密钥默认沿用目标服务器配置。",
+  "host": "203.0.113.20",
+  "port": 22,
+  "user": "deploy",
+  "key_file": "./keys/example_deploy_id_ed25519",
+  "timeout": 30,
+  "strict_host_key_checking": true,
+  "auto_add_hostkey": true,
+  "use_controlmaster": true,
+  "control_persist": "30m",
+  "jump_hosts": ["bastion.example.invalid", "jump.internal.invalid"],
+  "environment": "production",
+  "tags": ["example", "jump", "simple"],
+  "config_version": "1.0"
+}
+

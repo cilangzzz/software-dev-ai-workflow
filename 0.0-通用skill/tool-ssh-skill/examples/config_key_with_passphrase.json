@@ -1,0 +1,22 @@
+{
+  "name": "example-key-with-passphrase",
+  "summary": "示例：单机-密钥认证-私钥带密码（替换 host/user/key_file/key_passphrase）",
+  "description": "私钥带密码的密钥认证示例（建议配合 ssh-agent 或安全的密钥管理方案）。",
+  "host": "198.51.100.10",
+  "port": 22,
+  "user": "deploy",
+  "key_file": "./keys/example_id_ed25519",
+  "key_passphrase": "__REPLACE_ME__",
+  "timeout": 30,
+  "strict_host_key_checking": true,
+  "auto_add_hostkey": true,
+  "use_controlmaster": true,
+  "control_persist": "10m",
+  "environment": "production",
+  "tags": ["example", "key", "passphrase"],
+  "owner": "（填：负责人）",
+  "team": "（填：团队）",
+  "notes": "注意：不要在仓库中提交真实 key_passphrase；请使用安全方式注入。",
+  "config_version": "1.0"
+}
+

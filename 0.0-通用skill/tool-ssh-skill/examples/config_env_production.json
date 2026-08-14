@@ -1,0 +1,28 @@
+{
+  "name": "example-env-production",
+  "summary": "示例：生产环境标注（environment=production，建议 strict_host_key_checking=true）",
+  "host": "198.51.100.50",
+  "port": 22,
+  "user": "deploy",
+  "key_file": "./keys/example_prod_id_ed25519",
+  "timeout": 30,
+  "strict_host_key_checking": true,
+  "auto_add_hostkey": false,
+  "use_controlmaster": true,
+  "control_persist": "30m",
+  "description": "生产环境配置示例 - 高安全性要求",
+  "created_at": "2025-01-15T09:00:00+08:00",
+  "updated_at": "2025-12-17T10:30:00+08:00",
+  "environment": "production",
+  "tags": ["example", "production", "secure"],
+  "review_interval_days": 90,
+  "last_reviewed_at": "2025-10-01T14:00:00+08:00",
+  "expires_at": null,
+  "owner": "（填：负责人）",
+  "contact": "user@example.invalid",
+  "team": "（填：团队）",
+  "notes": "生产环境建议：\n1. 启用严格主机密钥检查\n2. 禁用自动添加 hostkey，手动管理 known_hosts\n3. 定期审查配置\n4. 使用短期有效的访问凭证",
+  "documentation_url": "",
+  "config_version": "1.0"
+}
+

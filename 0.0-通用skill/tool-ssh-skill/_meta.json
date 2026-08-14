@@ -1,0 +1,146 @@
+{
+  "name": "ssh-skill",
+  "display_name": "SSH Skill - 高性能SSH操作技能",
+  "version": "3.3.1",
+  "category": "运维工具",
+  "description": "为Claude Code打造的企业级SSH管理工具，让远程服务器操作像本地一样简单高效。支持守护进程长连接、自动连接复用、跳板机、SFTP、隧道、自动错误恢复等高级特性。",
+  "priority": "P1",
+  "author": "badseal",
+  "source_repository": "https://github.com/badseal/ssh-skill",
+  "created_at": "2026-08-14",
+  "updated_at": "2026-08-14",
+  "tags": [
+    "SSH",
+    "远程",
+    "服务器",
+    "跳板机",
+    "SFTP",
+    "文件传输",
+    "隧道",
+    "端口转发",
+    "批量操作",
+    "运维",
+    "deploy",
+    "部署"
+  ],
+  "trigger_keywords": [
+    "SSH",
+    "服务器",
+    "远程",
+    "连接",
+    "登录",
+    "上传",
+    "下载",
+    "部署",
+    "跳板机",
+    "服务器间传输",
+    "迁移",
+    "隧道",
+    "端口转发",
+    "数据库连接",
+    "内网访问",
+    "deploy",
+    "运维",
+    "命令执行",
+    "文件传输"
+  ],
+  "command": "/ssh-skill",
+  "scripts": [
+    {
+      "name": "ssh_execute.py",
+      "description": "远程命令执行 - 支持守护进程长连接，自动复用连接",
+      "usage": "python scripts/ssh_execute.py <别名> \"<命令>\" [--timeout <秒>] [--no-daemon]"
+    },
+    {
+      "name": "ssh_upload.py",
+      "description": "文件上传 - 支持断点续传、进度显示、目录递归上传",
+      "usage": "MSYS_NO_PATHCONV=1 python scripts/ssh_upload.py <别名> \"<本地路径>\" \"<远程路径>\" [--resume] [--recursive] [--no-progress]"
+    },
+    {
+      "name": "ssh_download.py",
+      "description": "文件下载 - 支持断点续传、进度显示、目录递归下载",
+      "usage": "MSYS_NO_PATHCONV=1 python scripts/ssh_download.py <别名> \"<远程路径>\" \"<本地路径>\" [--resume] [--recursive] [--no-progress]"
+    },
+    {
+      "name": "ssh_server_transfer.py",
+      "description": "服务器间直接传输 - 支持直连/流式/混合模式，可使用rsync增量同步",
+      "usage": "MSYS_NO_PATHCONV=1 python scripts/ssh_server_transfer.py <源别名> \"<源路径>\" <目标别名> \"<目标路径>\" [--mode <auto|direct|stream|hybrid>] [--use-rsync]"
+    },
+    {
+      "name": "ssh_cluster.py",
+      "description": "批量并发操作 - 对多台服务器并发执行命令",
+      "usage": "python scripts/ssh_cluster.py \"<命令>\" [--parallel] [--hosts \"<别名列表>\"] [--environment <环境>] [--tags \"<标签列表>\"]"
+    },
+    {
+      "name": "ssh_config_manager_v3.py",
+      "description": "服务器配置管理 - 列出、查找、创建、更新、删除服务器配置",
+      "usage": "python scripts/ssh_config_manager_v3.py <list-servers|find|create|update|delete> [选项]"
+    },
+    {
+      "name": "ssh_tunnel.py",
+      "description": "SSH隧道管理 - 本地端口转发，访问远程内网服务（数据库、Web服务等）",
+      "usage": "python scripts/ssh_tunnel.py <start|list|status|stop|stop-all> [选项]"
+    },
+    {
+      "name": "ssh_daemon.py",
+      "description": "守护进程管理 - 启动、查看状态、停止长连接守护进程",
+      "usage": "python scripts/ssh_daemon.py <start|status|stop> <别名> [--idle-timeout <秒>]"
+    },
+    {
+      "name": "ssh_key_manager.py",
+      "description": "SSH密钥管理 - 生成、部署、管理SSH密钥对",
+      "usage": "python scripts/ssh_key_manager.py <action> [options]"
+    },
+    {
+      "name": "deploy_pubkey.py",
+      "description": "公钥部署 - 一键部署公钥到远程服务器",
+      "usage": "python scripts/deploy_pubkey.py <别名> [options]"
+    },
+    {
+      "name": "add_comments_to_config.py",
+      "description": "添加配置注释 - 为SSH config添加元数据注释",
+      "usage": "python scripts/add_comments_to_config.py"
+    },
+    {
+      "name": "fix_ssh_config.py",
+      "description": "修复SSH配置 - 修复SSH config中的常见错误",
+      "usage": "python scripts/fix_ssh_config.py"
+    },
+    {
+      "name": "migrate_to_key_auth.py",
+      "description": "迁移到密钥认证 - 将密码认证迁移为密钥认证",
+      "usage": "python scripts/migrate_to_key_auth.py"
+    },
+    {
+      "name": "migrate_to_ssh_config.py",
+      "description": "迁移到SSH config格式 - 将JSON配置转换为SSH config格式",
+      "usage": "python scripts/migrate_to_ssh_config.py"
+    },
+    {
+      "name": "update_server_info.py",
+      "description": "更新服务器信息 - 批量更新SSH config中的服务器元数据",
+      "usage": "python scripts/update_server_info.py [options]"
+    }
+  ],
+  "dependencies": {
+    "python": "3.8+",
+    "paramiko": "pip install paramiko"
+  },
+  "optional_dependencies": {
+    "openssh": "OpenSSH客户端（系统自带）"
+  },
+  "core_features": [
+    "守护进程长连接 - 首次连接后自动启动守护进程，命令响应从 ~0.45s 降至 ~0.12s",
+    "自动连接复用 - 多个Claude Code实例可共享同一守护进程",
+    "SFTP高级传输 - 支持断点续传、进度显示、目录递归上传/下载",
+    "服务器间直接传输 - 数据直接在服务器间传输，无需本地中转",
+    "SSH隧道 - 支持本地端口转发，访问远程内网服务（数据库、Web服务等）",
+    "跳板机支持 - 通过ProxyJump自动处理多级跳板机",
+    "批量并发操作 - 支持对多台服务器并发执行命令",
+    "自动错误恢复 - SSH连接断开自动重连（最多3次）"
+  ],
+  "config_location": "~/.ssh/config",
+  "supported_auth_methods": ["密钥认证", "密码认证", "Passphrase保护的密钥"],
+  "documentation_url": "https://github.com/badseal/ssh-skill",
+  "license": "MIT"
+}

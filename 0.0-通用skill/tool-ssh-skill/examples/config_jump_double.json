@@ -1,0 +1,39 @@
+{
+  "name": "example-jump-double-key",
+  "summary": "示例：双跳板机-密钥认证（替换 host/user/key_file 与 jump_hosts）",
+  "description": "双跳板机配置示例（连接深层内网服务器的典型场景）。",
+  "host": "192.0.2.30",
+  "port": 22,
+  "user": "dbadmin",
+  "key_file": "./keys/example_db_id_ed25519",
+  "timeout": 60,
+  "strict_host_key_checking": true,
+  "auto_add_hostkey": true,
+  "use_controlmaster": true,
+  "control_persist": "1h",
+  "jump_hosts": [
+    {
+      "name": "bastion-1",
+      "host": "198.51.100.30",
+      "port": 22,
+      "user": "jumpuser1",
+      "key_file": "./keys/example_jump1_id_ed25519",
+      "description": "第一级跳板机"
+    },
+    {
+      "name": "jump-2",
+      "host": "198.51.100.31",
+      "port": 22,
+      "user": "jumpuser2",
+      "key_file": "./keys/example_jump2_id_ed25519",
+      "description": "第二级跳板机"
+    }
+  ],
+  "environment": "production",
+  "tags": ["example", "jump", "double", "key"],
+  "owner": "（填：负责人）",
+  "team": "（填：团队）",
+  "notes": "每层跳板机可配置不同 user/key_file；也可按实际情况简化为字符串格式。",
+  "config_version": "1.0"
+}
+

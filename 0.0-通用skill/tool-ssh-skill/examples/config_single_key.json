@@ -1,0 +1,22 @@
+{
+  "name": "example-single-key",
+  "summary": "示例：开发环境-单机-密钥认证（替换 host/user/key_file）",
+  "description": "单机密钥认证示例，默认启用 ControlMaster 连接复用。",
+  "host": "192.0.2.10",
+  "port": 22,
+  "user": "deploy",
+  "key_file": "./keys/example_id_ed25519",
+  "timeout": 30,
+  "strict_host_key_checking": true,
+  "auto_add_hostkey": true,
+  "use_controlmaster": true,
+  "control_persist": "10m",
+  "jump_hosts": [],
+  "environment": "development",
+  "tags": ["example", "single", "key"],
+  "owner": "（填：负责人）",
+  "team": "（填：团队）",
+  "notes": "请将 key_file 指向实际私钥路径，并确保权限正确（建议 chmod 600）。",
+  "config_version": "1.0"
+}
+
