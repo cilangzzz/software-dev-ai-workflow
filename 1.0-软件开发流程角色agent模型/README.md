@@ -73,8 +73,10 @@
 
 | 概念 | 定义 | 文件后缀 | 说明 |
 |------|------|----------|------|
-| **Agent角色** | 承担特定职责的智能实体 | `.agent.yaml` | 定义职责、权限、协作关系、可调用技能 |
-| **Skill技能** | 可被调用的具体能力 | `.skill.yaml` | 定义输入输出、工作流程、模板 |
+| **Agent角色** | 承担特定职责的智能实体 | `.role.md` / `.agent.md` | 定义职责、权限、协作关系 |
+| **Skill技能** | 可被调用的具体能力 | `.skill.md` | 定义输入输出、工作流程、模板 |
+
+> 注：本目录实际文件后缀为 `.md`（无 `.yaml`）。
 
 ### 关系模型
 
@@ -89,51 +91,51 @@ Agent（架构师） ──调用──> Skill（系统架构设计）
 
 ### 产品部Skill
 
-| Skill名称 | 功能描述 | 触发命令 |
-|-----------|----------|----------|
-| requirement-analyzer | 解析需求描述，生成结构化PRD框架 | `/requirement-analyzer` |
-| user-story-generator | 生成符合INVEST原则的用户故事 | `/user-story-generator` |
-| acceptance-criteria-writer | 编写Gherkin格式的验收标准 | `/acceptance-criteria-writer` |
-| user-manual-writer | 生成用户手册和快速入门指南 | `/user-manual-writer` |
-| business-rule-analyzer | 提取和分析业务规则 | `/business-rule-analyzer` |
-| requirement-researcher | 从Web搜索行业需求文档，提炼功能需求点 | `/requirement-researcher` |
-| competitive-analyzer | 采集竞品功能清单，生成对比矩阵 | `/competitive-analyzer` |
+| Skill名称 | 功能描述 | 触发命令 | 文件路径 |
+|-----------|----------|----------|----------|
+| requirement-analyzer | 解析需求描述，生成结构化PRD框架 | `/requirement-analyzer` | [产品/skill/requirement-analyzer.skill.md](产品/skill/requirement-analyzer.skill.md) |
+| user-story-generator | 生成符合INVEST原则的用户故事 | `/user-story-generator` | [产品/skill/user-story-generator.skill.md](产品/skill/user-story-generator.skill.md) |
+| acceptance-criteria-writer | 编写Gherkin格式的验收标准 | `/acceptance-criteria-writer` | [产品/skill/acceptance-criteria-writer.skill.md](产品/skill/acceptance-criteria-writer.skill.md) |
+| user-manual-writer | 生成用户手册和快速入门指南 | `/user-manual-writer` | [产品/skill/user-manual-writer.skill.md](产品/skill/user-manual-writer.skill.md) |
+| business-rule-analyzer | 提取和分析业务规则 | `/business-rule-analyzer` | [产品/skill/business-rule-analyzer.skill.md](产品/skill/business-rule-analyzer.skill.md) |
+| requirement-researcher | 从Web搜索行业需求文档，提炼功能需求点 | `/requirement-researcher` | [产品/skill/requirement-researcher.skill.md](产品/skill/requirement-researcher.skill.md) |
 
 ### 研发部Skill
 
-| Skill名称 | 功能描述 | 触发命令 |
-|-----------|----------|----------|
-| architect | 系统架构设计，生成架构图 | `/architect` |
-| implement | 功能代码实现 | `/implement` |
-| scaffold | 项目脚手架生成 | `/scaffold` |
-| module-designer | 功能模块详细设计 | `/module-designer` |
-| api-designer | RESTful API接口设计 | `/api-designer` |
-| state-machine-designer | 状态机设计 | `/state-machine-designer` |
-| data-model-designer | 数据模型设计 | `/data-model-designer` |
-| code-review | 代码审查 | `/code-review` |
+| Skill名称 | 功能描述 | 触发命令 | 文件路径 |
+|-----------|----------|----------|----------|
+| architect | 系统架构设计，生成架构图 | `/architect` | [研发/skill/architect/system-architect.skill.md](研发/skill/architect/system-architect.skill.md) |
+| implement | 功能代码实现 | `/implement` | [研发/skill/implement/](研发/skill/implement/) |
+| scaffold | 项目脚手架生成 | `/scaffold` | [研发/skill/implement/](研发/skill/implement/) |
+| module-designer | 功能模块详细设计 | `/module-designer` | [研发/skill/design/module-designer.skill.md](研发/skill/design/module-designer.skill.md) |
+| api-designer | RESTful API接口设计 | `/api-designer` | [研发/skill/design/api-designer.skill.md](研发/skill/design/api-designer.skill.md) |
+| state-machine-designer | 状态机设计 | `/state-machine-designer` | [研发/skill/design/state-machine-designer.skill.md](研发/skill/design/state-machine-designer.skill.md) |
+| data-model-designer | 数据模型设计 | `/data-model-designer` | [研发/skill/design/data-model-designer.skill.md](研发/skill/design/data-model-designer.skill.md) |
+| code-review | 代码审查 | `/code-review` | [研发/skill/process/code-review.skill.md](研发/skill/process/code-review.skill.md) |
 
 ### 测试部Skill
 
-| Skill名称 | 功能描述 | 触发命令 |
-|-----------|----------|----------|
-| test-case-generator | 根据需求生成测试用例 | `/test-case-generator` |
-| test-executor | 执行测试并记录结果 | `/test-executor` |
-| bug-analyzer | 分析Bug原因并提供修复建议 | `/bug-analyzer` |
+| Skill名称 | 功能描述 | 触发命令 | 文件路径 |
+|-----------|----------|----------|----------|
+| test-case-generator | 根据需求生成测试用例 | `/test-case-generator` | [测试/skill/test-case-generator.skill.md](测试/skill/test-case-generator.skill.md) |
+| test-executor | 执行测试并记录结果 | `/test-executor` | [测试/skill/test-executor.skill.md](测试/skill/test-executor.skill.md) |
+| bug-analyzer | 分析Bug原因并提供修复建议 | `/bug-analyzer` | [测试/skill/bug-analyzer.skill.md](测试/skill/bug-analyzer.skill.md) |
 
 ### 运维部Skill
 
-| Skill名称 | 功能描述 | 触发命令 |
-|-----------|----------|----------|
-| ci-cd-pipeline | CI/CD流水线配置 | `/ci-cd-pipeline` |
-| deployment-analyzer | 部署分析和配置 | `/deployment-analyzer` |
+| Skill名称 | 功能描述 | 触发命令 | 文件路径 |
+|-----------|----------|----------|----------|
+| ci-pipeline-assistant | CI/CD流水线配置 | `/ci-pipeline-assistant` | [运维/skill/ci-pipeline-assistant.skill.md](运维/skill/ci-pipeline-assistant.skill.md) |
+| deploy-analyzer | 部署分析和配置 | `/deploy-analyzer` | [运维/skill/deploy-analyzer.skill.md](运维/skill/deploy-analyzer.skill.md) |
 
 ### 安全部Skill
 
-| Skill名称 | 功能描述 | 触发命令 |
-|-----------|----------|----------|
-| security-scan | 安全漏洞扫描 | `/security-scan` |
-| security-code-review | 代码安全审查 | `/security-code-review` |
-| security-threat-model | 威胁建模分析 | `/security-threat-model` |
+| Skill名称 | 功能描述 | 触发命令 | 文件路径 |
+|-----------|----------|----------|----------|
+| security-scan | 安全漏洞扫描 | `/security-scan` | [安全/skill/security-scan.skill.md](安全/skill/security-scan.skill.md) |
+| security-code-review | 代码安全审查 | `/security-code-review` | [安全/skill/security-code-review.skill.md](安全/skill/security-code-review.skill.md) |
+| security-review | 安全审查流程 | `/security-review` | [安全/skill/security-review.skill.md](安全/skill/security-review.skill.md) |
+| security-threat-model | 威胁建模分析 | `/security-threat-model` | [安全/skill/security-threat-model.skill.md](安全/skill/security-threat-model.skill.md) |
 
 ## 使用指南
 
