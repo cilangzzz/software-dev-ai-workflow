@@ -22,9 +22,11 @@
 
 - 🔄 **双流程支持** — 瀑布 / 敏捷全流程定义，含质量门控检查点（Gate 1-5）
 - 🏭 **行业系统模型** — 内置 ERP（12 模块）、MES（10+ 模块）、语音社区等完整参考架构
-- 🔧 **21+ 通用技能** — SSH、Word、Draw.io、Notion、Jira、禅道等工具集成
+- 🔧 **27+ 通用技能** — SSH、Word、Draw.io、Notion、Jira、禅道等工具集成
+- 🤖 **8 阶段端到端工作流** — `.claude/` 下预置从需求分析到前后端开发的可执行编排
 - 🧬 **可自扩展** — 通过 `author-agent` / `author-skill` 元技能，AI 自行创建新角色和新技能
 - 📐 **质量门控** — 每阶段有可量化检查标准，不达标不放行
+- 🗂️ **单一事实源** — 自动生成 [`catalog.json`](catalog.json)、[Skill 总目录](docs/skill-index.md)、[按阶段产出物](docs/deliverables/by-stage.md)、[按部门产出物](docs/deliverables/by-department.md)
 
 ---
 
@@ -75,7 +77,16 @@
 
 ```
 software-dev-ai-workflow/
-├── 0.0-通用skill/                    # 通用技能工具集
+├── .claude/                           # Claude Code 编排入口（推荐从此入手）
+│   ├── skills/                        # 8 阶段 Skill（stage-01 ~ stage-08）
+│   └── workflows/                     # 8 阶段工作流脚本
+├── catalog.json                       # 仓库级 Skill 单一事实源（自动生成）
+├── docs/                              # 自动生成文档
+│   ├── skill-index.md                 # Skill 总目录（按阶段/部门/通用四象限）
+│   └── deliverables/                  # 产出物单一事实源
+│       ├── by-stage.md                # 按阶段汇总
+│       └── by-department.md           # 按部门汇总
+├── 0.0-通用skill/                    # 通用技能工具集（27 个子目录）
 │   ├── author-build-project-docs/    # 项目文档生成
 │   └── manage-项目管理/              # 项目管理工具
 ├── 1.0-软件开发流程角色agent模型/      # 角色Agent定义
@@ -85,7 +96,8 @@ software-dev-ai-workflow/
 │   ├── 开发流程样例/                  # 瀑布/敏捷流程
 │   ├── 系统模型样例/                  # ERP、MES、VCP
 │   └── 项目管理样例/                  # 项目管理模板
-├── 3.0-基础开发系统模板/              # 基础开发框架
+├── 3.0-基础开发系统模板/              # 基础开发框架（git submodule）
+├── _deprecated/                      # 归档的旧版 Skill（仅供溯源）
 └── output/                           # 输出目录
 ```
 
@@ -110,6 +122,9 @@ software-dev-ai-workflow/
 | 了解开发流程 | [2.0-用例/开发流程样例/](2.0-用例/开发流程样例/) |
 | 参考系统模型 | [2.0-用例/系统模型样例/](2.0-用例/系统模型样例/) |
 | 端到端工作流示例 | [2.0-用例/工作流/](2.0-用例/工作流/) |
+| 查看全部 Skill 索引 | [docs/skill-index.md](docs/skill-index.md) |
+| 按阶段查看产出物 | [docs/deliverables/by-stage.md](docs/deliverables/by-stage.md) |
+| 按部门查看产出物 | [docs/deliverables/by-department.md](docs/deliverables/by-department.md) |
 
 ---
 

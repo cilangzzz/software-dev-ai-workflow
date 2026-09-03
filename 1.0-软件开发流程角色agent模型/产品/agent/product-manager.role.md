@@ -235,15 +235,15 @@
 ### core_skills
 
 
-- **path**: skill/requirement-analyzer.md
+- **path**: skill/requirement-analyzer.skill.md
 - **priority**: P0
 - **description**: 需求分析，生成结构化PRD框架
 
-- **path**: skill/user-story-generator.md
+- **path**: skill/user-story-generator.skill.md
 - **priority**: P0
 - **description**: 用户故事生成，INVEST标准
 
-- **path**: skill/acceptance-criteria-writer.md
+- **path**: skill/acceptance-criteria-writer.skill.md
 - **priority**: P0
 - **description**: 验收标准编写，Gherkin格式
 
@@ -272,15 +272,15 @@
 ### core_skills
 
 
-- **path**: skill/requirement-analyzer.md
+- **path**: skill/requirement-analyzer.skill.md
 - **priority**: P0
 - **description**: 需求分析，生成结构化PRD框架
 
-- **path**: skill/user-story-generator.md
+- **path**: skill/user-story-generator.skill.md
 - **priority**: P0
 - **description**: 用户故事生成，INVEST标准
 
-- **path**: skill/acceptance-criteria-writer.md
+- **path**: skill/acceptance-criteria-writer.skill.md
 - **priority**: P0
 - **description**: 验收标准编写，Gherkin格式
 
@@ -317,15 +317,15 @@
 ### core_skills
 
 
-- **path**: skill/requirement-analyzer.md
+- **path**: skill/requirement-analyzer.skill.md
 - **priority**: P0
 - **description**: 需求分析，生成结构化PRD框架
 
-- **path**: skill/user-story-generator.md
+- **path**: skill/user-story-generator.skill.md
 - **priority**: P0
 - **description**: 用户故事生成，INVEST标准
 
-- **path**: skill/user-manual-writer.md
+- **path**: skill/user-manual-writer.skill.md
 - **priority**: P0
 - **description**: 用户手册生成（C端重点）
 
@@ -350,7 +350,7 @@
 ### core_skills
 
 
-- **path**: skill/requirement-analyzer.md
+- **path**: skill/requirement-analyzer.skill.md
 - **priority**: P0
 - **description**: 需求分析
 
@@ -375,15 +375,15 @@
 ### core_skills
 
 
-- **path**: skill/requirement-analyzer.md
+- **path**: skill/requirement-analyzer.skill.md
 - **priority**: P0
 - **description**: 需求分析
 
-- **path**: skill/user-story-generator.md
+- **path**: skill/user-story-generator.skill.md
 - **priority**: P0
 - **description**: 用户故事生成
 
-- **path**: skill/user-manual-writer.md
+- **path**: skill/user-manual-writer.skill.md
 - **priority**: P0
 - **description**: 用户手册生成（APP使用说明）
 
@@ -404,7 +404,7 @@
 ### b2b_pm
 
 
-- **pattern**: skill/user-manual-writer.md
+- **pattern**: skill/user-manual-writer.skill.md
 - **reason**: B端产品通常由培训/实施人员编写手册，而非产品经理
 
 ### b2c_pm
@@ -422,10 +422,10 @@
 ### data_pm
 
 
-- **pattern**: skill/user-manual-writer.md
+- **pattern**: skill/user-manual-writer.skill.md
 - **reason**: 数据产品通常不需要面向终端用户的用户手册
 
-- **pattern**: skill/acceptance-criteria-writer.md
+- **pattern**: skill/acceptance-criteria-writer.skill.md
 - **reason**: 数据产品的验收侧重数据准确性，而非功能验收
 
 ### mobile_pm
@@ -437,7 +437,7 @@
 - **pattern**: references/srs-template.md
 - **reason**: 移动端项目通常用PRD而非SRS
 
-- **pattern**: skill/acceptance-criteria-writer.md
+- **pattern**: skill/acceptance-criteria-writer.skill.md
 - **priority**: P1
 - **reason**: 移动端验收侧重用户体验而非Gherkin格式
 

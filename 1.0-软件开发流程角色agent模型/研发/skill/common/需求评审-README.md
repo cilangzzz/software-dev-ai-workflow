@@ -6,7 +6,7 @@
 
 | 文件 | 类型 | 描述 |
 |------|------|------|
-| [requirement-review.md](requirement-review.md) | Skill 定义 | 需求评审 Skill 的完整定义文档 |
+| requirement-review.md <!-- TODO: requirement-review.md 链接待修复 --> | Skill 定义 | 需求评审 Skill 的完整定义文档 |
 | [role-config.yaml](role-config.yaml) | 配置文件 | 需求评审角色配置和参数说明 |
 
 ## 快速使用

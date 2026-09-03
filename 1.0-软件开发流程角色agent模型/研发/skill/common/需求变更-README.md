@@ -6,7 +6,7 @@
 
 | 文件 | 类型 | 描述 |
 |------|------|------|
-| [requirement-change.md](requirement-change.md) | Skill 定义 | 需求变更管理 Skill 的完整定义文档 |
+| requirement-change.md <!-- TODO: requirement-change.md 链接待修复 --> | Skill 定义 | 需求变更管理 Skill 的完整定义文档 |
 | [role-config.yaml](role-config.yaml) | 配置文件 | 需求变更角色配置和参数说明 |
 
 ## 快速使用

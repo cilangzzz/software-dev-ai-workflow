@@ -9,6 +9,16 @@ trigger:
     - 需求开发
     - 功能点清单
     - BRD文档
+downstream:
+  - name: "user-story-generator"
+    department: "产品"
+    path: "产品/skill/user-story-generator.skill.md"
+  - name: "acceptance-criteria-writer"
+    department: "产品"
+    path: "产品/skill/acceptance-criteria-writer.skill.md"
+  - name: "business-rule-analyzer"
+    department: "产品"
+    path: "产品/skill/business-rule-analyzer.skill.md"
 ---
 
 # 需求开发阶段技能
@@ -85,6 +95,6 @@ trigger:
 
 ## 关联技能
 
-- [user-story-generator](../1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.skill.md)
-- [acceptance-criteria-writer](../1.0-软件开发流程角色agent模型/产品/skill/acceptance-criteria-writer.skill.md)
-- [business-rule-analyzer](../1.0-软件开发流程角色agent模型/产品/skill/business-rule-analyzer.skill.md)
+- [user-story-generator](../../1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.skill.md)
+- [acceptance-criteria-writer](../../1.0-软件开发流程角色agent模型/产品/skill/acceptance-criteria-writer.skill.md)
+- [business-rule-analyzer](../../1.0-软件开发流程角色agent模型/产品/skill/business-rule-analyzer.skill.md)

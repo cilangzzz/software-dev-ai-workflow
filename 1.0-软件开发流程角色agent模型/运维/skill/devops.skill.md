@@ -8,5 +8,5 @@ user_invocable: true
 
 ## Guides
 
-- [CI Commit Failure Report](commit-failures.md) — analyze GitHub Actions failures for the last commit on main
+- CI Commit Failure Report <!-- TODO: commit-failures.md 链接待修复 --> — analyze GitHub Actions failures for the last commit on main
 - [fetch-commit-logs.sh](fetch-commit-logs.sh) — script to download failed job logs into `~/tmp/commit-<sha>/`

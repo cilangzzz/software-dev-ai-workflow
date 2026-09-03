@@ -243,7 +243,7 @@ Run axe in component tests for every interactive component. Catches:
 - Missing alt text on images
 - Heading order violations
 
-Cross-link: [skills/accessibility/SKILL.md](../accessibility/SKILL.md) for the broader a11y testing playbook.
+Cross-link: skills/accessibility/SKILL.md <!-- TODO: ../accessibility/SKILL.md 链接待修复 --> for the broader a11y testing playbook.
 
 ## When NOT to Use Snapshot Tests
 
@@ -270,7 +270,7 @@ JSDOM (used by Vitest/Jest) cannot:
 - Handle iframes, popups, downloads, cross-origin flows
 - Run real network in a controlled environment with full DevTools support
 
-For any of those, use Playwright Component Testing (component test in real browser) or full E2E. See [e2e-testing skill](../e2e-testing/SKILL.md).
+For any of those, use Playwright Component Testing (component test in real browser) or full E2E. See e2e-testing skill <!-- TODO: ../e2e-testing/SKILL.md 链接待修复 -->.
 
 Decision boundary:
 
@@ -354,8 +354,8 @@ CI=true vitest run --coverage
 
 ## Related
 
-- Rules: [rules/react/testing.md](../../rules/react/testing.md)
-- Skills: [react-patterns](../react-patterns/SKILL.md), [accessibility](../accessibility/SKILL.md), [e2e-testing](../e2e-testing/SKILL.md), [tdd-workflow](../tdd-workflow/SKILL.md)
+- Rules: rules/react/testing.md <!-- TODO: ../../rules/react/testing.md 链接待修复 -->
+- Skills: react-patterns <!-- TODO: ../react-patterns/SKILL.md 链接待修复 -->, accessibility <!-- TODO: ../accessibility/SKILL.md 链接待修复 -->, e2e-testing <!-- TODO: ../e2e-testing/SKILL.md 链接待修复 -->, tdd-workflow <!-- TODO: ../tdd-workflow/SKILL.md 链接待修复 -->
 - Agents: `react-reviewer` (reviews test quality during code review), `tdd-guide` (enforces TDD process)
 - Commands: `/react-test`, `/react-review`
 

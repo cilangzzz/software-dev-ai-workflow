@@ -23,14 +23,14 @@ metadata:
 
 | Topic | Description | Reference |
 |-------|-------------|-----------|
-| Script Setup & Macros | `<script setup>`, defineProps, defineEmits, defineModel, defineExpose, defineOptions, defineSlots, generics | [script-setup-macros](references/script-setup-macros.md) |
-| Reactivity & Lifecycle | ref, shallowRef, computed, watch, watchEffect, effectScope, lifecycle hooks, composables | [core-new-apis](references/core-new-apis.md) |
+| Script Setup & Macros | `<script setup>`, defineProps, defineEmits, defineModel, defineExpose, defineOptions, defineSlots, generics | script-setup-macros <!-- TODO: references/script-setup-macros.md 缺失 --> |
+| Reactivity & Lifecycle | ref, shallowRef, computed, watch, watchEffect, effectScope, lifecycle hooks, composables | core-new-apis <!-- TODO: references/core-new-apis.md 缺失 --> |
 
 ## Features
 
 | Topic | Description | Reference |
 |-------|-------------|-----------|
-| Built-in Components & Directives | Transition, Teleport, Suspense, KeepAlive, v-memo, custom directives | [advanced-patterns](references/advanced-patterns.md) |
+| Built-in Components & Directives | Transition, Teleport, Suspense, KeepAlive, v-memo, custom directives | advanced-patterns <!-- TODO: references/advanced-patterns.md 缺失 --> |
 
 ## Quick Reference
 

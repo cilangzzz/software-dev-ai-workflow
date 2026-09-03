@@ -49,14 +49,14 @@ These are essential, must-know foundations. Apply all of them in every Vue task 
 
 ### Reactivity
 
-- Must-read reference from `1.1`: [reactivity](references/reactivity.md)
+- Must-read reference from `1.1`: reactivity <!-- TODO: references/reactivity.md 缺失 -->
 - Keep source state minimal (`ref`/`reactive`), derive everything possible with `computed`.
 - Use watchers for side effects if needed.
 - Avoid recomputing expensive logic in templates.
 
 ### SFC structure and template safety
 
-- Must-read reference from `1.1`: [sfc](references/sfc.md)
+- Must-read reference from `1.1`: sfc <!-- TODO: references/sfc.md 缺失 -->
 - Keep SFC sections in this order: `<script>` → `<template>` → `<style>`.
 - Keep SFC responsibilities focused; split large components.
 - Keep templates declarative; move branching/derivation to script.
@@ -89,7 +89,7 @@ Entry/root and route view rule:
 
 ### Component data flow
 
-- Must-read reference from `1.1`: [component-data-flow](references/component-data-flow.md)
+- Must-read reference from `1.1`: component-data-flow <!-- TODO: references/component-data-flow.md 缺失 -->
 - Use props down, events up as the primary model.
 - Use `v-model` only for true two-way component contracts.
 - Use provide/inject only for deep-tree dependencies or shared context.
@@ -97,7 +97,7 @@ Entry/root and route view rule:
 
 ### Composables
 
-- Must-read reference from `1.1`: [composables](references/composables.md)
+- Must-read reference from `1.1`: composables <!-- TODO: references/composables.md 缺失 -->
 - Extract logic into composables when it is reused, stateful, or side-effect heavy.
 - Keep composable APIs small, typed, and predictable.
 - Separate feature logic from presentational components.
@@ -108,35 +108,35 @@ Entry/root and route view rule:
 
 Do not add these by default. Load the matching reference only when the requirement exists.
 
-- Slots: parent needs to control child content/layout -> [component-slots](references/component-slots.md)
-- Fallthrough attributes: wrapper/base components must forward attrs/events safely -> [component-fallthrough-attrs](references/component-fallthrough-attrs.md)
-- Built-in component `<KeepAlive>` for stateful view caching -> [component-keep-alive](references/component-keep-alive.md)
-- Built-in component `<Teleport>` for overlays/portals -> [component-teleport](references/component-teleport.md)
-- Built-in component `<Suspense>` for async subtree fallback boundaries -> [component-suspense](references/component-suspense.md)
+- Slots: parent needs to control child content/layout -> component-slots <!-- TODO: references/component-slots.md 缺失 -->
+- Fallthrough attributes: wrapper/base components must forward attrs/events safely -> component-fallthrough-attrs <!-- TODO: references/component-fallthrough-attrs.md 缺失 -->
+- Built-in component `<KeepAlive>` for stateful view caching -> component-keep-alive <!-- TODO: references/component-keep-alive.md 缺失 -->
+- Built-in component `<Teleport>` for overlays/portals -> component-teleport <!-- TODO: references/component-teleport.md 缺失 -->
+- Built-in component `<Suspense>` for async subtree fallback boundaries -> component-suspense <!-- TODO: references/component-suspense.md 缺失 -->
 - Animation-related features: pick the simplest approach that matches the required motion behavior.
-  - Built-in component `<Transition>` for enter/leave effects -> [transition](references/component-transition.md)
-  - Built-in component `<TransitionGroup>` for animated list mutations -> [transition-group](references/component-transition-group.md)
-  - Class-based animation for non-enter/leave effects -> [animation-class-based-technique](references/animation-class-based-technique.md)
-  - State-driven animation for user-input-driven animation -> [animation-state-driven-technique](references/animation-state-driven-technique.md)
+  - Built-in component `<Transition>` for enter/leave effects -> transition <!-- TODO: references/component-transition.md 缺失 -->
+  - Built-in component `<TransitionGroup>` for animated list mutations -> transition-group <!-- TODO: references/component-transition-group.md 缺失 -->
+  - Class-based animation for non-enter/leave effects -> animation-class-based-technique <!-- TODO: references/animation-class-based-technique.md 缺失 -->
+  - State-driven animation for user-input-driven animation -> animation-state-driven-technique <!-- TODO: references/animation-state-driven-technique.md 缺失 -->
 
 ### 3.2 Less-common optional features
 
 Use these only when there is explicit product or technical need.
 
-- Directives: behavior is DOM-specific and not a good composable/component fit -> [directives](references/directives.md)
-- Async components: heavy/rarely-used UI should be lazy loaded -> [component-async](references/component-async.md)
-- Render functions only when templates cannot express the requirement -> [render-functions](references/render-functions.md)
-- Plugins when behavior must be installed app-wide -> [plugins](references/plugins.md)
-- State management patterns: app-wide shared state crosses feature boundaries -> [state-management](references/state-management.md)
+- Directives: behavior is DOM-specific and not a good composable/component fit -> directives <!-- TODO: references/directives.md 缺失 -->
+- Async components: heavy/rarely-used UI should be lazy loaded -> component-async <!-- TODO: references/component-async.md 缺失 -->
+- Render functions only when templates cannot express the requirement -> render-functions <!-- TODO: references/render-functions.md 缺失 -->
+- Plugins when behavior must be installed app-wide -> plugins <!-- TODO: references/plugins.md 缺失 -->
+- State management patterns: app-wide shared state crosses feature boundaries -> state-management <!-- TODO: references/state-management.md 缺失 -->
 
 ## 4) Run performance optimization after behavior is correct
 
 Performance work is a post-functionality pass. Do not optimize before core behavior is implemented and verified.
 
-- Large list rendering bottlenecks -> [perf-virtualize-large-lists](references/perf-virtualize-large-lists.md)
-- Static subtrees re-rendering unnecessarily -> [perf-v-once-v-memo-directives](references/perf-v-once-v-memo-directives.md)
-- Over-abstraction in hot list paths -> [perf-avoid-component-abstraction-in-lists](references/perf-avoid-component-abstraction-in-lists.md)
-- Expensive updates triggered too often -> [updated-hook-performance](references/updated-hook-performance.md)
+- Large list rendering bottlenecks -> perf-virtualize-large-lists <!-- TODO: references/perf-virtualize-large-lists.md 缺失 -->
+- Static subtrees re-rendering unnecessarily -> perf-v-once-v-memo-directives <!-- TODO: references/perf-v-once-v-memo-directives.md 缺失 -->
+- Over-abstraction in hot list paths -> perf-avoid-component-abstraction-in-lists <!-- TODO: references/perf-avoid-component-abstraction-in-lists.md 缺失 -->
+- Expensive updates triggered too often -> updated-hook-performance <!-- TODO: references/updated-hook-performance.md 缺失 -->
 
 ## 5) Final self-check before finishing
 

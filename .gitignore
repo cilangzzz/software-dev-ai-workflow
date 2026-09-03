@@ -48,4 +48,4 @@ test/
 .claude/settings.local.json
 
 # AI authoring scratch directories (per-system model workspace)
-.workspace/
+.workspace/scripts/__pycache__/

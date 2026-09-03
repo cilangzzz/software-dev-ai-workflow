@@ -224,10 +224,10 @@ function Cart({ items }) {
 
 ## 参考资源
 
-- [React Patterns (SkillsMP)](skill/design/react-patterns.skill.md) - 212062 stars
-- [Vue Best Practices (SkillsMP)](skill/design/vue-best-practices.skill.md) - 40873 stars
-- [Frontend Developer (SkillsMP)](skill/implement/frontend-developer.skill.md) - 40198 stars
-- [Testing Patterns (SkillsMP)](../测试/skill/testing-patterns.skill.md) - 40198 stars
+- React Patterns (SkillsMP) <!-- TODO: skill/design/react-patterns.skill.md 链接待修复 --> - 212062 stars
+- Vue Best Practices (SkillsMP) <!-- TODO: skill/design/vue-best-practices.skill.md 链接待修复 --> - 40873 stars
+- Frontend Developer (SkillsMP) <!-- TODO: skill/implement/frontend-developer.skill.md 链接待修复 --> - 40198 stars
+- Testing Patterns (SkillsMP) <!-- TODO: ../测试/skill/testing-patterns.skill.md 链接待修复 --> - 40198 stars
 
 ## 更新记录
 

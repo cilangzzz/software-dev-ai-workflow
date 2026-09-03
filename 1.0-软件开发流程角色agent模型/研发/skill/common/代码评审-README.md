@@ -6,7 +6,7 @@
 
 | 文件 | 类型 | 描述 |
 |------|------|------|
-| [code-review.md](code-review.md) | Skill 定义 | 代码审查 Skill 的完整定义文档 |
+| code-review.md <!-- TODO: code-review.md 链接待修复 --> | Skill 定义 | 代码审查 Skill 的完整定义文档 |
 | [role-config.yaml](role-config.yaml) | 配置文件 | 代码评审角色配置和**触发条件**定义 |
 
 ## ⚠️ 按需加载机制

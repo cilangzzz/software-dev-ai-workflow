@@ -18,43 +18,43 @@ This skill provides expert guide for testing Spring Boot 4 applications with mod
 
 | Scenario | Annotation | Reference |
 |----------|------------|-----------|
-| Controller + HTTP semantics | `@WebMvcTest` | [references/webmvctest.md](references/webmvctest.md) |
-| Repository + JPA queries | `@DataJpaTest` | [references/datajpatest.md](references/datajpatest.md) |
-| REST client + external APIs | `@RestClientTest` | [references/restclienttest.md](references/restclienttest.md) |
-| JSON (de)serialization | `@JsonTest` | [references/test-slices-overview.md](references/test-slices-overview.md) |
-| Full application | `@SpringBootTest` | [references/test-slices-overview.md](references/test-slices-overview.md) |
+| Controller + HTTP semantics | `@WebMvcTest` | references/webmvctest.md <!-- TODO: references/webmvctest.md 缺失 --> |
+| Repository + JPA queries | `@DataJpaTest` | references/datajpatest.md <!-- TODO: references/datajpatest.md 缺失 --> |
+| REST client + external APIs | `@RestClientTest` | references/restclienttest.md <!-- TODO: references/restclienttest.md 缺失 --> |
+| JSON (de)serialization | `@JsonTest` | references/test-slices-overview.md <!-- TODO: references/test-slices-overview.md 缺失 --> |
+| Full application | `@SpringBootTest` | references/test-slices-overview.md <!-- TODO: references/test-slices-overview.md 缺失 --> |
 
 ## Test Slices Reference
 
-- [references/test-slices-overview.md](references/test-slices-overview.md) - Decision matrix and comparison
-- [references/webmvctest.md](references/webmvctest.md) - Web layer with MockMvc
-- [references/datajpatest.md](references/datajpatest.md) - Data layer with Testcontainers
-- [references/restclienttest.md](references/restclienttest.md) - REST client testing
+- references/test-slices-overview.md <!-- TODO: references/test-slices-overview.md 缺失 --> - Decision matrix and comparison
+- references/webmvctest.md <!-- TODO: references/webmvctest.md 缺失 --> - Web layer with MockMvc
+- references/datajpatest.md <!-- TODO: references/datajpatest.md 缺失 --> - Data layer with Testcontainers
+- references/restclienttest.md <!-- TODO: references/restclienttest.md 缺失 --> - REST client testing
 
 ## Testing Tools Reference
 
-- [references/mockmvc-tester.md](references/mockmvc-tester.md) - AssertJ-style MockMvc (3.2+)
-- [references/mockmvc-classic.md](references/mockmvc-classic.md) - Traditional MockMvc (pre-3.2)
-- [references/resttestclient.md](references/resttestclient.md) - Spring Boot 4+ REST client
-- [references/mockitobean.md](references/mockitobean.md) - Mocking dependencies
+- references/mockmvc-tester.md <!-- TODO: references/mockmvc-tester.md 缺失 --> - AssertJ-style MockMvc (3.2+)
+- references/mockmvc-classic.md <!-- TODO: references/mockmvc-classic.md 缺失 --> - Traditional MockMvc (pre-3.2)
+- references/resttestclient.md <!-- TODO: references/resttestclient.md 缺失 --> - Spring Boot 4+ REST client
+- references/mockitobean.md <!-- TODO: references/mockitobean.md 缺失 --> - Mocking dependencies
 
 ## Assertion Libraries
 
-- [references/assertj-basics.md](references/assertj-basics.md) - Scalars, strings, booleans, dates
-- [references/assertj-collections.md](references/assertj-collections.md) - Lists, Sets, Maps, arrays
+- references/assertj-basics.md <!-- TODO: references/assertj-basics.md 缺失 --> - Scalars, strings, booleans, dates
+- references/assertj-collections.md <!-- TODO: references/assertj-collections.md 缺失 --> - Lists, Sets, Maps, arrays
 
 ## Testcontainers
 
-- [references/testcontainers-jdbc.md](references/testcontainers-jdbc.md) - PostgreSQL, MySQL, etc.
+- references/testcontainers-jdbc.md <!-- TODO: references/testcontainers-jdbc.md 缺失 --> - PostgreSQL, MySQL, etc.
 
 ## Test Data Generation
 
-- [references/instancio.md](references/instancio.md) - Generate complex test objects (3+ properties)
+- references/instancio.md <!-- TODO: references/instancio.md 缺失 --> - Generate complex test objects (3+ properties)
 
 ## Performance & Migration
 
-- [references/context-caching.md](references/context-caching.md) - Speed up test suites
-- [references/sb4-migration.md](references/sb4-migration.md) - Spring Boot 4.0 changes
+- references/context-caching.md <!-- TODO: references/context-caching.md 缺失 --> - Speed up test suites
+- references/sb4-migration.md <!-- TODO: references/sb4-migration.md 缺失 --> - Spring Boot 4.0 changes
 
 ## Quick Decision Tree
 

@@ -9,6 +9,10 @@ trigger:
     - 系统设计
     - 容量规划
     - 性能指标
+downstream:
+  - name: "system-architect"
+    department: "研发"
+    path: "研发/skill/architect/system-architect.skill.md"
 ---
 
 # 系统设计阶段技能
@@ -104,4 +108,4 @@ trigger:
 
 ## 关联技能
 
-- [system-architect](../1.0-软件开发流程角色agent模型/研发/skill/architect/system-architect.skill.md)
+- [system-architect](../../1.0-软件开发流程角色agent模型/研发/skill/architect/system-architect.skill.md)

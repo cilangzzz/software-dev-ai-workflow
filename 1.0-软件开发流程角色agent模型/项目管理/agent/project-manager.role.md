@@ -87,27 +87,27 @@
 ### core_skills
 
 
-- **path**: management/skill/schedule-planner.md
+- **path**: management/skill/schedule-planner.skill.md
 - **priority**: P0
 - **description**: 项目排期规划，工时估算、任务分配、甘特图生成
 
-- **path**: management/skill/workload-analyzer.md
+- **path**: management/skill/workload-analyzer.skill.md
 - **priority**: P0
 - **description**: 人员负载分析，工时分配、缺口识别、负荷率计算
 
-- **path**: management/skill/milestone-tracker.md
+- **path**: management/skill/milestone-tracker.skill.md
 - **priority**: P0
 - **description**: 里程碑跟踪，节点验收、偏差监控、预警机制
 
-- **path**: management/skill/risk-manager.md
+- **path**: management/skill/risk-manager.skill.md
 - **priority**: P1
 - **description**: 风险识别评估，应对措施、预警清单
 
-- **path**: management/skill/change-handler.md
+- **path**: management/skill/change-handler.skill.md
 - **priority**: P1
 - **description**: 变更请求处理，影响分析、排期调整
 
-- **path**: management/skill/status-reporter.md
+- **path**: management/skill/status-reporter.skill.md
 - **priority**: P0
 - **description**: 项目状态报告，周期性汇报、进度可视化
 

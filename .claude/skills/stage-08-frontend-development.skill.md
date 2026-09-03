@@ -8,6 +8,16 @@ trigger:
   keywords:
     - 前端开发
     - 前端实现
+downstream:
+  - name: "vue-implement"
+    department: "研发"
+    path: "研发/skill/implement/vue-implement.skill.md"
+  - name: "vue-best-practices"
+    department: "研发"
+    path: "研发/skill/design/vue-best-practices.skill.md"
+  - name: "component-designer-vue"
+    department: "研发"
+    path: "研发/skill/design/component-designer-vue.skill.md"
 ---
 
 # 前端开发阶段技能
@@ -185,6 +195,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
 
 ## 关联技能
 
-- [vue-implement](../1.0-软件开发流程角色agent模型/研发/skill/implement/vue-implement.skill.md)
-- [vue-best-practices](../1.0-软件开发流程角色agent模型/研发/skill/design/vue-best-practices.skill.md)
-- [component-designer-vue](../1.0-软件开发流程角色agent模型/研发/skill/design/component-designer-vue.skill.md)
+- [vue-implement](../../1.0-软件开发流程角色agent模型/研发/skill/implement/vue-implement.skill.md)
+- [vue-best-practices](../../1.0-软件开发流程角色agent模型/研发/skill/design/vue-best-practices.skill.md)
+- [component-designer-vue](../../1.0-软件开发流程角色agent模型/研发/skill/design/component-designer-vue.skill.md)

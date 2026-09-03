@@ -62,7 +62,7 @@
 | 文件 | 用途 |
 |------|------|
 | `产品/SKILL.md` | 产品部Agent技能定义 |
-| `产品/skill/requirement-analyzer.md` | 需求分析技能 |
+| `产品/skill/requirement-analyzer.skill.md` | 需求分析技能 |
 
 ---
 
@@ -150,8 +150,8 @@
 **关键文件**：
 | 文件 | 用途 |
 |------|------|
-| `研发/skill/implement.md` | 代码实现技能 |
-| `研发/skill/architect.md` | 架构设计技能 |
+| `研发/skill/implement.md  # TODO: Skill 未实现 (阶段三 catalog 收口)` | 代码实现技能 |
+| `研发/skill/architect.md  # TODO: Skill 未实现 (阶段三 catalog 收口)` | 架构设计技能 |
 | `研发/skill-collaboration.yaml` | Agent协作配置 |
 
 ---

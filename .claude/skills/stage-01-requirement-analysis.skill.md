@@ -9,6 +9,16 @@ trigger:
     - 需求分析
     - 开始需求分析
     - 需求调研
+downstream:
+  - name: "requirement-analyzer"
+    department: "产品"
+    path: "产品/skill/requirement-analyzer.skill.md"
+  - name: "user-story-generator"
+    department: "产品"
+    path: "产品/skill/user-story-generator.skill.md"
+  - name: "acceptance-criteria-writer"
+    department: "产品"
+    path: "产品/skill/acceptance-criteria-writer.skill.md"
 ---
 
 # 需求分析阶段技能
@@ -78,12 +88,12 @@ trigger:
 ## 注意事项
 
 1. **禁止Mock数据**：所有资料必须通过WebSearch从真实网络获取
-2. **产品技能调用**：使用requirement-analyzer-v2.skill.md进行调研
+2. **产品技能调用**：使用requirement-analyzer.skill.md进行调研
 3. **优先级评分**：功能需求必须使用RICE模型评分
 4. **用户故事规范**：必须符合INVEST原则（Independent, Negotiable, Valuable, Estimable, Small, Testable）
 
 ## 关联技能
 
-- [requirement-analyzer-v2](../1.0-软件开发流程角色agent模型/产品/skill/requirement-analyzer-v2.skill.md)
-- [user-story-generator](../1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.skill.md)
-- [acceptance-criteria-writer](../1.0-软件开发流程角色agent模型/产品/skill/acceptance-criteria-writer.skill.md)
+- [requirement-analyzer](../../1.0-软件开发流程角色agent模型/产品/skill/requirement-analyzer.skill.md)
+- [user-story-generator](../../1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.skill.md)
+- [acceptance-criteria-writer](../../1.0-软件开发流程角色agent模型/产品/skill/acceptance-criteria-writer.skill.md)

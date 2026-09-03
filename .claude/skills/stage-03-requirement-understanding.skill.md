@@ -9,6 +9,13 @@ trigger:
     - 需求理解
     - 原型图
     - 业务流程图
+downstream:
+  - name: "user-story-generator"
+    department: "产品"
+    path: "产品/skill/user-story-generator.skill.md"
+  - name: "acceptance-criteria-writer"
+    department: "产品"
+    path: "产品/skill/acceptance-criteria-writer.skill.md"
 ---
 
 # 需求理解阶段技能
@@ -112,5 +119,5 @@ trigger:
 
 ## 关联技能
 
-- [user-story-generator](../1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.skill.md)
-- [acceptance-criteria-writer](../1.0-软件开发流程角色agent模型/产品/skill/acceptance-criteria-writer.skill.md)
+- [user-story-generator](../../1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.skill.md)
+- [acceptance-criteria-writer](../../1.0-软件开发流程角色agent模型/产品/skill/acceptance-criteria-writer.skill.md)

@@ -9,6 +9,16 @@ trigger:
     - 概要设计
     - 架构设计
     - 数据库设计
+downstream:
+  - name: "system-architect"
+    department: "研发"
+    path: "研发/skill/architect/system-architect.skill.md"
+  - name: "db-designer-java"
+    department: "研发"
+    path: "研发/skill/design/db-designer-java.skill.md"
+  - name: "data-model-designer"
+    department: "研发"
+    path: "研发/skill/design/data-model-designer.skill.md"
 ---
 
 # 概要设计阶段技能
@@ -111,6 +121,6 @@ trigger:
 
 ## 关联技能
 
-- [system-architect](../1.0-软件开发流程角色agent模型/研发/skill/architect/system-architect.skill.md)
-- [db-designer-java](../1.0-软件开发流程角色agent模型/研发/skill/design/db-designer-java.skill.md)
-- [data-model-designer](../1.0-软件开发流程角色agent模型/研发/skill/design/data-model-designer.skill.md)
+- [system-architect](../../1.0-软件开发流程角色agent模型/研发/skill/architect/system-architect.skill.md)
+- [db-designer-java](../../1.0-软件开发流程角色agent模型/研发/skill/design/db-designer-java.skill.md)
+- [data-model-designer](../../1.0-软件开发流程角色agent模型/研发/skill/design/data-model-designer.skill.md)

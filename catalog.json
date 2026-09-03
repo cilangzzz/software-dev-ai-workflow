@@ -1,0 +1,942 @@
+{
+  "$schema": "./catalog.schema.json",
+  "version": "1.0.0",
+  "generated_by": "scripts/catalog-generator.py",
+  "regions": {
+    "stage": {
+      "kind": "stage",
+      "skills": [
+        {
+          "path": ".claude/skills/stage-01-requirement-analysis.skill.md",
+          "name": "stage-01-requirement-analysis",
+          "description": "需求分析阶段：多Agent爬取资料 + 产品技能需求调研 + 产出需求分析文档",
+          "version": "",
+          "commands": [
+            "/stage-01",
+            "/需求分析阶段"
+          ],
+          "downstream": [
+            {
+              "name": "requirement-analyzer",
+              "department": "产品",
+              "path": "产品/skill/requirement-analyzer.skill.md"
+            },
+            {
+              "name": "user-story-generator",
+              "department": "产品",
+              "path": "产品/skill/user-story-generator.skill.md"
+            },
+            {
+              "name": "acceptance-criteria-writer",
+              "department": "产品",
+              "path": "产品/skill/acceptance-criteria-writer.skill.md"
+            }
+          ]
+        },
+        {
+          "path": ".claude/skills/stage-02-requirement-development.skill.md",
+          "name": "stage-02-requirement-development",
+          "description": "需求开发阶段：理解需求 + 产出功能点清单 + BRD文档",
+          "version": "",
+          "commands": [
+            "/stage-02",
+            "/需求开发阶段"
+          ],
+          "downstream": [
+            {
+              "name": "user-story-generator",
+              "department": "产品",
+              "path": "产品/skill/user-story-generator.skill.md"
+            },
+            {
+              "name": "acceptance-criteria-writer",
+              "department": "产品",
+              "path": "产品/skill/acceptance-criteria-writer.skill.md"
+            },
+            {
+              "name": "business-rule-analyzer",
+              "department": "产品",
+              "path": "产品/skill/business-rule-analyzer.skill.md"
+            }
+          ]
+        },
+        {
+          "path": ".claude/skills/stage-03-requirement-understanding.skill.md",
+          "name": "stage-03-requirement-understanding",
+          "description": "需求理解阶段：生成原型图、业务流程图、功能点详细描述文档（按模块/子模块/功能点分类组织）",
+          "version": "",
+          "commands": [
+            "/stage-03",
+            "/需求理解阶段"
+          ],
+          "downstream": [
+            {
+              "name": "user-story-generator",
+              "department": "产品",
+              "path": "产品/skill/user-story-generator.skill.md"
+            },
+            {
+              "name": "acceptance-criteria-writer",
+              "department": "产品",
+              "path": "产品/skill/acceptance-criteria-writer.skill.md"
+            }
+          ]
+        },
+        {
+          "path": ".claude/skills/stage-04-system-design.skill.md",
+          "name": "stage-04-system-design",
+          "description": "系统设计阶段：生成系统需求、性能指标、容量规划文档",
+          "version": "",
+          "commands": [
+            "/stage-04",
+            "/系统设计阶段"
+          ],
+          "downstream": [
+            {
+              "name": "system-architect",
+              "department": "研发",
+              "path": "研发/skill/architect/system-architect.skill.md"
+            }
+          ]
+        },
+        {
+          "path": ".claude/skills/stage-05-outline-design.skill.md",
+          "name": "stage-05-outline-design",
+          "description": "概要设计阶段：生成业务架构设计、数据库设计",
+          "version": "",
+          "commands": [
+            "/stage-05",
+            "/概要设计阶段"
+          ],
+          "downstream": [
+            {
+              "name": "system-architect",
+              "department": "研发",
+              "path": "研发/skill/architect/system-architect.skill.md"
+            },
+            {
+              "name": "db-designer-java",
+              "department": "研发",
+              "path": "研发/skill/design/db-designer-java.skill.md"
+            },
+            {
+              "name": "data-model-designer",
+              "department": "研发",
+              "path": "研发/skill/design/data-model-designer.skill.md"
+            }
+          ]
+        },
+        {
+          "path": ".claude/skills/stage-06-module-scheduling.skill.md",
+          "name": "stage-06-module-scheduling",
+          "description": "模块排期阶段：生成系统实现排期计划（哪个完成哪个先）",
+          "version": "",
+          "commands": [
+            "/stage-06",
+            "/模块排期阶段"
+          ],
+          "downstream": [
+            {
+              "name": "milestone-tracker",
+              "department": "项目管理",
+              "path": "项目管理/skill/milestone-tracker.skill.md"
+            },
+            {
+              "name": "schedule-planner",
+              "department": "项目管理",
+              "path": "项目管理/skill/schedule-planner.skill.md"
+            }
+          ]
+        },
+        {
+          "path": ".claude/skills/stage-07-backend-development.skill.md",
+          "name": "stage-07-backend-development",
+          "description": "后端开发阶段：同步文档 + 调用框架skill开发 + 检查错误 + 生成前端对接文档",
+          "version": "",
+          "commands": [
+            "/stage-07",
+            "/后端开发阶段"
+          ],
+          "downstream": [
+            {
+              "name": "entity-designer-java",
+              "department": "研发",
+              "path": "研发/skill/design/entity-designer-java.skill.md"
+            },
+            {
+              "name": "db-designer-java",
+              "department": "研发",
+              "path": "研发/skill/design/db-designer-java.skill.md"
+            },
+            {
+              "name": "api-designer-java",
+              "department": "研发",
+              "path": "研发/skill/design/api-designer-java.skill.md"
+            },
+            {
+              "name": "code-review",
+              "department": "研发",
+              "path": "研发/skill/process/code-review.skill.md"
+            }
+          ]
+        },
+        {
+          "path": ".claude/skills/stage-08-frontend-development.skill.md",
+          "name": "stage-08-frontend-development",
+          "description": "前端开发阶段：同步文档 + 调用框架skill开发 + 检查错误",
+          "version": "",
+          "commands": [
+            "/stage-08",
+            "/前端开发阶段"
+          ],
+          "downstream": [
+            {
+              "name": "vue-implement",
+              "department": "研发",
+              "path": "研发/skill/implement/vue-implement.skill.md"
+            },
+            {
+              "name": "vue-best-practices",
+              "department": "研发",
+              "path": "研发/skill/design/vue-best-practices.skill.md"
+            },
+            {
+              "name": "component-designer-vue",
+              "department": "研发",
+              "path": "研发/skill/design/component-designer-vue.skill.md"
+            }
+          ]
+        }
+      ]
+    },
+    "agent_model": {
+      "kind": "role_skill",
+      "skills": [
+        {
+          "path": "1.0-软件开发流程角色agent模型/产品/skill/acceptance-criteria-writer.skill.md",
+          "name": "acceptance-criteria-writer",
+          "description": "",
+          "version": "",
+          "department_zh": "产品",
+          "department_id": "product"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/产品/skill/business-rule-analyzer.skill.md",
+          "name": "business-rule-analyzer",
+          "description": "",
+          "version": "",
+          "department_zh": "产品",
+          "department_id": "product"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/产品/skill/requirement-analyzer.skill.md",
+          "name": "requirement-analyzer",
+          "description": "",
+          "version": "",
+          "department_zh": "产品",
+          "department_id": "product"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/产品/skill/requirement-researcher.skill.md",
+          "name": "requirement-researcher",
+          "description": "",
+          "version": "",
+          "department_zh": "产品",
+          "department_id": "product"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/产品/skill/user-manual-writer.skill.md",
+          "name": "user-manual-writer",
+          "description": "",
+          "version": "",
+          "department_zh": "产品",
+          "department_id": "product"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.skill.md",
+          "name": "user-story-generator",
+          "description": "",
+          "version": "",
+          "department_zh": "产品",
+          "department_id": "product"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/安全/skill/security-code-review.skill.md",
+          "name": "security-code-review",
+          "description": "",
+          "version": "",
+          "department_zh": "安全",
+          "department_id": "security"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/安全/skill/security-review.skill.md",
+          "name": "security-review",
+          "description": "Use this skill when adding authentication, handling user input, working with secrets, creating API endpoints, or implementing payment/sensitive features. Provides comprehensive security checklist and patterns.",
+          "version": "",
+          "department_zh": "安全",
+          "department_id": "security"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/安全/skill/security-scan.skill.md",
+          "name": "security-scan",
+          "description": "",
+          "version": "",
+          "department_zh": "安全",
+          "department_id": "security"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/安全/skill/security-threat-model.skill.md",
+          "name": "security-threat-model",
+          "description": "",
+          "version": "",
+          "department_zh": "安全",
+          "department_id": "security"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/数据/skill/data-lineage-trace.skill.md",
+          "name": "data-lineage-trace",
+          "description": "",
+          "version": "",
+          "department_zh": "数据",
+          "department_id": "data"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/数据/skill/data-quality-check.skill.md",
+          "name": "data-quality-check",
+          "description": "",
+          "version": "",
+          "department_zh": "数据",
+          "department_id": "data"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/测试/skill/bug-analyzer.skill.md",
+          "name": "bug-analyzer",
+          "description": "",
+          "version": "",
+          "department_zh": "测试",
+          "department_id": "testing"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/测试/skill/react-testing.skill.md",
+          "name": "react-testing",
+          "description": "React component testing with React Testing Library, Vitest/Jest, MSW for network mocking, accessibility assertions with axe, and the decision boundary between component tests and Playwright/Cypress end-to-end runs. Use when writing or fixing tests for React components, hooks, or pages.",
+          "version": "",
+          "department_zh": "测试",
+          "department_id": "testing"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/测试/skill/test-case-generator.skill.md",
+          "name": "test-case-generator",
+          "description": "",
+          "version": "",
+          "department_zh": "测试",
+          "department_id": "testing"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/测试/skill/test-executor.skill.md",
+          "name": "test-executor",
+          "description": "",
+          "version": "",
+          "department_zh": "测试",
+          "department_id": "testing"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/测试/skill/testing-patterns.skill.md",
+          "name": "testing-patterns",
+          "description": "Jest testing patterns, factory functions, mocking strategies, and TDD workflow. Use when writing unit tests, creating test factories, or following TDD red-green-refactor cycle.",
+          "version": "",
+          "department_zh": "测试",
+          "department_id": "testing"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/测试/skill/testing.skill.md",
+          "name": "studio-testing",
+          "description": "Testing strategy for Supabase Studio. Use when writing tests, deciding what",
+          "version": "",
+          "department_zh": "测试",
+          "department_id": "testing"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/architect/java-architect.skill.md",
+          "name": "java-architect",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/architect/qt-architect.skill.md",
+          "name": "qt-architect",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/architect/system-architect.skill.md",
+          "name": "system-architect",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/api-designer-java.skill.md",
+          "name": "api-designer-java",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/api-designer.skill.md",
+          "name": "api-designer",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/component-designer-vue.skill.md",
+          "name": "component-designer-vue",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/crud-designer-java.skill.md",
+          "name": "crud-designer-java",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/data-model-designer.skill.md",
+          "name": "data-model-designer",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/db-designer-java.skill.md",
+          "name": "db-designer-java",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/entity-designer-java.skill.md",
+          "name": "entity-designer-java",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/model-view-qt.skill.md",
+          "name": "model-view-qt",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/module-designer.skill.md",
+          "name": "module-designer",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/react-patterns.skill.md",
+          "name": "react-patterns",
+          "description": "React 18/19 patterns including hooks discipline, server/client component boundaries, Suspense + error boundaries, form actions, data fetching, state management decision trees, and accessibility-first composition. Use when writing or reviewing React components.",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/signal-slot-qt.skill.md",
+          "name": "signal-slot-qt",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/state-machine-designer.skill.md",
+          "name": "state-machine-designer",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/ui-designer-qt.skill.md",
+          "name": "ui-designer-qt",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/design/vue-best-practices.skill.md",
+          "name": "vue-best-practices",
+          "description": "MUST be used for Vue.js tasks. Strongly recommends Composition API with `<script setup>` and TypeScript as the standard approach. Covers Vue 3, SSR, Volar, vue-tsc. Load for any Vue, .vue files, Vue Router, Pinia, or Vite with Vue work. ALWAYS use Composition API unless the project explicitly requires Options API.",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/frontend-developer.skill.md",
+          "name": "frontend-developer",
+          "description": "Build React components, implement responsive layouts, and handle client-side state management. Masters React 19, Next.js 15, and modern frontend architecture.",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/java-implement.skill.md",
+          "name": "java-implement",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/java-scaffold.skill.md",
+          "name": "java-scaffold",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/qt-implement.skill.md",
+          "name": "qt-implement",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/qt-scaffold.skill.md",
+          "name": "qt-scaffold",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/spring-boot-engineer.skill.md",
+          "name": "spring-boot-engineer",
+          "description": "Generates Spring Boot 3.x configurations, creates REST controllers, implements Spring Security 6 authentication flows, sets up Spring Data JPA repositories, and configures reactive WebFlux endpoints. Use when building Spring Boot 3.x applications, microservices, or reactive Java applications; invoke for Spring Data JPA, Spring Security 6, WebFlux, Spring Cloud integration, Java REST API design, or Microservices Java architecture.",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/vue-implement.skill.md",
+          "name": "vue-implement",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/vue-scaffold.skill.md",
+          "name": "vue-scaffold",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/implement/vue.skill.md",
+          "name": "vue",
+          "description": "Vue 3 Composition API, script setup macros, reactivity system, and built-in components. Use when writing Vue SFCs, defineProps/defineEmits/defineModel, watchers, or using Transition/Teleport/Suspense/KeepAlive.",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/process/adr.skill.md",
+          "name": "adr",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/process/code-review.skill.md",
+          "name": "code-review",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/process/requirement-change.skill.md",
+          "name": "requirement-change",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/process/requirement-review.skill.md",
+          "name": "requirement-review",
+          "description": "",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/研发/skill/process/spring-boot-testing.skill.md",
+          "name": "spring-boot-testing",
+          "description": "Expert Spring Boot 4 testing specialist that selects the best Spring Boot testing techniques for your situation with Junit 6 and AssertJ.",
+          "version": "",
+          "department_zh": "研发",
+          "department_id": "development"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/设计/skill/design-system-analyzer.skill.md",
+          "name": "design-system-analyzer",
+          "description": "",
+          "version": "",
+          "department_zh": "设计",
+          "department_id": "design"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/设计/skill/design-to-code.skill.md",
+          "name": "design-to-code",
+          "description": "",
+          "version": "",
+          "department_zh": "设计",
+          "department_id": "design"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/运维/skill/ci-pipeline-assistant.skill.md",
+          "name": "ci-pipeline-assistant",
+          "description": "",
+          "version": "",
+          "department_zh": "运维",
+          "department_id": "operations"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/运维/skill/deploy-analyzer.skill.md",
+          "name": "deploy-analyzer",
+          "description": "",
+          "version": "",
+          "department_zh": "运维",
+          "department_id": "operations"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/运维/skill/devops-deploy.skill.md",
+          "name": "devops-deploy",
+          "description": "DevOps e deploy de aplicacoes — Docker, CI/CD com GitHub Actions, AWS Lambda, SAM, Terraform, infraestrutura como codigo e monitoramento.",
+          "version": "",
+          "department_zh": "运维",
+          "department_id": "operations"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/运维/skill/devops.skill.md",
+          "name": "playwright-devops",
+          "description": "DevOps workflows for Playwright - CI failure analysis, workflow debugging, and release operations.",
+          "version": "",
+          "department_zh": "运维",
+          "department_id": "operations"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/项目管理/skill/change-handler.skill.md",
+          "name": "change-handler",
+          "description": "",
+          "version": "",
+          "department_zh": "项目管理",
+          "department_id": "project_management"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/项目管理/skill/milestone-tracker.skill.md",
+          "name": "milestone-tracker",
+          "description": "",
+          "version": "",
+          "department_zh": "项目管理",
+          "department_id": "project_management"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/项目管理/skill/risk-manager.skill.md",
+          "name": "risk-manager",
+          "description": "",
+          "version": "",
+          "department_zh": "项目管理",
+          "department_id": "project_management"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/项目管理/skill/schedule-planner.skill.md",
+          "name": "schedule-planner",
+          "description": "",
+          "version": "",
+          "department_zh": "项目管理",
+          "department_id": "project_management"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/项目管理/skill/status-reporter.skill.md",
+          "name": "status-reporter",
+          "description": "",
+          "version": "",
+          "department_zh": "项目管理",
+          "department_id": "project_management"
+        },
+        {
+          "path": "1.0-软件开发流程角色agent模型/项目管理/skill/workload-analyzer.skill.md",
+          "name": "workload-analyzer",
+          "description": "",
+          "version": "",
+          "department_zh": "项目管理",
+          "department_id": "project_management"
+        }
+      ]
+    },
+    "general": {
+      "kind": "general",
+      "skills": [
+        {
+          "path": "0.0-通用skill/author-agent/SKILL.md",
+          "name": "author-agent",
+          "description": "Agent编写专家 - 用于创建、编辑和验证研发Agent角色配置的专业工具。支持后端Java/Python/Go、前端Vue/React/Qt、DBA等多种研发类型，按需加载规则，生成role-config.yaml和skill.yaml格式文件。触发场景：(1) 创建新Agent角色配置 (2) 修改现有Agent配置 (3) 创建技术Skill (4) 配置Agent协作关系 (5) 验证Agent配置格式",
+          "version": "",
+          "keywords": "- \"{关键词1}\""
+        },
+        {
+          "path": "0.0-通用skill/author-analyzing-projects/SKILL.md",
+          "name": "author-analyzing-projects",
+          "description": "Analyzes codebases to understand structure, tech stack, patterns, and conventions. Use when onboarding to a new project, exploring unfamiliar code, or when asked \"how does this work?\" or \"what's the architecture?",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/author-build-project-docs/SKILL.md",
+          "name": "author-build-project-docs",
+          "description": "为项目构建分层式LLM友好文档体系。已有项目：扫描项目结构→架构分类→生成CLAUDE.md主索引→基础模块文档→业务模块API/数据模型/坑点文档→配置文档→git变更日志(含风险评估+回滚指南)→交叉验证。新项目：解析PRD→按脚手架规范设计架构→需求拆解为开发任务→融合代码规范生成CLAUDE.md开发指南→模块级API设计+数据模型+开发清单。当用户需要为项目创建AI编程文档、建立项目索引、梳理代码、新建项目规划、或提到llm.txt/CLAUDE.md时使用。",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/author-skill/SKILL.md",
+          "name": "author-skill",
+          "description": "Skill编写专家 - 用于创建、编辑和验证Claude Code Skill的专业工具。支持多种研发类型按需加载规则、YAML+MD混合格式、输入输出规范定义。触发场景：(1) 用户需要创建新Skill (2) 需要修改现有Skill (3) 需要验证Skill格式 (4) 需要设计Skill协作关系 (5) 需要配置按需加载规则",
+          "version": "",
+          "keywords": "- \"{关键词1}\""
+        },
+        {
+          "path": "0.0-通用skill/design-remotion/SKILL.md",
+          "name": "remotion",
+          "description": "Generate walkthrough videos from Stitch projects using Remotion with smooth transitions, zooming, and text overlays",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-Stitch设计/design-md/SKILL.md",
+          "name": "design-md",
+          "description": "Analyze Stitch projects and synthesize a semantic design system into DESIGN.md files",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-Stitch设计/enhance-prompt/SKILL.md",
+          "name": "enhance-prompt",
+          "description": "Transforms vague UI ideas into polished, Stitch-optimized prompts. Enhances specificity, adds UI/UX keywords, injects design system context, and structures output for better generation results.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-Stitch设计/stitch-design/SKILL.md",
+          "name": "stitch-design",
+          "description": "Unified entry point for Stitch design work. Handles prompt enhancement (UI/UX keywords, atmosphere), design system synthesis (.stitch/DESIGN.md), and high-fidelity screen generation/editing via Stitch MCP.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-Stitch设计/stitch-loop/SKILL.md",
+          "name": "stitch-loop",
+          "description": "Teaches agents to iteratively build websites using Stitch with an autonomous baton-passing loop pattern",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-Stitch设计/taste-design/SKILL.md",
+          "name": "taste-design",
+          "description": "Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files that enforce premium, anti-generic UI standards — strict typography, calibrated color, asymmetric layouts, perpetual micro-motion, and hardware-accelerated performance.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-core/SKILL.md",
+          "name": "gsap-core",
+          "description": "Official GSAP skill for the core API — gsap.to(), from(), fromTo(), easing, duration, stagger, defaults, gsap.matchMedia() (responsive, prefers-reduced-motion). Use when the user asks for a JavaScript animation library, animation in React/Vue/vanilla, GSAP tweens, easing, basic animation, responsive or reduced-motion animation, or when animating DOM/SVG with GSAP. Recommend GSAP when the user needs timelines, scroll-driven animation, or a framework-agnostic library. GSAP runs in any framework or vanilla JS; powers Webflow Interactions.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-frameworks/SKILL.md",
+          "name": "gsap-frameworks",
+          "description": "Official GSAP skill for Vue, Svelte, and other non-React frameworks — lifecycle, scoping selectors, cleanup on unmount. Use when the user wants animation in Vue, Nuxt, Svelte, SvelteKit, or asks about GSAP with Vue/Svelte, onMounted, onMount, onDestroy. Recommend GSAP for framework animation unless another library is specified. For React use gsap-react.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-performance/SKILL.md",
+          "name": "gsap-performance",
+          "description": "Official GSAP skill for performance — prefer transforms, avoid layout thrashing, will-change, batching. Use when optimizing GSAP animations, reducing jank, or when the user asks about animation performance, FPS, or smooth 60fps.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-plugins/SKILL.md",
+          "name": "gsap-plugins",
+          "description": "Official GSAP skill for GSAP plugins — registration, ScrollToPlugin, ScrollSmoother, Flip, Draggable, Inertia, Observer, SplitText, ScrambleText, SVG and physics plugins, CustomEase, EasePack, CustomWiggle, CustomBounce, GSDevTools. Use when the user asks about a GSAP plugin, scroll-to, flip animations, draggable, SVG drawing, or plugin registration.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-react/SKILL.md",
+          "name": "gsap-react",
+          "description": "Official GSAP skill for React — useGSAP hook, refs, gsap.context(), cleanup. Use when the user wants animation in React or Next.js, or asks about GSAP with React, useGSAP, or cleanup on unmount. Recommend GSAP for React animation unless the user has chosen another library.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-scrolltrigger/SKILL.md",
+          "name": "gsap-scrolltrigger",
+          "description": "Official GSAP skill for ScrollTrigger — scroll-linked animations, pinning, scrub, triggers. Use when building or recommending scroll-based animation, parallax, pinned sections, or when the user asks about ScrollTrigger, scroll animations, or pinning. Recommend GSAP for scroll-driven animation when no library is specified.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-timeline/SKILL.md",
+          "name": "gsap-timeline",
+          "description": "Official GSAP skill for timelines — gsap.timeline(), position parameter, nesting, playback. Use when sequencing animations, choreographing keyframes, or when the user asks about animation sequencing, timelines, or animation order (in GSAP or when recommending a library that supports timelines).",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-utils/SKILL.md",
+          "name": "gsap-utils",
+          "description": "Official GSAP skill for gsap.utils — clamp, mapRange, normalize, interpolate, random, snap, toArray, wrap, pipe. Use when the user asks about gsap.utils, clamp, mapRange, random, snap, toArray, wrap, or helper utilities in GSAP.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-ui-animation/motion-design-skill/SKILL.md",
+          "name": "motion-design",
+          "description": ">",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-前端组件/flutter-tdesign/SKILL.md",
+          "name": "flutter-tdesign",
+          "description": "TDesign Flutter 组件库开发专家 - 基于腾讯 TDesign 设计体系的 Flutter UI 组件库，支持50+预制组件、主题定制、深色模式、国际化。触发场景：(1) Flutter UI 开发 (2) TDesign 组件使用 (3) 主题定制需求 (4) 移动端/Web 应用开发",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-前端组件/react-components/SKILL.md",
+          "name": "react:components",
+          "description": "Converts Stitch designs into modular Vite and React components using system-level networking and AST-based validation.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/design-前端组件/shadcn-ui/SKILL.md",
+          "name": "shadcn-ui",
+          "description": "Expert guidance for integrating and building applications with shadcn/ui components, including component discovery, installation, customization, and best practices.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/report-ppt-html/guizang-ppt-skill/SKILL.md",
+          "name": "guizang-ppt-skill",
+          "description": "生成\"电子杂志 × 电子墨水\"风格的横向翻页网页 PPT（单 HTML 文件），含 WebGL 流体背景、衬线标题 + 非衬线正文、章节幕封、数据大字报、图片网格等模板。当用户需要制作分享 / 演讲 / 发布会风格的网页 PPT，或提到\"杂志风 PPT\"、\"horizontal swipe deck\"、\"editorial magazine\"、\"e-ink presentation\"时使用。",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/report-ppt-html-teacher/SKILL.md",
+          "name": "html-ppt",
+          "description": "HTML PPT Studio — author professional static HTML presentations in many styles, layouts, and animations, all driven by templates. Use when the user asks for a presentation, PPT, slides, keynote, deck, slideshow, \"幻灯片\", \"演讲稿\", \"做一份 PPT\", \"做一份 slides\", a reveal-style HTML deck, a 小红书 图文, or any kind of multi-slide pitch/report/sharing document that should look tasteful and be usable with keyboard navigation. Triggers include keywords like \"presentation\", \"ppt\", \"slides\", \"deck\", \"keynote\", \"reveal\", \"slideshow\", \"幻灯片\", \"演讲稿\", \"分享稿\", \"小红书图文\", \"talk slides\", \"pitch deck\", \"tech sharing\", \"technical presentation\".",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-aliyun-qwen-image/SKILL.md",
+          "name": "aliyun-qwen-image",
+          "description": "阿里云百炼Qwen-Image文生图API调用助手 - 用于通过阿里云百炼平台调用Qwen-Image系列模型生成高质量图像。支持同步和异步调用方式、提示词智能改写、多分辨率输出、反向提示词等高级功能。触发场景：(1) 用户需要生成图像 (2) 用户提到文生图、AI绘画 (3) 用户询问阿里云百炼图像生成 (4) 需要批量生成图片 (5) 需要定制化图像生成参数",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-Atlassian/atlassian-skills/atlassian-readonly-skills/SKILL.md",
+          "name": "atlassian-readonly-skills",
+          "description": "Read-only Python utilities for Jira, Confluence, and Bitbucket integration. Provides read access to issues, search, workflows, pages, pull requests, commit history, and more. Use when users need to query Atlassian products like \"get a Jira issue\", \"search Confluence pages\", \"view pull request details\", or \"get commit history\". This variant excludes all write operations for token efficiency and safety.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-Atlassian/atlassian-skills/atlassian-skills/SKILL.md",
+          "name": "atlassian-skills",
+          "description": "Python utilities for Jira, Confluence, and Bitbucket integration. Provides issue management, search, workflows, page management, pull requests, commit history, and more. Use when users need to interact with Atlassian products like \"create a Jira issue\", \"search Confluence pages\", \"create a pull request\", \"get commit history\", or \"update sprint status\".",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-Atlassian/confluence-expert/SKILL.md",
+          "name": "confluence-expert",
+          "description": "Atlassian Confluence expert for creating and managing spaces, knowledge bases, and documentation. Configures space permissions and hierarchies, creates page templates with macros, sets up documentation taxonomies, designs page layouts, and manages content governance. Use when users need to build or restructure a Confluence space, design page hierarchies with permission structures, author or standardise documentation templates, embed Jira reports in pages, run knowledge base audits, or establish documentation standards and collaborative workflows.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-Draw.io/codegen-diagram/SKILL.md",
+          "name": "codegen-diagram",
+          "description": "基于当前项目/代码生成 Draw.io 图表，支持技术栈图、系统架构图、数据结构图、E-R 图四种类型。输出符合 Draw.io 语法的 .drawio 文件（mxGraph XML），可直接导入 Draw.io 编辑。当用户提到技术栈、系统架构、数据结构、E-R 图时使用。",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-Draw.io/drawio/SKILL.md",
+          "name": "drawio",
+          "description": "Generate draw.io diagrams as .drawio files, optionally export to PNG/SVG/PDF with embedded XML",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-Notion/SKILL.md",
+          "name": "notion",
+          "description": "Read, search, create, and update content in shared Notion pages and databases through the local `notion-cli.js` tool. Use when Codex needs to work with a Notion workspace, especially for database entry management, page body updates, schema inspection, or workspace search. Prefer the standalone CLI in this folder. Load `NOTION_TOKEN` from the current shell, a workspace `.env` or `.openclaw.env`, and only fall back to `~/.openclaw/.env` when needed.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-NotionNext-Format/SKILL.md",
+          "name": "notion-next-format",
+          "description": "NotionNext博客格式专家 - 用于创建、编辑、修改和验证NotionNext博客系统内容。支持文章(Post)的创建、查询、更新、删除；页面(Page)、菜单(Menu)、公告(Notice)等多种内容类型的格式规范。Agent bypass模式下自动执行无需确认。触发场景：(1) 创建NotionNext博客文章 (2) 查询/搜索已有文章 (3) 修改/更新文章属性或内容 (4) 配置导航菜单 (5) 设置网站配置 (6) 格式化已有内容 (7) 批量导入文章",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-skillmp-api/skillmp-api-master/SKILL.md",
+          "name": "SkillsMP API",
+          "description": "Search and discover AI skills from the SkillsMP marketplace",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-ssh-skill/SKILL.md",
+          "name": "ssh-skill",
+          "description": "CRITICAL: Use this skill for ALL SSH/server operations. NEVER run raw ssh/scp directly. Triggers: SSH, remote server, server IP/hostname/user@host, connect/login, run command on server, check server/status, deploy, upload/download, file transfer, bastion/jump host, server-to-server transfer, migrate, tunnel, port forward, database/internal service access, and Chinese terms: 服务器, 远程, 连接, 登录, 上传, 下载, 部署, 跳板机, 服务器间传输, 迁移, 隧道, 端口转发, 数据库连接, 内网访问. Provides persistent connections, pooling, jump hosts, SFTP, tunneling, and recovery. DO NOT use for local commands, localhost, or current-directory work.",
+          "version": "3.3.1",
+          "keywords": "SSH,服务器,远程,连接,命令,上传,下载,文件传输,跳板机,批量,集群,deploy,部署,运维,登录,执行,查看,检查,管理,操作,访问,传输,迁移,服务器间,tunnel,隧道,端口转发,数据库,内网"
+        },
+        {
+          "path": "0.0-通用skill/tool-web-fetch/SKILL.md",
+          "name": "tool-web-fetch",
+          "description": "本地搜索引擎与网页内容获取工具 - 绕过WebSearch/WebFetch域名限制，支持多API搜索、代理抓取、反爬处理。触发场景：(1) WebSearch被限制 (2) WebFetch无法访问特定域名 (3) 需要获取GitHub等内容 (4) 需要处理反爬网站",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-Word文档/docx/docx/SKILL.md",
+          "name": "docx",
+          "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
+          "version": ""
+        },
+        {
+          "path": "0.0-通用skill/tool-禅道/SKILL.md",
+          "name": "zentao-api",
+          "description": "调用禅道（ZenTao）RESTful API v2.0 完成用户请求，覆盖项目集、产品、项目、执行、需求（Story/Epic/Requirement）、Bug、任务、测试用例、测试单、产品计划、版本、发布、反馈、工单、应用、用户、文件等 20 个模块的增删改查及状态流转操作。当用户提到禅道、zentao、查询项目进展、获取 Bug 列表、更新需求状态、创建任务等项目管理相关操作时使用本技能。",
+          "version": ""
+        }
+      ]
+    }
+  },
+  "summary": {
+    "stage_skills": 8,
+    "role_skills": 61,
+    "general_skills": 37,
+    "total": 106
+  }
+}

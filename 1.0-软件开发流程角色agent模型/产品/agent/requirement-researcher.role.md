@@ -96,13 +96,13 @@
 ### domain_researcher
 
 
-- **pattern**: skill/user-story-generator.md
+- **pattern**: skill/user-story-generator.skill.md
 - **reason**: 用户故事编写由产品经理负责，需求研究员只提供原始需求素材
 
-- **pattern**: skill/acceptance-criteria-writer.md
+- **pattern**: skill/acceptance-criteria-writer.skill.md
 - **reason**: 验收标准由产品经理和测试工程师负责
 
-- **pattern**: skill/user-manual-writer.md
+- **pattern**: skill/user-manual-writer.skill.md
 - **reason**: 用户手册由产品经理负责
 
 ## load_triggers

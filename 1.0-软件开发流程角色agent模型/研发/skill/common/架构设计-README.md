@@ -6,7 +6,7 @@
 
 | 文件 | 类型 | 描述 |
 |------|------|------|
-| [adr.md](adr.md) | Skill 定义 | 架构决策记录(ADR) Skill 的完整定义文档 |
+| adr.md <!-- TODO: adr.md 链接待修复 --> | Skill 定义 | 架构决策记录(ADR) Skill 的完整定义文档 |
 | [role-config.yaml](role-config.yaml) | 配置文件 | 架构设计角色配置和参数说明 |
 
 ## 快速使用

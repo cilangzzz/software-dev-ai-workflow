@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "software-dev-ai-workflow catalog",
+  "type": "object",
+  "required": ["version", "regions", "summary"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "version": {"type": "string"},
+    "generated_by": {"type": "string"},
+    "regions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["kind", "skills"],
+        "properties": {
+          "kind": {"enum": ["stage", "role_skill", "general"]},
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["path", "name"],
+              "properties": {
+                "path": {"type": "string"},
+                "name": {"type": "string"},
+                "description": {"type": "string"},
+                "version": {"type": "string"},
+                "department_zh": {"type": "string"},
+                "department_id": {"type": "string"},
+                "skill_id": {"type": "string"},
+                "category": {"type": "string"},
+                "command": {"type": "string"},
+                "commands": {"type": "array", "items": {"type": "string"}},
+                "keywords": {"type": "string"},
+                "downstream": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["name", "department", "path"],
+                    "properties": {
+                      "name": {"type": "string"},
+                      "department": {"type": "string"},
+                      "path": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "stage_skills": {"type": "integer"},
+        "role_skills": {"type": "integer"},
+        "general_skills": {"type": "integer"},
+        "total": {"type": "integer"}
+      }
+    }
+  }
+}

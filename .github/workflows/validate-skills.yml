@@ -1,0 +1,55 @@
+name: validate-skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate skills catalog & links
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Regenerate catalog
+        run: python scripts/catalog-generator.py
+
+      - name: Regenerate skill index
+        run: python scripts/skill-index-generator.py
+
+      - name: Regenerate deliverables docs
+        run: python scripts/deliverables-generator.py
+
+      - name: Check catalog artifacts are up to date
+        run: |
+          if [[ -n "$(git status --porcelain catalog.json docs/skill-index.md docs/deliverables/)" ]]; then
+            echo "::error::Generated artifacts are out of date. Run scripts locally and commit."
+            git status --porcelain catalog.json docs/skill-index.md docs/deliverables/
+            exit 1
+          fi
+
+      - name: Validate (errors fail, warnings allowed)
+        run: |
+          python scripts/validate-skills.py
+          # Exit 2 = only warnings (allowed); exit 1 = errors (fail)
+          if [ $? -eq 1 ]; then
+            echo "::error::validate-skills.py reported errors"
+            exit 1
+          fi

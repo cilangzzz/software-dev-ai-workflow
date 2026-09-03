@@ -75,7 +75,7 @@ Agent模型位于 `../../../1.0-软件开发流程角色agent模型/` 目录，�
 "帮我分析这个需求：需要一个汽车整车装配MES系统"
 ```
 
-**Agent位置**：`1.0-软件开发流程角色agent模型/产品/skill/requirement-analyzer.md`
+**Agent位置**：`1.0-软件开发流程角色agent模型/产品/skill/requirement-analyzer.skill.md`
 
 **执行流程**：
 1. Agent解析需求描述，识别核心需求点
@@ -96,7 +96,7 @@ Agent模型位于 `../../../1.0-软件开发流程角色agent模型/` 目录，�
 /user-story-generator
 ```
 
-**Agent位置**：`1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.md`
+**Agent位置**：`1.0-软件开发流程角色agent模型/产品/skill/user-story-generator.skill.md`
 
 **执行流程**：
 1. 根据PRD文档生成用户故事
@@ -159,7 +159,7 @@ Agent模型位于 `../../../1.0-软件开发流程角色agent模型/` 目录，�
 /test-case-generator
 ```
 
-**Agent位置**：`1.0-软件开发流程角色agent模型/测试/skill/test-case-generator.md`
+**Agent位置**：`1.0-软件开发流程角色agent模型/测试/skill/test-case-generator.skill.md`
 
 **执行流程**：
 1. 根据用户故事生成测试用例
@@ -178,7 +178,7 @@ Agent模型位于 `../../../1.0-软件开发流程角色agent模型/` 目录，�
 /user-manual-writer
 ```
 
-**Agent位置**：`1.0-软件开发流程角色agent模型/产品/skill/user-manual-writer.md`
+**Agent位置**：`1.0-软件开发流程角色agent模型/产品/skill/user-manual-writer.skill.md`
 
 **执行流程**：
 1. 根据功能设计生成用户手册
@@ -198,7 +198,7 @@ Agent模型位于 `../../../1.0-软件开发流程角色agent模型/` 目录，�
 /deployment-analyzer
 ```
 
-**Agent位置**：`1.0-软件开发流程角色agent模型/运维/skill/deployment-analyzer.md`
+**Agent位置**：`1.0-软件开发流程角色agent模型/运维/skill/deployment-analyzer.md  # TODO: Skill 未实现 (阶段三 catalog 收口)`
 
 **执行流程**：
 1. 分析系统部署需求
@@ -315,7 +315,7 @@ Agent模型提供了标准化的产出物模板：
 
 - [AI工作流程总结](AI工作流程总结.md) - 完整工作流程说明
 - [Agent模型目录](../../../1.0-软件开发流程角色agent模型/) - Agent角色定义
-- [产出物映射表](../../../1.0-软件开发流程角色agent模型/产出物映射表.md) - 阶段产出物映射
+- 产出物映射表 <!-- TODO: ../../../1.0-软件开发流程角色agent模型/产出物映射表.md 链接待修复 --> - 阶段产出物映射
 
 ---
 

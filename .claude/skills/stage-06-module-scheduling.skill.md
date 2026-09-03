@@ -9,6 +9,13 @@ trigger:
     - 模块排期
     - 开发排期
     - 项目排期
+downstream:
+  - name: "milestone-tracker"
+    department: "项目管理"
+    path: "项目管理/skill/milestone-tracker.skill.md"
+  - name: "schedule-planner"
+    department: "项目管理"
+    path: "项目管理/skill/schedule-planner.skill.md"
 ---
 
 # 模块排期阶段技能
@@ -131,5 +138,5 @@ trigger:
 
 ## 关联技能
 
-- [milestone-tracker](../1.0-软件开发流程角色agent模型/项目管理/skill/milestone-tracker.skill.md)
-- [schedule-planner](../1.0-软件开发流程角色agent模型/项目管理/skill/schedule-planner.skill.md)
+- [milestone-tracker](../../1.0-软件开发流程角色agent模型/项目管理/skill/milestone-tracker.skill.md)
+- [schedule-planner](../../1.0-软件开发流程角色agent模型/项目管理/skill/schedule-planner.skill.md)

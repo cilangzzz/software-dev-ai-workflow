@@ -73,7 +73,7 @@
 
 | 条件 | 技能 | 路径 |
 |------|------|------|
-| 微服务架构 | architect-v2 | skill/architect/architect-v2.skill.md |
+| 微服务架构 | architect | skill/architect/system-architect.skill.md |
 | 安全审计 | security-review | 安全/skill/security-review.skill.md |
 
 ## 触发条件
@@ -224,10 +224,10 @@
 
 ## 参考资源
 
-- [Spring Boot Testing (SkillsMP)](skill/process/spring-boot-testing.skill.md) - 34735 stars
-- [Spring Boot Engineer (SkillsMP)](skill/implement/spring-boot-engineer.skill.md) - 9766 stars
-- [API Designer](skill/design/api-designer.skill.md)
-- [DB Designer](skill/design/db-designer-java.skill.md)
+- Spring Boot Testing (SkillsMP) <!-- TODO: skill/process/spring-boot-testing.skill.md 链接待修复 --> - 34735 stars
+- Spring Boot Engineer (SkillsMP) <!-- TODO: skill/implement/spring-boot-engineer.skill.md 链接待修复 --> - 9766 stars
+- API Designer <!-- TODO: skill/design/api-designer.skill.md 链接待修复 -->
+- DB Designer <!-- TODO: skill/design/db-designer-java.skill.md 链接待修复 -->
 
 ## 更新记录
 

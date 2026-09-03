@@ -8,6 +8,19 @@ trigger:
   keywords:
     - 后端开发
     - 后端实现
+downstream:
+  - name: "entity-designer-java"
+    department: "研发"
+    path: "研发/skill/design/entity-designer-java.skill.md"
+  - name: "db-designer-java"
+    department: "研发"
+    path: "研发/skill/design/db-designer-java.skill.md"
+  - name: "api-designer-java"
+    department: "研发"
+    path: "研发/skill/design/api-designer-java.skill.md"
+  - name: "code-review"
+    department: "研发"
+    path: "研发/skill/process/code-review.skill.md"
 ---
 
 # 后端开发阶段技能
@@ -139,7 +152,7 @@ cn.iocoder.yudao.module.{模块}
 
 ## 关联技能
 
-- [entity-designer-java](../1.0-软件开发流程角色agent模型/研发/skill/design/entity-designer-java.skill.md)
-- [db-designer-java](../1.0-软件开发流程角色agent模型/研发/skill/design/db-designer-java.skill.md)
-- [api-designer-java](../1.0-软件开发流程角色agent模型/研发/skill/design/api-designer-java.skill.md)
-- [code-review-v2](../1.0-软件开发流程角色agent模型/研发/skill/process/code-review-v2.skill.md)
+- [entity-designer-java](../../1.0-软件开发流程角色agent模型/研发/skill/design/entity-designer-java.skill.md)
+- [db-designer-java](../../1.0-软件开发流程角色agent模型/研发/skill/design/db-designer-java.skill.md)
+- [api-designer-java](../../1.0-软件开发流程角色agent模型/研发/skill/design/api-designer-java.skill.md)
+- [code-review](../../1.0-软件开发流程角色agent模型/研发/skill/process/code-review.skill.md)

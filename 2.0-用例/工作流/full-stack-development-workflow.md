@@ -26,11 +26,11 @@
 
 | 阶段序号 | 阶段名称 | 主要角色 | 核心Skill | 产出物目录 |
 |----------|----------|----------|-----------|------------|
-| 1 | 需求分析阶段 | 产品经理 | requirement-analyzer-v2 + deep-research | 02-开发库/00-需求分析阶段 |
+| 1 | 需求分析阶段 | 产品经理 | requirement-analyzer + deep-research | 02-开发库/00-需求分析 |
 | 2 | 需求开发阶段 | 产品经理 | user-story-generator | 02-开发库/01-需求开发 |
 | 3 | 需求理解阶段 | 产品经理 | acceptance-criteria-writer + business-rule-analyzer | 02-开发库/02-需求理解 |
-| 4 | 系统设计阶段 | 系统架构师 | architect-v2 + deep-research | 02-开发库/03-系统设计 |
-| 5 | 概要设计阶段 | 研发工程师 | architect-v2 + db-designer-java + api-designer | 02-开发库/04-概要设计 |
+| 4 | 系统设计阶段 | 系统架构师 | system-architect + deep-research | 02-开发库/03-系统设计 |
+| 5 | 概要设计阶段 | 研发工程师 | system-architect + db-designer-java + api-designer | 02-开发库/04-概要设计 |
 | 6 | 模块排期阶段 | 项目经理 | schedule-template | 01-管理库/02-项目管理 |
 | 7 | 后端开发阶段 | 后端工程师 | implement (backend) + code-review | 03-源码库 |
 | 8 | 前端开发阶段 | 前端工程师 | implement (frontend) + code-review | 03-源码库 |
@@ -133,8 +133,8 @@ F:\projects\yudao-ai-his-backend\docs\his\
 
     - name: 需求调研
       description: 调用产品技能进行需求调研分析
-      skill: requirement-analyzer-v2
-      skill_path: F:\sandbox\workflow\1.0-软件开发流程角色agent模型\产品\skill\requirement-analyzer-v2.skill.md
+      skill: requirement-analyzer
+      skill_path: F:\sandbox\workflow\1.0-软件开发流程角色agent模型\产品\skill\requirement-analyzer.skill.md
       input:
         requirement_text: 来自网络调研的综合需求描述
         business_context: 业务背景信息
@@ -523,8 +523,8 @@ PRD内容：[读取阶段1产出的PRD文档]
 
     - name: 系统需求分析
       description: 分析系统级需求（性能、安全、可用性等）
-      skill: architect-v2
-      skill_path: F:\sandbox\workflow\1.0-软件开发流程角色agent模型\研发\skill\architect\architect-v2.skill.md
+      skill: system-architect
+      skill_path: F:\sandbox\workflow\1.0-软件开发流程角色agent模型\研发\skill\architect\system-architect.skill.md
       input:
         prd_document: PRD内容
         architecture_type: auto
@@ -637,8 +637,8 @@ PRD内容：[读取阶段1产出的PRD文档]
   步骤:
     - name: 业务架构设计
       description: 设计业务模块架构和模块间关系
-      skill: architect-v2
-      skill_path: F:\sandbox\workflow\1.0-软件开发流程角色agent模型\研发\skill\architect\architect-v2.skill.md
+      skill: system-architect
+      skill_path: F:\sandbox\workflow\1.0-软件开发流程角色agent模型\研发\skill\architect\system-architect.skill.md
       input:
         prd_document: PRD + 功能点详情
         architecture_type: modular-monolith  # HIS系统推荐模块化单体架构
@@ -1318,11 +1318,11 @@ workflow_flow:
 
 | Skill名称 | 文档路径 | 适用阶段 |
 |-----------|----------|----------|
-| requirement-analyzer-v2 | `1.0-软件开发流程角色agent模型\产品\skill\requirement-analyzer-v2.skill.md` | 阶段1 |
+| requirement-analyzer | `1.0-软件开发流程角色agent模型\产品\skill\requirement-analyzer.skill.md` | 阶段1 |
 | user-story-generator | `1.0-软件开发流程角色agent模型\产品\skill\user-story-generator.skill.md` | 阶段2 |
 | acceptance-criteria-writer | `1.0-软件开发流程角色agent模型\产品\skill\acceptance-criteria-writer.skill.md` | 阶段3 |
 | business-rule-analyzer | `1.0-软件开发流程角色agent模型\产品\skill\business-rule-analyzer.skill.md` | 阶段3 |
-| architect-v2 | `1.0-软件开发流程角色agent模型\研发\skill\architect\architect-v2.skill.md` | 阶段4、5 |
+| system-architect | `1.0-软件开发流程角色agent模型\研发\skill\architect\system-architect.skill.md` | 阶段4、5 |
 | db-designer-java | `1.0-软件开发流程角色agent模型\研发\skill\design\db-designer-java.skill.md` | 阶段5 |
 | api-designer | `1.0-软件开发流程角色agent模型\研发\skill\design\api-designer.skill.md` | 阶段5 |
 | schedule-template | `1.0-软件开发流程角色agent模型\项目管理\references\schedule-template.md` | 阶段6 |

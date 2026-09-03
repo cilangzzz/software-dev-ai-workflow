@@ -138,7 +138,7 @@ design-ui-animation/
 
 ## 快速开始
 
-1. **新手**：先读 [motion-design-skill/SKILL.md](motion-design-skill/skills/motion-design/SKILL.md) 了解设计理念
+1. **新手**：先读 motion-design-skill/SKILL.md [⚠️ link broken, ref needed] 了解设计理念
 2. **实现**：查阅 [gsap-core/SKILL.md](gsap-skills/skills/gsap-core/SKILL.md) 学习基础API
 3. **进阶**：使用 [gsap-timeline](gsap-skills/skills/gsap-timeline/SKILL.md) 编排复杂动画
 4. **示例**：参考 [examples/](gsap-skills/examples/) 目录下的代码
