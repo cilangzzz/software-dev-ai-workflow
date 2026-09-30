@@ -706,19 +706,6 @@
       "kind": "general",
       "skills": [
         {
-          "path": "0.0-通用skill/author-agent/SKILL.md",
-          "name": "author-agent",
-          "description": "Agent编写专家 - 用于创建、编辑和验证研发Agent角色配置的专业工具。支持后端Java/Python/Go、前端Vue/React/Qt、DBA等多种研发类型，按需加载规则，生成role-config.yaml和skill.yaml格式文件。触发场景：(1) 创建新Agent角色配置 (2) 修改现有Agent配置 (3) 创建技术Skill (4) 配置Agent协作关系 (5) 验证Agent配置格式",
-          "version": "",
-          "keywords": "- \"{关键词1}\""
-        },
-        {
-          "path": "0.0-通用skill/author-analyzing-projects/SKILL.md",
-          "name": "author-analyzing-projects",
-          "description": "Analyzes codebases to understand structure, tech stack, patterns, and conventions. Use when onboarding to a new project, exploring unfamiliar code, or when asked \"how does this work?\" or \"what's the architecture?",
-          "version": ""
-        },
-        {
           "path": "0.0-通用skill/author-build-project-docs/SKILL.md",
           "name": "author-build-project-docs",
           "description": "为项目构建分层式LLM友好文档体系。已有项目：扫描项目结构→架构分类→生成CLAUDE.md主索引→基础模块文档→业务模块API/数据模型/坑点文档→配置文档→git变更日志(含风险评估+回滚指南)→交叉验证。新项目：解析PRD→按脚手架规范设计架构→需求拆解为开发任务→融合代码规范生成CLAUDE.md开发指南→模块级API设计+数据模型+开发清单。当用户需要为项目创建AI编程文档、建立项目索引、梳理代码、新建项目规划、或提到llm.txt/CLAUDE.md时使用。",
@@ -730,114 +717,6 @@
           "description": "Skill编写专家 - 用于创建、编辑和验证Claude Code Skill的专业工具。支持多种研发类型按需加载规则、YAML+MD混合格式、输入输出规范定义。触发场景：(1) 用户需要创建新Skill (2) 需要修改现有Skill (3) 需要验证Skill格式 (4) 需要设计Skill协作关系 (5) 需要配置按需加载规则",
           "version": "",
           "keywords": "- \"{关键词1}\""
-        },
-        {
-          "path": "0.0-通用skill/design-remotion/SKILL.md",
-          "name": "remotion",
-          "description": "Generate walkthrough videos from Stitch projects using Remotion with smooth transitions, zooming, and text overlays",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-Stitch设计/design-md/SKILL.md",
-          "name": "design-md",
-          "description": "Analyze Stitch projects and synthesize a semantic design system into DESIGN.md files",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-Stitch设计/enhance-prompt/SKILL.md",
-          "name": "enhance-prompt",
-          "description": "Transforms vague UI ideas into polished, Stitch-optimized prompts. Enhances specificity, adds UI/UX keywords, injects design system context, and structures output for better generation results.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-Stitch设计/stitch-design/SKILL.md",
-          "name": "stitch-design",
-          "description": "Unified entry point for Stitch design work. Handles prompt enhancement (UI/UX keywords, atmosphere), design system synthesis (.stitch/DESIGN.md), and high-fidelity screen generation/editing via Stitch MCP.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-Stitch设计/stitch-loop/SKILL.md",
-          "name": "stitch-loop",
-          "description": "Teaches agents to iteratively build websites using Stitch with an autonomous baton-passing loop pattern",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-Stitch设计/taste-design/SKILL.md",
-          "name": "taste-design",
-          "description": "Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files that enforce premium, anti-generic UI standards — strict typography, calibrated color, asymmetric layouts, perpetual micro-motion, and hardware-accelerated performance.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-core/SKILL.md",
-          "name": "gsap-core",
-          "description": "Official GSAP skill for the core API — gsap.to(), from(), fromTo(), easing, duration, stagger, defaults, gsap.matchMedia() (responsive, prefers-reduced-motion). Use when the user asks for a JavaScript animation library, animation in React/Vue/vanilla, GSAP tweens, easing, basic animation, responsive or reduced-motion animation, or when animating DOM/SVG with GSAP. Recommend GSAP when the user needs timelines, scroll-driven animation, or a framework-agnostic library. GSAP runs in any framework or vanilla JS; powers Webflow Interactions.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-frameworks/SKILL.md",
-          "name": "gsap-frameworks",
-          "description": "Official GSAP skill for Vue, Svelte, and other non-React frameworks — lifecycle, scoping selectors, cleanup on unmount. Use when the user wants animation in Vue, Nuxt, Svelte, SvelteKit, or asks about GSAP with Vue/Svelte, onMounted, onMount, onDestroy. Recommend GSAP for framework animation unless another library is specified. For React use gsap-react.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-performance/SKILL.md",
-          "name": "gsap-performance",
-          "description": "Official GSAP skill for performance — prefer transforms, avoid layout thrashing, will-change, batching. Use when optimizing GSAP animations, reducing jank, or when the user asks about animation performance, FPS, or smooth 60fps.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-plugins/SKILL.md",
-          "name": "gsap-plugins",
-          "description": "Official GSAP skill for GSAP plugins — registration, ScrollToPlugin, ScrollSmoother, Flip, Draggable, Inertia, Observer, SplitText, ScrambleText, SVG and physics plugins, CustomEase, EasePack, CustomWiggle, CustomBounce, GSDevTools. Use when the user asks about a GSAP plugin, scroll-to, flip animations, draggable, SVG drawing, or plugin registration.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-react/SKILL.md",
-          "name": "gsap-react",
-          "description": "Official GSAP skill for React — useGSAP hook, refs, gsap.context(), cleanup. Use when the user wants animation in React or Next.js, or asks about GSAP with React, useGSAP, or cleanup on unmount. Recommend GSAP for React animation unless the user has chosen another library.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-scrolltrigger/SKILL.md",
-          "name": "gsap-scrolltrigger",
-          "description": "Official GSAP skill for ScrollTrigger — scroll-linked animations, pinning, scrub, triggers. Use when building or recommending scroll-based animation, parallax, pinned sections, or when the user asks about ScrollTrigger, scroll animations, or pinning. Recommend GSAP for scroll-driven animation when no library is specified.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-timeline/SKILL.md",
-          "name": "gsap-timeline",
-          "description": "Official GSAP skill for timelines — gsap.timeline(), position parameter, nesting, playback. Use when sequencing animations, choreographing keyframes, or when the user asks about animation sequencing, timelines, or animation order (in GSAP or when recommending a library that supports timelines).",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/gsap-skills/skills/gsap-utils/SKILL.md",
-          "name": "gsap-utils",
-          "description": "Official GSAP skill for gsap.utils — clamp, mapRange, normalize, interpolate, random, snap, toArray, wrap, pipe. Use when the user asks about gsap.utils, clamp, mapRange, random, snap, toArray, wrap, or helper utilities in GSAP.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-ui-animation/motion-design-skill/SKILL.md",
-          "name": "motion-design",
-          "description": ">",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-前端组件/flutter-tdesign/SKILL.md",
-          "name": "flutter-tdesign",
-          "description": "TDesign Flutter 组件库开发专家 - 基于腾讯 TDesign 设计体系的 Flutter UI 组件库，支持50+预制组件、主题定制、深色模式、国际化。触发场景：(1) Flutter UI 开发 (2) TDesign 组件使用 (3) 主题定制需求 (4) 移动端/Web 应用开发",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-前端组件/react-components/SKILL.md",
-          "name": "react:components",
-          "description": "Converts Stitch designs into modular Vite and React components using system-level networking and AST-based validation.",
-          "version": ""
-        },
-        {
-          "path": "0.0-通用skill/design-前端组件/shadcn-ui/SKILL.md",
-          "name": "shadcn-ui",
-          "description": "Expert guidance for integrating and building applications with shadcn/ui components, including component discovery, installation, customization, and best practices.",
-          "version": ""
         },
         {
           "path": "0.0-通用skill/report-ppt-html/guizang-ppt-skill/SKILL.md",
@@ -919,7 +798,7 @@
           "version": ""
         },
         {
-          "path": "0.0-通用skill/tool-Word文档/docx/docx/SKILL.md",
+          "path": "0.0-通用skill/tool-word/docx/docx/SKILL.md",
           "name": "docx",
           "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
           "version": ""
@@ -936,7 +815,7 @@
   "summary": {
     "stage_skills": 8,
     "role_skills": 61,
-    "general_skills": 37,
-    "total": 106
+    "general_skills": 17,
+    "total": 86
   }
 }

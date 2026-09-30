@@ -4,17 +4,13 @@ Reference table only. No directories have been renamed.
 
 | 中文目录 | English Alias | 用途 |
 |---|---|---|
-| 0.0-通用skill | `00-general-skills/` | 通用通用 Skill 库(文档生成 / Agent / 项目分析 / 设计 / 管理 / 报告 / 工具 等) |
+| 0.0-通用skill | `00-general-skills/` | 通用通用 Skill 库(文档生成 / 项目分析 / 报告 / 工具 等) |
 | 0.0-通用skill/author-README生成 | `author-readme-gen/` | 自动生成 README 文档 |
-| 0.0-通用skill/author-agent | `author-agent/` | 创建自定义 Agent 配置 |
 | 0.0-通用skill/author-skill | `author-skill/` | 创建自定义 Skill 脚本 |
-| 0.0-通用skill/design-ui-animation | `design-ui-animation/` | UI 交互动效设计素材与示例 |
-| 0.0-通用skill/design-前端组件 | `design-frontend-components/` | 前端组件设计规范与素材 |
-| 0.0-通用skill/manage-项目管理 | `manage-project/` | 项目管理辅助 Skill |
 | 0.0-通用skill/tool-web-fetch | `tool-web-fetch/` | 本地搜索引擎与网页内容抓取 |
 | 0.0-通用skill/tool-ssh-skill | `tool-ssh-skill/` | 高性能 SSH 管理工具 |
 | 0.0-通用skill/tool-Notion | `tool-notion/` | Notion 文档集成工具 |
-| 0.0-通用skill/tool-接口导出 | `tool-api-export/` | 接口文档导出工具 |
+| 0.0-通用skill/tool-api-export | `tool-api-export/` | 接口文档导出工具 |
 | 1.0-软件开发流程角色agent模型 | `10-sdlc-role-agent-model/` | 按角色组织的开发流程 Agent 模型(产品/研发/设计/测试/数据/安全/运维/项目管理) |
 | 1.0-软件开发流程角色agent模型/产品 | `roles/product/` | 产品角色 Agent 与 Skill |
 | 1.0-软件开发流程角色agent模型/研发 | `roles/engineering/` | 研发角色 Agent、Skill 与技术选型 |

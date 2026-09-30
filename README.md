@@ -24,7 +24,7 @@
 - 🏭 **行业系统模型** — 内置 ERP（12 模块）、MES（10+ 模块）、语音社区等完整参考架构
 - 🔧 **27+ 通用技能** — SSH、Word、Draw.io、Notion、Jira、禅道等工具集成
 - 🤖 **8 阶段端到端工作流** — `.claude/` 下预置从需求分析到前后端开发的可执行编排
-- 🧬 **可自扩展** — 通过 `author-agent` / `author-skill` 元技能，AI 自行创建新角色和新技能
+- 🧬 **可自扩展** — 通过 `author-skill` 元技能，AI 自行创建新技能
 - 📐 **质量门控** — 每阶段有可量化检查标准，不达标不放行
 - 🗂️ **单一事实源** — 自动生成 [`catalog.json`](catalog.json)、[Skill 总目录](docs/skill-index.md)、[按阶段产出物](docs/deliverables/by-stage.md)、[按部门产出物](docs/deliverables/by-department.md)
 
@@ -86,9 +86,8 @@ software-dev-ai-workflow/
 │   └── deliverables/                  # 产出物单一事实源
 │       ├── by-stage.md                # 按阶段汇总
 │       └── by-department.md           # 按部门汇总
-├── 0.0-通用skill/                    # 通用技能工具集（27 个子目录）
-│   ├── author-build-project-docs/    # 项目文档生成
-│   └── manage-项目管理/              # 项目管理工具
+├── 0.0-通用skill/                    # 通用技能工具集（18 个子目录）
+│   └── author-build-project-docs/    # 项目文档生成
 ├── 1.0-软件开发流程角色agent模型/      # 角色Agent定义
 ├── 2.0-用例/                         # 用例示例库 ⭐
 │   ├── agent用例/                    # Agent使用示例

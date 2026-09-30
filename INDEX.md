@@ -3,7 +3,7 @@
 ## 快速开始
 
 本仓库聚合软件开发全流程的 **阶段编排 / 角色技能 / 通用工具 / 用例库** 四大入口。
-通过 8 阶段端到端命令（`/stage-01` ~ `/stage-08`）驱动研发协作,所有阶段共享 61 个角色 Skill 与 37 个通用 Skill。
+通过 8 阶段端到端命令（`/stage-01` ~ `/stage-08`）驱动研发协作,所有阶段共享 61 个角色 Skill 与 17 个通用 Skill。
 新用户建议先读 [`docs/skill-index.md`](docs/skill-index.md) 了解阶段编排,再按角色深入。
 
 ## 四象限导航
@@ -12,7 +12,7 @@
 |------|------------|------|
 | 阶段编排 | [`docs/skill-index.md` § 1](docs/skill-index.md#1-按阶段8-阶段端到端编排) | 8 阶段端到端命令(`/stage-01` ~ `/stage-08`)与下游角色 |
 | 角色技能 | [`docs/skill-index.md` § 2](docs/skill-index.md#2-按部门角色-agent-技能) | 产品/研发/测试/运维/安全/数据/设计/项目管理 61 个 Skill |
-| 通用工具 | [`docs/skill-index.md` § 3](docs/skill-index.md#3-按通用能力00-通用skill) | 0.0-通用skill 下 37 个工具(Skill/Agent/Stitch/SSH/Notion 等) |
+| 通用工具 | [`docs/skill-index.md` § 3](docs/skill-index.md#3-按通用能力00-通用skill) | 0.0-通用skill 下 17 个工具(Skill/Agent/SSH/Notion 等) |
 | 用例库 | [`2.0-用例/`](2.0-用例/) | agent 用例 / 工作流 / 开发流程 / 系统模型 / 项目管理样例 |
 
 ## 目录英文化映射
@@ -23,15 +23,11 @@
 |---|---|---|
 | 0.0-通用skill | `00-general-skills/` | 通用 Skill 库(文档生成 / Agent / 项目分析 / 设计 / 管理 / 报告 / 工具) |
 | 0.0-通用skill/author-README生成 | `author-readme-gen/` | 自动生成 README 文档 |
-| 0.0-通用skill/author-agent | `author-agent/` | 创建自定义 Agent 配置 |
 | 0.0-通用skill/author-skill | `author-skill/` | 创建自定义 Skill 脚本 |
-| 0.0-通用skill/design-ui-animation | `design-ui-animation/` | UI 交互动效设计素材与示例 |
-| 0.0-通用skill/design-前端组件 | `design-frontend-components/` | 前端组件设计规范与素材 |
-| 0.0-通用skill/manage-项目管理 | `manage-project/` | 项目管理辅助 Skill |
 | 0.0-通用skill/tool-web-fetch | `tool-web-fetch/` | 本地搜索引擎与网页内容抓取 |
 | 0.0-通用skill/tool-ssh-skill | `tool-ssh-skill/` | 高性能 SSH 管理工具 |
 | 0.0-通用skill/tool-Notion | `tool-notion/` | Notion 文档集成工具 |
-| 0.0-通用skill/tool-接口导出 | `tool-api-export/` | 接口文档导出工具 |
+| 0.0-通用skill/tool-api-export | `tool-api-export/` | 接口文档导出工具 |
 | 1.0-软件开发流程角色agent模型 | `10-sdlc-role-agent-model/` | 按角色组织的开发流程 Agent 模型 |
 | 1.0-软件开发流程角色agent模型/产品 | `roles/product/` | 产品角色 Agent 与 Skill |
 | 1.0-软件开发流程角色agent模型/研发 | `roles/engineering/` | 研发角色 Agent、Skill 与技术选型 |

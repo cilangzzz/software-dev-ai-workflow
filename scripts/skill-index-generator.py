@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""docstring"""
+from __future__ import annotations
+
 """
 skill-index-generator.py — 从 catalog.json 生成 docs/skill-index.md
 

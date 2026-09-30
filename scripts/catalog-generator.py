@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""docstring"""
+from __future__ import annotations
+
 """
 catalog-generator.py — 生成仓库级 Skill catalog.json
 
